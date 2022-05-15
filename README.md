@@ -1,12 +1,11 @@
 # Ciência de dados em saúde
 
-# Apresentação
 
 O presente projeto foi originado no contexto das atividades da disciplina de pós-graduação [*Ciência e Visualização de Dados em Saúde*](https://ds4h.org), oferecida no primeiro semestre de 2022, na Unicamp.
 
 | Nome                     | RA     | Especialização |
 | ------------------------ | ------ | -------------- |
-| Bruna Osti               | 000000 | Computação     |
+| Bruna Osti               | 231024 | Computação     |
 | Fabio Fogliarini Brolesi | 023718 | Computação     |
 | Ingrid                   | 000000 | Computação     |
 
