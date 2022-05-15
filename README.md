@@ -3,11 +3,11 @@
 
 O presente projeto foi originado no contexto das atividades da disciplina de pós-graduação [*Ciência e Visualização de Dados em Saúde*](https://ds4h.org), oferecida no primeiro semestre de 2022, na Unicamp.
 
-| Nome                     | RA     | Especialização |
-| ------------------------ | ------ | -------------- |
-| Bruna Osti               | 231024 | Computação     |
-| Fabio Fogliarini Brolesi | 023718 | Computação     |
-| Ingrid                   | 000000 | Computação     |
+| Nome                          | RA     | Especialização |
+| ----------------------------- | ------ | -------------- |
+| Bruna Osti                    | 231024 | Computação     |
+| Fabio Fogliarini Brolesi      | 023718 | Computação     |
+| Ingrid Alves de Paiva Barbosa | 182849 | Computação     |
 
 # Contextualização da Proposta
 > Apresentação da proposta de predição indicando os parâmetros adotados para a mesma com a justificativa (por que esses parâmetros foram adotados?).
@@ -26,23 +26,57 @@ Para o presente trabalho, utilizou-se a tecnologia Python, a partir de desenvolv
 > Justificar as escolhas e (opcionalmente) apresentar fundamentos teóricos.
 
 
-O presente trabalho trata-se de um estudo de caso que utiliza a metodologia presente na Figura 1. Inicialmente foi realizada a combinação dos dados de interesse presentes em cada uma das tabelas fornecidas: pacientes, eventos e condições (do ponto de vista técnico, respectivamente as tabelas em formato CSV de `patients`, `events`, `conditions`). 
+O presente trabalho trata-se de um estudo de caso que utiliza a metodologia CRISP-DM (CRoss-Industry Standard Process for Data Mining), criado pela SPSS Inc [1]. Este modelo é composto de 6 fases, e suas interações podem ser vistas na figura a seguir [1]: 
+
+1. Entendimento do negócio/contexto
+2. Entendimento dos dados
+3. Preparação dos dados
+4. Modelagem
+5. Avaliação
+6. Aplicação (*Deployment*)
 
 ```mermaid
-graph TB;
-subgraph Preparação dos dados
-  id1(Pacientes) --> id4(Datamart);
-  id2(Eventos)   --> id4(Datamart);
-  id3(Condições) --> id4(Datamart);
+flowchart  TB;
+id1(Entendimento do negócio) --> id2(Entendimento dos dados);
+id2(Entendimento dos dados) --> id1(Entendimento do negócio) ;
+id2(Entendimento dos dados) --> id100[Preparação dos dados];
+subgraph id100[Preparação dos dados]
+id101(Pacientes) --> id104(Datamart);
+id102(Eventos)   --> id104(Datamart);
+id103(Condições) --> id104(Datamart);
 end
-  id4(Datamart) -->  id5[Modelo];
-subgraph Modelagem e deploy
-  id6(Novos dados) --> id5[Modelo];
-  id5[Modelo] --> id7(Predição)
-end
-;
+
+id100[Preparação dos dados] --> id4(Modelagem)
+id4(Modelagem) --> id100[Preparação dos dados];
+id4(Modelagem) --> id5(Validação);
+id5(Validação) --> id1(Entendimento do negócio);
+id5(Validação) --> id6("Aplicação (deploy)");
+
 ```
-Figura 1. Visão esquemática da metodologia utilizada
+Figura 1: Metodologia CRISP-DM.
+
+
+A seguir será explicado o objetivo de cada fase, com sua respectiva aplicação para solucionar o problema proposto neste projeto.
+
+## Entendimento do problema (entendimento de negócio)
+
+Dados os cenários sintéticos do [Synthea](https://synthea.mitre.org/) presentes no repositório [Github](https://github.com/santanche/lab2learn/tree/master/data/synthea) especificamente para esta disciplina, utilizamos um conjunto de dados para identificar [o que queremos identificar]
+
+## Entendimento dos dados
+
+a
+
+## Preparação dos dados
+
+## Modelagem
+
+## Validação
+
+## Aplicação
+
+
+
+ presente na Figura 1. Inicialmente foi realizada a combinação dos dados de interesse presentes em cada uma das tabelas fornecidas: pacientes, eventos e condições (do ponto de vista técnico, respectivamente as tabelas em formato CSV de `patients`, `events`, `conditions`). 
 
 O vínculo entre cada uma das tabelas foi feito conforme a Tabela 1, gerando um datamart final para ser utilizado no modelo proposto.
 
