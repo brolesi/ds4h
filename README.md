@@ -1,6 +1,6 @@
 # Ciência de dados em saúde
 
-## Bruna Osti - RA ?
+## Bruna Osti - 231024
 
 ## Fabio Fogliarini Brolesi 
 
