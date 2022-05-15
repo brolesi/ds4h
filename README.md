@@ -36,9 +36,11 @@ O presente trabalho trata-se de um estudo de caso que utiliza a metodologia CRIS
 6. Aplicação (*Deployment*)
 
 ```mermaid
-flowchart  TB;
+flowchart  RL;
+subgraph 99[Entendimento]
 id1(Entendimento do negócio) --> id2(Entendimento dos dados);
 id2(Entendimento dos dados) --> id1(Entendimento do negócio) ;
+end
 id2(Entendimento dos dados) --> id100[Preparação dos dados];
 subgraph id100[Preparação dos dados]
 id101(Pacientes) --> id104(Datamart);
@@ -60,25 +62,33 @@ A seguir será explicado o objetivo de cada fase, com sua respectiva aplicação
 
 ## Entendimento do problema (entendimento de negócio)
 
-Dados os cenários sintéticos do [Synthea](https://synthea.mitre.org/) presentes no repositório [Github](https://github.com/santanche/lab2learn/tree/master/data/synthea) especificamente para esta disciplina, utilizamos um conjunto de dados para identificar [o que queremos identificar]
+Dados os cenários sintéticos do [Synthea](https://synthea.mitre.org/) presentes no repositório [Github](https://github.com/santanche/lab2learn/tree/master/data/synthea) especificamente para esta disciplina, utilizamos um conjunto de dados para identificar qual a probabilidade do prognóstico de evolução para óbido dos pacientes cujo encontro foi a partir das causas [TODO: colocar as causas] [TODO: o que mais queremos identificar].
 
 ## Entendimento dos dados
 
-a
+Os dados estão presentes em arquivos CSV (*comma separeted values*) e são os seguintes:
+
+* `allergies`
+* `careplans`
+* `claims`
+* `conditions`
+* `devices`
+* `encounters`
+* `imaging_studies`
+* `immunizations`
+* `medications`
+* `observations`
+* `organizations`
+* `patients`
+* `payers`
+* `payer_transitions`
+* `procedures`
+* `providers`
+* `supplies`
 
 ## Preparação dos dados
 
-## Modelagem
-
-## Validação
-
-## Aplicação
-
-
-
- presente na Figura 1. Inicialmente foi realizada a combinação dos dados de interesse presentes em cada uma das tabelas fornecidas: pacientes, eventos e condições (do ponto de vista técnico, respectivamente as tabelas em formato CSV de `patients`, `events`, `conditions`). 
-
-O vínculo entre cada uma das tabelas foi feito conforme a Tabela 1, gerando um datamart final para ser utilizado no modelo proposto.
+Após avaliação do cenário corrente baseado na pergunta ser respondida, foi identificada a necessidade de uso das bases pacientes, eventos e condições [TODO: avaliar se só essas] (do ponto de vista técnico, respectivamente as tabelas em formato CSV de `patients`, `events`, `conditions`). A combinação dos dados de interesse presentes em cada uma das tabelas fornecidas foi feita a partir do vínculo entre elas conforme a Tabela 1, gerando um datamart final para ser utilizado no modelo proposto.
 
 |                  | **`patients`** | **`events`** | **`conditions`** |
 | ---------------- | -------------- | ------------ | ---------------- |
@@ -93,16 +103,51 @@ Com a estruturação dos dados a partir do cruzamento entre eles, realizou-se a 
 
 Ao final, as colunas relevantes para o desenvolvimento do datamart foram as presentes na Tabela 2:
 
-| **Campo** | **Tabela origem** | **Coluna origem** | **Descrição** |
-| --------- | ----------------- | ----------------- | ------------- |
-| A         | B                 |                   | C             |
-| D         | E                 | A                 | F             |
+| **Tabela origem** | **Campo**                 | **Coluna origem**   | **Descrição**                                                      |
+| ----------------- | ------------------------- | ------------------- | ------------------------------------------------------------------ |
+| ENCOUNTER         | TOTAL_CLAIM_COST          | TOTAL_CLAIM_COST    |
+| ENCOUNTER         | ENCOUNTERCLASS_wellness   | ENCOUNTERCLASS      | Classe de encontro marcada como rotineira                          |
+| ENCOUNTER         | ENCOUNTERCLASS_urgentcare | ENCOUNTERCLASS      | Classe de encontro marcada como de urgência                        |
+| ENCOUNTER         | ENCOUNTERCLASS_snf        | ENCOUNTERCLASS      | Classe de encontro marcada como centro de enfermagem especializada |
+| ENCOUNTER         | ENCOUNTERCLASS_outpatient | ENCOUNTERCLASS      | Classe de encontro marcada como ambulatorial                       |
+| ENCOUNTER         | ENCOUNTERCLASS_inpatient  | ENCOUNTERCLASS      | Classe de encontro marcada como internação                         |
+| ENCOUNTER         | ENCOUNTERCLASS_home       | ENCOUNTERCLASS      | Classe de encontro marcada como domiciliar                         |
+| ENCOUNTER         | ENCOUNTERCLASS_emergency  | ENCOUNTERCLASS      | Classe de encontro marcada como emergência                         |
+| ENCOUNTER         | ENCOUNTERCLASS_ambulatory | ENCOUNTERCLASS      | Classe de encontro marcada como ambulatorial                       |
+| ENCOUNTER         | PAYER_COVERAGE            | PAYER_COVERAGE      |                                                                    |
+| PATIENT           | BIRTHDATE                 | BIRTHDATE           |                                                                    |
+| PATIENT           | MARITAL                   | MARITAL             |                                                                    |
+| PATIENT           | HEALTHCARE_COVERAGE       | HEALTHCARE_COVERAGE |                                                                    |
+| PATIENT           | HEALTHCARE_EXPENSES       | HEALTHCARE_EXPENSES |                                                                    |
+| PATIENT           | LON                       | LON                 |                                                                    |
+| PATIENT           | LAT                       | LAT                 |                                                                    |
+| PATIENT           | ZIP                       | ZIP                 |                                                                    |
+| PATIENT           | GENDER                    | GENDER              |                                                                    |
+| PATIENT           | ETHNICITY                 | ETHNICITY           |                                                                    |
+| PATIENT           | RACE                      | RACE                |                                                                    |
+| ENCOUNTER         | BASE_ENCOUNTER_COST       | BASE_ENCOUNTER_COST |                                                                    |
 
 Tabela 2: Campos utilizados para composição do datamart a ser considerado para a geração do modelo de aprendizado de máquina. A **coluna origem** indica que o campo foi criado artificialmente de uma *feature* categórica da tabela origem.
 
-Após a criação do datamart, realizou-se a extração de informações relevantes para a análise dos pacientes de interesse considerando apena a condição **[nome da condição]** para que a partir do modelo, a entrada de dados fosse feita apenas considerando a condição de interesse.
+Após a criação do datamart, realizou-se a extração de informações relevantes para a análise dos pacientes de interesse considerando apena a condição **[TODO: nome da condição]** para que a partir do modelo, a entrada de dados fosse feita apenas considerando a condição de interesse.
 
+## Modelagem
 
+[TODO: colocar a criação de samples / treino/teste, SVM e decision tree]
+
+## Validação
+
+Os resultados obtidos a partir da análise descritiva, criação e refinamento do modelo são os que seguem:
+
+### Análise descritiva
+
+[TODO: penso em colocar boxplot, outros pontos descritivos de análises iniciais]
+
+### Modelo
+
+Sobre o modelo, utilizou-se a técnica de *Support Vector Machines* afim de identificar a segregação a partir de hiperplanos dos dados em dois: prognóstico de evolução à óbito em até $7$ dias e prognóstico de evolução à óbito igual ou superior a $7$ dias. Dado que a quantidade de registros era pequena, utilizou-se da técnica de *data augmentation* (ou, aumento de dados, a partir da criação de dados sintéticos, baseados nos dados originais), para que as amostras (óbito em até 7 dias e óbito a partir de 7 dias) ficassem balanceadas.
+
+## Aplicação
 
 Uma com o modelo desenhado e validado, realizou-se então o deploy do mesmo, tornando-o produtivo para ser executado no dispositivo final, e a partir daí, o uso do mesmo a partir da entrada de dados conforme estrutura da Tabela 3.
 
@@ -122,8 +167,6 @@ As bases utilizadas para o presente projeto são as que seguem:
 * [scenario01](/data/raw/scenario01/)
 * [scenario02](/data/raw/scenario02/)
 
-
-
 > Se usou também outras bases (opcional), apresentá-las como segue:
 
 | Base de Dados  | Endereço na Web   | Resumo descritivo                                |
@@ -131,6 +174,7 @@ As bases utilizadas para o presente projeto são as que seguem:
 | Título da Base | http://base1.org/ | Breve resumo (duas ou três linhas) sobre a base. |
 
 # Resultados Obtidos
+
 > Esta seção pode opcionalmente ser apresentada em conjunto com a metodologia, intercalando método e resultados.
 >
 > Descreva etapas para obtenção do modelo, incluindo tratamento de dados, se houve.
@@ -156,7 +200,9 @@ As bases utilizadas para o presente projeto são as que seguem:
 > Seção opcional se houver histórico de mudanças e evolução relevantes.
 > Relate aqui a evolução do projeto: possíveis problemas enfrentados e possíveis mudanças de trajetória. Relatar o processo para se alcançar os resultados é tão importante quanto os resultados.
 
-A partir dos resultados obtidos, podemos avaliar a possibilidade de evolução do ponto de vista de captar mais dados que possam ser relevantes para a análise e construção de um modelo mais robusto e que possa ter a capacidade de previsão mais acurada, para apoiar a definição do prognóstico médico [...].
+A partir dos resultados obtidos, existe a possibilidade de evolução do ponto de vista de utilizar / captar mais dados que possam ser relevantes para a análise e construção de um modelo mais robusto e que possa ter a capacidade de previsão mais acurada, para apoiar a definição do prognóstico médico [TODO: incrementar].
+
+Outra possibilidade é a geração de mais dados sintéticos para, a partir de uma massa de dados maior, termos um modelo com maior robustez.
 
 # Discussão
 > Fazer um breve debate sobre os resultados alcançados. Aqui pode ser feita a análise dos possíveis motivos que certos resultados foram alcançados. Por exemplo:
