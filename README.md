@@ -18,35 +18,77 @@ Com dados de eventos e condições de pacientes a partir dos seus registros disp
 ## Ferramentas
 > Listagem das ferramentas utilizadas (na forma de itens).
 
-Para o presente trabalho, utilizamos da tecnologia Python, a partir de desenvolvimento de provas de conceito em notebook e posterior execução de fluxo de dados (data pipeline) através de scripts shell a partir dos dados disponibilizados em arquivos físicos `csv`.
+Para o presente trabalho, utilizou-se a tecnologia Python, a partir de desenvolvimento de provas de conceito em notebook e posterior execução de fluxo de dados (data pipeline) através de scripts shell a partir dos dados disponibilizados em arquivos físicos `csv`.
 
 
 # Metodologia
 > Abordagem adotada pelo projeto na predição.
 > Justificar as escolhas e (opcionalmente) apresentar fundamentos teóricos.
+
+
+O presente trabalho trata-se de um estudo de caso que utiliza a metodologia presente na Figura 1. Inicialmente foi realizada a combinação dos dados de interesse presentes em cada uma das tabelas fornecidas: pacientes, eventos e condições (do ponto de vista técnico, respectivamente as tabelas em formato CSV de `patients`, `events`, `conditions`). 
+
 ```mermaid
 graph TB;
-subgraph one
+subgraph Preparação dos dados
   id1(Pacientes) --> id4(Datamart);
   id2(Eventos)   --> id4(Datamart);
   id3(Condições) --> id4(Datamart);
 end
   id4(Datamart) -->  id5[Modelo];
-subgraph two
+subgraph Modelagem e deploy
   id6(Novos dados) --> id5[Modelo];
   id5[Modelo] --> id7(Predição)
 end
 ;
 ```
+Figura 1. Visão esquemática da metodologia utilizada
+
+O vínculo entre cada uma das tabelas foi feito conforme a Tabela 1, gerando um datamart final para ser utilizado no modelo proposto.
+
+|                  | **`patients`** | **`events`** | **`conditions`** |
+| ---------------- | -------------- | ------------ | ---------------- |
+| **`patients`**   |                | `patient_id` |                  |
+| **`events`**     | `patient_id`   |              | `event_id`       |
+| **`conditions`** |                | `event_id`   |                  |
+
+ 
+Tabela 1: Apresentação do vínculo entre tabelas para criação do datamart a ser utilizado pelo modelo.
+
+Com a estruturação dos dados a partir do cruzamento entre eles, realizou-se a criação de colunas (características, ou, em inglês na área de ciência de dados, *feature*) sintéticas a partir de colunas originas de de dados categóricos para, a partir do aumento da dimensionalidade, trazer maior riquza para a criação do modelo considerando aspectos relevantes para a análise.
+
+Ao final, as colunas relevantes para o desenvolvimento do datamart foram as presentes na Tabela 2:
+
+| **Campo** | **Tabela origem** | **Coluna origem** | **Descrição** |
+| --------- | ----------------- | ----------------- | ------------- |
+| A         | B                 |                   | C             |
+| D         | E                 | A                 | F             |
+
+Tabela 2: Campos utilizados para composição do datamart a ser considerado para a geração do modelo de aprendizado de máquina. A **coluna origem** indica que o campo foi criado artificialmente de uma *feature* categórica da tabela origem.
+
+Após a criação do datamart, realizou-se a extração de informações relevantes para a análise dos pacientes de interesse considerando apena a condição **[nome da condição]** para que a partir do modelo, a entrada de dados fosse feita apenas considerando a condição de interesse.
 
 
+
+Uma com o modelo desenhado e validado, realizou-se então o deploy do mesmo, tornando-o produtivo para ser executado no dispositivo final, e a partir daí, o uso do mesmo a partir da entrada de dados conforme estrutura da Tabela 3.
+
+| **Campo** | **Descrição**                |
+| --------- | ---------------------------- |
+| A         | Identifica o tipo de sintoma |
+| D         | Identifica o tempo de vida   |
+
+Tabela 3: Campos utilizados na entrada dos dados para processamento do modelo desenvolvido.
 
 ## Bases Adotadas para o Estudo
 
 > Se só foram usadas as bases fornecidas, basta listá-las como segue:
+
 As bases utilizadas para o presente projeto são as que seguem:
-* scenario01
-* scenario02
+
+* [scenario01](/data/raw/scenario01/)
+* [scenario02](/data/raw/scenario02/)
+
+
 
 > Se usou também outras bases (opcional), apresentá-las como segue:
 
