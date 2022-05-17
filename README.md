@@ -25,9 +25,6 @@ Diante deste cenário, a pergunta de pesquisa levantada para este projeto é a s
 
 > Com dados de eventos e condições de pacientes a partir dos seus registros disponíveis, é possível predizer o prognóstico de evolução para óbito de pacientes com Insuficiência Cardíaca Congestiva Crônica dentro de 7 dias?
 
-**Para realizar o prognóstico de mortalidade em pacientes com ICC, será necessário analisar os parametros X, Y, Z, devido a xxxxx. (TO DO)**
-
-
 ## Ferramentas
 
 Para o presente trabalho, utilizou-se as seguintes ferramentas:
@@ -35,13 +32,11 @@ Para o presente trabalho, utilizou-se as seguintes ferramentas:
 * Tecnologia _Python_, para desenvolver as provas de conceito;
 * Bibliotecas _Panda, Glob, OS, Matplotlib.pyplot, Seaborn e Datetime_ como suporte para as funções necessárias;
 * _PyCaret_, para escolher o melhor modelo a ser utilizado;
-* _Notebook Jupyter_, para escrita dos códigos de forma colaborativa;
+* _Notebook Jupyter_, para escrita dos códigos em ambiente de execução;
 * _Scripts Shell_, para execução de fluxo de dados (_data pipeline_);
 * Base de dados _Synthea_, para geração do modelo de prognóstico e também para testes.
 
 # Metodologia
-> Abordagem adotada pelo projeto na predição.
-> Justificar as escolhas e (opcionalmente) apresentar fundamentos teóricos.
 
 O presente trabalho trata-se de um estudo de caso que utiliza a metodologia CRISP-DM (CRoss-Industry Standard Process for Data Mining), criado pela SPSS Inc [5]. Este modelo é composto de 6 fases, e suas interações podem ser vistas na figura a seguir [5]: 
 
@@ -74,7 +69,6 @@ id5(Validação) --> id6("Aplicação (deploy)");
 ```
 Figura 1: Metodologia CRISP-DM.
 
-
 A seguir será explicado o objetivo de cada fase, com sua respectiva aplicação para solucionar o problema proposto neste projeto.
 
 ## Entendimento do problema (entendimento de negócio)
@@ -106,7 +100,20 @@ Os dados estão presentes em arquivos CSV (*comma separeted values*) e são os s
 * `providers`
 * `supplies`
 
-Especificamente para esta disciplina, utilizamos um conjunto de dados para identificar qual a probabilidade do prognóstico de evolução para óbito dos pacientes cujo encontro foi a partir das causas **[TODO: colocar as causas] [TODO: o que mais queremos identificar]**
+Especificamente para este projeto, utilizou-se a tabela `encounters` e a tabela `conditions` para entender quais condições mais levavam os pacientes á óbitos. Posteriormente, utilizou-se a tabela `patients` para cálculo da probabilidade de óbito em até 7 dias. Destas tabelas, levou-se em consideração os parâmetros a seguir:
+ 
+* `BIRTHDATE`: data de nascimento, para saber a idade que o paciente tinha ao ir a óbito; 
+* `MARITAL`: nome do Conjugê, para saber o estado civíl do paciente;
+* `RACE`: raça do paciente;
+* `ETHNICITY`: etnia do paciente;
+* `GENDER`: gênero do paciente, aqui considerado como binário (masculino ou feminino);
+* `ZIP`, `LAT` e `LON`: Código postal, latitude e longitude, para saber o endereço do paciente;
+* `HEALTHCARE_EXPENSES`, and `HEALTHCARE_COVERAGE`: gastos com plano de saúde e a cobertura do plano do paciente;
+* `ENCOUNTERCLASS`: classe do último encontro, para saber se era uma emergência ou outro tipo de encontro;
+* `BASE_ENCOUNTER_COST`: custo do último encontro do paciente;
+* `TOTAL_CLAIM_COST`: custo total do ultimo encontro com todas as outras despesas envolvidas;
+* `PAYER_COVERAGE`: pagador deste custo do paciente, para saber se o plano de saúde foi usado ou não;
+* `death_threshold`: foi um dado criado pela equipe, que possui valor _True_ ou _False_, sendo _True_ quando o paciente foi á óbito em até 7 dias após o último encontro.
 
 ## Preparação dos dados
 
