@@ -13,8 +13,6 @@ O presente projeto foi originado no contexto das atividades da disciplina de pó
 | Ingrid Alves de Paiva Barbosa | 182849 | Computação     |
 
 # Contextualização da Proposta
-> Apresentação da proposta de predição indicando os parâmetros adotados para a mesma com a justificativa (por que esses parâmetros foram adotados?).
-> O ideal é que a proposta seja apresentada como uma pergunta de pesquisa.
 
 A área de pesquisa de prognósticos busca entender e melhorar os resultados de prognósticos em pessoas com uma determinada doença ou condição de saúde. O objetivo geral de estudos prognósticos em contextos clínicos é ajudar clínicos, pacientes e familiares a tomar decisões esclarecidas a respeito de cuidados de saúde com base em informações disponíveis sobre cada paciente no presente para prever desfechos no futuro [1]. Além disso, ajuda os pacientes e os familiares a tomar decisões adequadas a respeito do fim da vida daqueles cujo risco de morte é muito alto e a identificar intervenções personalizadas para evitar futuras hospitalizações [2].  
 Os modelos prognósticos usam vários fatores em combinação para prever o risco de resultados clínicos futuros em pacientes. Um bom modelo deve (i) fornecer previsões precisas que informam os pacientes e seus cuidadores, (ii) apoiar a pesquisa clínica e (iii) permitir decisões para melhorar os resultados dos tratamentos aos pacientes [1]. Um modelo prognóstico tem três fases principais: desenvolvimento do modelo (incluindo validação interna), validação externa e investigações de impacto na prática clínica. Embora muitos modelos prognósticos sejam propostos, poucos são atualmente usados na prática clínica [1].
@@ -25,20 +23,26 @@ Para realizar o prognóstico de forma mais precisa, é importante escolher um ce
 
 Diante deste cenário, a pergunta de pesquisa levantada para este projeto é a seguinte:
 
-> Com dados de eventos e condições de pacientes a partir dos seus registros disponíveis, é possível predizer o prognóstico de evolução para óbito de pacientes com Insuficiência Cardíaca Congestiva Crônica dentro de $7$ dias?
+> Com dados de eventos e condições de pacientes a partir dos seus registros disponíveis, é possível predizer o prognóstico de evolução para óbito de pacientes com Insuficiência Cardíaca Congestiva Crônica dentro de 7 dias?
+
+**Para realizar o prognóstico de mortalidade em pacientes com ICC, será necessário analisar os parametros X, Y, Z, devido a xxxxx. (TO DO)**
+
 
 ## Ferramentas
-> Listagem das ferramentas utilizadas (na forma de itens).
 
-Para o presente trabalho, utilizou-se a tecnologia Python, a partir de desenvolvimento de provas de conceito em notebook e posterior execução de fluxo de dados (data pipeline) através de scripts shell a partir dos dados disponibilizados em arquivos físicos `csv`.
+Para o presente trabalho, utilizou-se as seguintes ferramentas:
 
+* Tecnologia _Python_, para desenvolver as provas de conceito;
+* Bibliotecas x, y, z como suporte para as funções necessárias; **TO DO**
+* _Notebook Jupyter_, para escrita dos códigos de forma colaborativa;
+* _Scripts Shell_, para execução de fluxo de dados (_data pipeline_);
+* Base de dados _Synthea_, para geração do modelo de prognóstico e também para testes.
 
 # Metodologia
 > Abordagem adotada pelo projeto na predição.
 > Justificar as escolhas e (opcionalmente) apresentar fundamentos teóricos.
 
-
-O presente trabalho trata-se de um estudo de caso que utiliza a metodologia CRISP-DM (CRoss-Industry Standard Process for Data Mining), criado pela SPSS Inc [1]. Este modelo é composto de 6 fases, e suas interações podem ser vistas na figura a seguir [1]: 
+O presente trabalho trata-se de um estudo de caso que utiliza a metodologia CRISP-DM (CRoss-Industry Standard Process for Data Mining), criado pela SPSS Inc [5]. Este modelo é composto de 6 fases, e suas interações podem ser vistas na figura a seguir [5]: 
 
 1. Entendimento do negócio/contexto
 2. Entendimento dos dados
@@ -74,9 +78,11 @@ A seguir será explicado o objetivo de cada fase, com sua respectiva aplicação
 
 ## Entendimento do problema (entendimento de negócio)
 
-Dados os cenários sintéticos do [Synthea](https://synthea.mitre.org/) presentes no repositório [Github](https://github.com/santanche/lab2learn/tree/master/data/synthea) especificamente para esta disciplina, utilizamos um conjunto de dados para identificar qual a probabilidade do prognóstico de evolução para óbido dos pacientes cujo encontro foi a partir das causas [TODO: colocar as causas] [TODO: o que mais queremos identificar].
+Insuficiência cardíaca é uma das principais causas de mortalidade e morbidade no mundo, e está associada ao alto uso de recursos e custos com saúde. No Brasil, a prevalência de insuficiência cardíaca é de aproximadamente 2 milhões de pacientes, e sua incidência é de aproximadamente 240.000 novos casos por ano, sendo que as cidades localizadas no sul, sudeste, nordeste e centro-oeste mostraram maior risco relativo para mortalidade causada por insuficiência cardíaca, e a maioria das cidades do norte foi classificada como um fator protetivo contra esta causa de morte [6]. Diante dessa realidade, é relevante que seja realizado um estudo prognóstico de pacientes com esta condição.
 
 ## Entendimento dos dados
+
+Foram usados dados dos cenários sintéticos do [Synthea](https://synthea.mitre.org/) presentes no repositório [Github](https://github.com/santanche/lab2learn/tree/master/data/synthea).
 
 Os dados estão presentes em arquivos CSV (*comma separeted values*) e são os seguintes:
 
@@ -97,6 +103,8 @@ Os dados estão presentes em arquivos CSV (*comma separeted values*) e são os s
 * `procedures`
 * `providers`
 * `supplies`
+
+Especificamente para esta disciplina, utilizamos um conjunto de dados para identificar qual a probabilidade do prognóstico de evolução para óbito dos pacientes cujo encontro foi a partir das causas **[TODO: colocar as causas] [TODO: o que mais queremos identificar]**
 
 ## Preparação dos dados
 
@@ -243,3 +251,5 @@ Outra possibilidade é a geração de mais dados sintéticos para, a partir de u
 Steyerberg EW, Moons KG, van der Windt DA, Hayden JA, Perel P, Schroter S, et al. Prognosis Research Strategy (PROGRESS) 3: prognostic model research. PLoS Med. 2013;10(2):e1001381. https://doi.org/10.1371/journal.pmed.1001381
 [3] https://www.findacode.com/snomed/88805009--chronic-congestive-heart-failure.html?hl=88805009
 [4] https://wippesaude.com.br/2018/06/12/o-que-e-o-icc-insuficiencia-cardiaca-cronica-congestiva/
+[5] crisp
+[6] https://doi.org/10.36660/abc.20201325
