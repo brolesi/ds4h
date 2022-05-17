@@ -162,25 +162,43 @@ Tabela 2: Campos utilizados para composição do *datamart* a ser considerado pa
 
 Após a criação do *datamart*, realizou-se a extração de informações relevantes para a análise dos pacientes de interesse considerando apena a condição de Insuficiência Cardíaca Congestiva Crônica para que a partir do modelo, a entrada de dados fosse feita apenas considerando a condição de interesse.
 
-## 3.4 Modelagem
+## 3.4 Modelagem, Avaliação e Aplicação
 
-### 3.4.1 Análise descritiva
+Como brevemente explicado anteiormente, esta modelagem foi dividida em duas etapas, sendo a primeira de análises exploratórias, para auxiliar na definição do cenário e a segunda de modelagem propriamente dita, já específica para o cenário determinado.
 
-[TODO: penso em colocar boxplot, outros pontos descritivos de análises iniciais]
+### 3.4.1 Etapa 1 - Análise descritiva
 
-### 4.3.2 Modelo
+Na primeira etapa foram realizadas algumas análises dos dados das tabelas `patients`, `encounters` e `conditions` para entender quais condições mais levavam os pacientes á óbitos, e tomar as decisões para escolha de cenário de aplicação do prognóstico.
+
+No cenário 1, foram encontrados 1174 pacientes diferentes, sendo que 174 deles já haviam ido à òbito, enquanto no cenário 2 haviam 1121 pacientes, com 121 óbitos. Em ambos os cenários haviam 1000 pacientes ainda em vida. 
+
+Foi análisado a idade com que os pacientes foram à òbito, e a estratificação por gênero é apresentada na figura 4, na qual é possível analisar que os homens morreram em idades mais avançadas que as mulheres, em ambos os cenários. 
+
+![alt text](assets/boxplot.png)
+
+Figura 4 - Idade de falecimento por gênero em cada cenário.
+
+Foi analisada ainda as condições que mais levaram a óbito considerando o prazo de até 7 dias. É possível perceber na figura 5 que a maior causa de morte no cenário 1 é a Leucemia mielóide aguda (*Acute myeloid leukemia* - 91861009) e no cenário 2 é a Hiperlipidemia (*Hyperlipidemia* - 55822004). 
+
+![alt text](assets/contagem_morte.png)
+
+Figura 5 - maiores causas de morte por cenário
+
+Entretanto, percebeu-se que nem todas as condições que levaram a òbito no cenário 1 estavam presentes no cenário 2. Isso poderia atrapalhar no modelo que seria gerado posteriormente. Por essa razão, foi analisado quais eram as causas de morte presente em ambos os cenários, conforme apresentado na Figura 6.
+
+![alt text](assets/contagem_morte2.png)
+
+Figura 5 - Maiores causas de morte em comum nos dois cenários.
+
+É possível perceber que a condição que mais levou à óbito, somando os dois cenários, é a Insuficiência cardíaca congestiva crônica (*Chronic congestive heart failure* - 88805009).
+
+### 3.4.2 Etapa 2 - Modelo
 
 [TODO: colocar a criação de samples / treino/teste, SVM e decision tree]
 
-Sobre o modelo, utilizou-se a técnica de *Support Vector Machines* afim de identificar a segregação a partir de hiperplanos dos dados em dois: prognóstico de evolução à óbito em até $7$ dias e prognóstico de evolução à óbito igual ou superior a $7$ dias. Dado que a quantidade de registros era pequena, utilizou-se da técnica de *data augmentation* (ou, aumento de dados, a partir da criação de dados sintéticos, baseados nos dados originais), para que as amostras (óbito em até 7 dias e óbito a partir de 7 dias) ficassem balanceadas.
+Para o modelo, primeiro foi necessário eliminar todos os dados que poderiam causar bias, restando os parâmetros já apresentados na seção 3.3. Utilizou-se a técnica de *Support Vector Machines* afim de identificar a segregação a partir de hiperplanos dos dados em dois: prognóstico de evolução à óbito em até $7$ dias e prognóstico de evolução à óbito igual ou superior a $7$ dias. Dado que a quantidade de registros era pequena, o resultado não foi como o esperado, por isso, utilizou-se da técnica de *data augmentation* (ou, aumento de dados, a partir da criação de dados sintéticos, baseados nos dados originais), para que as amostras (óbito em até 7 dias e óbito a partir de 7 dias) ficassem balanceadas.
 
-## 3.5 Avaliação
-
-Os resultados obtidos a partir da análise descritiva, criação e refinamento do modelo são os que seguem
-
-## 3.6 Aplicação
-
-Uma com o modelo desenhado e validado, realizou-se então o deploy do mesmo, tornando-o produtivo para ser executado no dispositivo final, e a partir daí, o uso do mesmo a partir da entrada de dados conforme estrutura da Tabela 3.
+Após ter o modelo desenhado e validado, realizou-se então o *deploy* do mesmo, tornando-o produtivo para ser executado no dispositivo final, e a partir daí, o uso do mesmo a partir da entrada de dados conforme estrutura da Tabela 3.
 
 | **Campo** | **Descrição**                |
 | --------- | ---------------------------- |
@@ -188,8 +206,6 @@ Uma com o modelo desenhado e validado, realizou-se então o deploy do mesmo, tor
 | D         | Identifica o tempo de vida   |
 
 Tabela 3: Campos utilizados na entrada dos dados para processamento do modelo desenvolvido.
-
-# 4. Resultados Obtidos
 
 > Esta seção pode opcionalmente ser apresentada em conjunto com a metodologia, intercalando método e resultados.
 >
@@ -211,20 +227,14 @@ Tabela 3: Campos utilizados na entrada dos dados para processamento do modelo de
 >     * como analisar e interpretar as diferenças?
 > * testar diferentes composições de dados sobre o paciente para a predição (por exemplo, quantidade diversificadas de número de itens).
 
-# 5. Evolução do Projeto
-
-> Seção opcional se houver histórico de mudanças e evolução relevantes.
-> Relate aqui a evolução do projeto: possíveis problemas enfrentados e possíveis mudanças de trajetória. Relatar o processo para se alcançar os resultados é tão importante quanto os resultados.
-
-
-# 6. Discussão
+# 4. Discussão
 > Fazer um breve debate sobre os resultados alcançados. Aqui pode ser feita a análise dos possíveis motivos que certos resultados foram alcançados. Por exemplo:
 > * por que seu modelo alcançou (ou não) um bom resultado?
 > * por que o modelo de um cenário não se desempenhou bem em outro?
 >
 > A discussão dos resultados também pode ser feita opcionalmente na seção de Resultados, na medida em que os resultados são apresentados. Aspectos importantes a serem discutidos: É possível tirar conclusões dos resultados? Quais? Há indicações de direções para estudo? São necessários trabalhos mais profundos?
 
-# 7. Conclusão
+# 5. Conclusão
 > Destacar as principais conclusões obtidas no desenvolvimento do projeto.
 >
 > Destacar os principais desafios enfrentados.
