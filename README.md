@@ -100,7 +100,21 @@ Os dados estão presentes em arquivos CSV (*comma separeted values*) e são os s
 * `providers`
 * `supplies`
 
-Especificamente para este projeto, utilizou-se a tabela `encounters` e a tabela `conditions` para entender quais condições mais levavam os pacientes á óbitos. Posteriormente, utilizou-se a tabela `patients` para cálculo da probabilidade de óbito em até 7 dias. Destas tabelas, levou-se em consideração os parâmetros a seguir:
+Este projeto foi dividido em duas etapas, sendo que na primeira utilizou-se as tabelas `patients`, `encounters` e `conditions` para entender quais condições mais levavam os pacientes á óbitos, e tomar as decisões para escolha de cenário de aplicação do prognóstico. Posteriormente, na segunda etapa, utilizou-se apenas a tabela `patients` para cálculo da probabilidade de óbito em até 7 dias.
+
+## Preparação dos dados
+
+Após o entendimento dos dados, na primeira etapa, foram retirados dados das tabelas `patients`, `encounters` e `conditions`. A combinação dos dados de interesse presentes em cada uma das tabelas fornecidas foi feita a partir do vínculo entre elas conforme a Tabela 1, gerando um _datamart_ final para ser utilizado no modelo proposto.
+
+|                  | **`patients`** | **`encounters`** | **`conditions`** |
+| ---------------- | -------------- | -----------------| ---------------- |
+| **`patients`**   |                |   `patient_id`   |                  |
+| **`encounters`** | `patient_id`   |                  |  `encounter_id`  |
+| **`conditions`** |                |  `encounter_id`  |                  |
+
+ Tabela 1: Apresentação do vínculo entre tabelas para criação do datamart a ser utilizado pelo modelo.
+
+Já na segunda etapa levou-se em consideração os parâmetros a seguir, das tabelas `patients` e `encounters`:
  
 * `BIRTHDATE`: data de nascimento, para saber a idade que o paciente tinha ao ir a óbito; 
 * `MARITAL`: nome do Conjugê, para saber o estado civíl do paciente;
@@ -115,46 +129,33 @@ Especificamente para este projeto, utilizou-se a tabela `encounters` e a tabela 
 * `PAYER_COVERAGE`: pagador deste custo do paciente, para saber se o plano de saúde foi usado ou não;
 * `death_threshold`: foi um dado criado pela equipe, que possui valor _True_ ou _False_, sendo _True_ quando o paciente foi á óbito em até 7 dias após o último encontro.
 
-## Preparação dos dados
-
-Após avaliação do cenário corrente baseado na pergunta ser respondida, foi identificada a necessidade de uso das bases pacientes, eventos e condições [TODO: avaliar se só essas] (do ponto de vista técnico, respectivamente as tabelas em formato CSV de `patients`, `events`, `conditions`). A combinação dos dados de interesse presentes em cada uma das tabelas fornecidas foi feita a partir do vínculo entre elas conforme a Tabela 1, gerando um datamart final para ser utilizado no modelo proposto.
-
-|                  | **`patients`** | **`events`** | **`conditions`** |
-| ---------------- | -------------- | ------------ | ---------------- |
-| **`patients`**   |                | `patient_id` |                  |
-| **`events`**     | `patient_id`   |              | `event_id`       |
-| **`conditions`** |                | `event_id`   |                  |
-
- 
-Tabela 1: Apresentação do vínculo entre tabelas para criação do datamart a ser utilizado pelo modelo.
-
 Com a estruturação dos dados a partir do cruzamento entre eles, realizou-se a criação de colunas (características, ou, em inglês na área de ciência de dados, *feature*) sintéticas a partir de colunas originas de de dados categóricos para, a partir do aumento da dimensionalidade, trazer maior riquza para a criação do modelo considerando aspectos relevantes para a análise.
 
 Ao final, as colunas relevantes para o desenvolvimento do datamart foram as presentes na Tabela 2:
 
 | **Tabela origem** | **Campo**                 | **Coluna origem**   | **Descrição**                                                      |
 | ----------------- | ------------------------- | ------------------- | ------------------------------------------------------------------ |
-| ENCOUNTER         | TOTAL_CLAIM_COST          | TOTAL_CLAIM_COST    |
-| ENCOUNTER         | ENCOUNTERCLASS_wellness   | ENCOUNTERCLASS      | Classe de encontro marcada como rotineira                          |
-| ENCOUNTER         | ENCOUNTERCLASS_urgentcare | ENCOUNTERCLASS      | Classe de encontro marcada como de urgência                        |
-| ENCOUNTER         | ENCOUNTERCLASS_snf        | ENCOUNTERCLASS      | Classe de encontro marcada como centro de enfermagem especializada |
-| ENCOUNTER         | ENCOUNTERCLASS_outpatient | ENCOUNTERCLASS      | Classe de encontro marcada como ambulatorial                       |
-| ENCOUNTER         | ENCOUNTERCLASS_inpatient  | ENCOUNTERCLASS      | Classe de encontro marcada como internação                         |
-| ENCOUNTER         | ENCOUNTERCLASS_home       | ENCOUNTERCLASS      | Classe de encontro marcada como domiciliar                         |
-| ENCOUNTER         | ENCOUNTERCLASS_emergency  | ENCOUNTERCLASS      | Classe de encontro marcada como emergência                         |
-| ENCOUNTER         | ENCOUNTERCLASS_ambulatory | ENCOUNTERCLASS      | Classe de encontro marcada como ambulatorial                       |
-| ENCOUNTER         | PAYER_COVERAGE            | PAYER_COVERAGE      |                                                                    |
-| PATIENT           | BIRTHDATE                 | BIRTHDATE           |                                                                    |
-| PATIENT           | MARITAL                   | MARITAL             |                                                                    |
-| PATIENT           | HEALTHCARE_COVERAGE       | HEALTHCARE_COVERAGE |                                                                    |
-| PATIENT           | HEALTHCARE_EXPENSES       | HEALTHCARE_EXPENSES |                                                                    |
-| PATIENT           | LON                       | LON                 |                                                                    |
-| PATIENT           | LAT                       | LAT                 |                                                                    |
-| PATIENT           | ZIP                       | ZIP                 |                                                                    |
-| PATIENT           | GENDER                    | GENDER              |                                                                    |
-| PATIENT           | ETHNICITY                 | ETHNICITY           |                                                                    |
-| PATIENT           | RACE                      | RACE                |                                                                    |
-| ENCOUNTER         | BASE_ENCOUNTER_COST       | BASE_ENCOUNTER_COST |                                                                    |
+| ENCOUNTERS        | TOTAL_CLAIM_COST          | TOTAL_CLAIM_COST    |
+| ENCOUNTERS        | ENCOUNTERCLASS_wellness   | ENCOUNTERCLASS      | Classe de encontro marcada como rotineira                          |
+| ENCOUNTERS        | ENCOUNTERCLASS_urgentcare | ENCOUNTERCLASS      | Classe de encontro marcada como de urgência                        |
+| ENCOUNTERS        | ENCOUNTERCLASS_snf        | ENCOUNTERCLASS      | Classe de encontro marcada como centro de enfermagem especializada |
+| ENCOUNTERS        | ENCOUNTERCLASS_outpatient | ENCOUNTERCLASS      | Classe de encontro marcada como ambulatorial                       |
+| ENCOUNTERS        | ENCOUNTERCLASS_inpatient  | ENCOUNTERCLASS      | Classe de encontro marcada como internação                         |
+| ENCOUNTERS        | ENCOUNTERCLASS_home       | ENCOUNTERCLASS      | Classe de encontro marcada como domiciliar                         |
+| ENCOUNTERS        | ENCOUNTERCLASS_emergency  | ENCOUNTERCLASS      | Classe de encontro marcada como emergência                         |
+| ENCOUNTERS        | ENCOUNTERCLASS_ambulatory | ENCOUNTERCLASS      | Classe de encontro marcada como ambulatorial                       |
+| ENCOUNTERS        | PAYER_COVERAGE            | PAYER_COVERAGE      |                                                                    |
+| PATIENTS          | BIRTHDATE                 | BIRTHDATE           |                                                                    |
+| PATIENTS          | MARITAL                   | MARITAL             |                                                                    |
+| PATIENTS          | HEALTHCARE_COVERAGE       | HEALTHCARE_COVERAGE |                                                                    |
+| PATIENTS          | HEALTHCARE_EXPENSES       | HEALTHCARE_EXPENSES |                                                                    |
+| PATIENTS          | LON                       | LON                 |                                                                    |
+| PATIENTS          | LAT                       | LAT                 |                                                                    |
+| PATIENTS          | ZIP                       | ZIP                 |                                                                    |
+| PATIENTS          | GENDER                    | GENDER              |                                                                    |
+| PATIENTS          | ETHNICITY                 | ETHNICITY           |                                                                    |
+| PATIENTS          | RACE                      | RACE                |                                                                    |
+| ENCOUNTERS        | BASE_ENCOUNTER_COST       | BASE_ENCOUNTER_COST |Custo do encontro, sem medicamentos, imunizações, procedimentos ou outros serviços.|
 
 Tabela 2: Campos utilizados para composição do datamart a ser considerado para a geração do modelo de aprendizado de máquina. A **coluna origem** indica que o campo foi criado artificialmente de uma *feature* categórica da tabela origem.
 
