@@ -114,28 +114,13 @@ Após o entendimento dos dados, na primeira etapa, foram retirados dados das tab
 
  Tabela 1: Apresentação do vínculo entre tabelas para criação do datamart a ser utilizado pelo modelo.
 
-Já na segunda etapa levou-se em consideração os parâmetros a seguir, das tabelas `patients` e `encounters`:
- 
-* `BIRTHDATE`: data de nascimento, para saber a idade que o paciente tinha ao ir a óbito; 
-* `MARITAL`: nome do Conjugê, para saber o estado civíl do paciente;
-* `RACE`: raça do paciente;
-* `ETHNICITY`: etnia do paciente;
-* `GENDER`: gênero do paciente, aqui considerado como binário (masculino ou feminino);
-* `ZIP`, `LAT` e `LON`: Código postal, latitude e longitude, para saber o endereço do paciente;
-* `HEALTHCARE_EXPENSES`, and `HEALTHCARE_COVERAGE`: gastos com plano de saúde e a cobertura do plano do paciente;
-* `ENCOUNTERCLASS`: classe do último encontro, para saber se era uma emergência ou outro tipo de encontro;
-* `BASE_ENCOUNTER_COST`: custo do último encontro do paciente;
-* `TOTAL_CLAIM_COST`: custo total do ultimo encontro com todas as outras despesas envolvidas;
-* `PAYER_COVERAGE`: pagador deste custo do paciente, para saber se o plano de saúde foi usado ou não;
-* `death_threshold`: foi um dado criado pela equipe, que possui valor _True_ ou _False_, sendo _True_ quando o paciente foi á óbito em até 7 dias após o último encontro.
+Já na segunda etapa, com a estruturação dos dados a partir do cruzamento entre eles, realizou-se a criação de colunas (características, ou, em inglês na área de ciência de dados, *feature*) sintéticas a partir de colunas originas de de dados categóricos para, a partir do aumento da dimensionalidade, trazer maior riquza para a criação do modelo considerando aspectos relevantes para a análise.
 
-Com a estruturação dos dados a partir do cruzamento entre eles, realizou-se a criação de colunas (características, ou, em inglês na área de ciência de dados, *feature*) sintéticas a partir de colunas originas de de dados categóricos para, a partir do aumento da dimensionalidade, trazer maior riquza para a criação do modelo considerando aspectos relevantes para a análise.
-
-Ao final, as colunas relevantes para o desenvolvimento do datamart foram as presentes na Tabela 2:
+Ao final, as colunas relevantes para o desenvolvimento do _datamart_ foram as presentes na Tabela 2:
 
 | **Tabela origem** | **Campo**                 | **Coluna origem**   | **Descrição**                                                      |
 | ----------------- | ------------------------- | ------------------- | ------------------------------------------------------------------ |
-| ENCOUNTERS        | TOTAL_CLAIM_COST          | TOTAL_CLAIM_COST    |
+| ENCOUNTERS        | TOTAL_CLAIM_COST          | TOTAL_CLAIM_COST    | Custo total do encontro
 | ENCOUNTERS        | ENCOUNTERCLASS_wellness   | ENCOUNTERCLASS      | Classe de encontro marcada como rotineira                          |
 | ENCOUNTERS        | ENCOUNTERCLASS_urgentcare | ENCOUNTERCLASS      | Classe de encontro marcada como de urgência                        |
 | ENCOUNTERS        | ENCOUNTERCLASS_snf        | ENCOUNTERCLASS      | Classe de encontro marcada como centro de enfermagem especializada |
@@ -144,22 +129,22 @@ Ao final, as colunas relevantes para o desenvolvimento do datamart foram as pres
 | ENCOUNTERS        | ENCOUNTERCLASS_home       | ENCOUNTERCLASS      | Classe de encontro marcada como domiciliar                         |
 | ENCOUNTERS        | ENCOUNTERCLASS_emergency  | ENCOUNTERCLASS      | Classe de encontro marcada como emergência                         |
 | ENCOUNTERS        | ENCOUNTERCLASS_ambulatory | ENCOUNTERCLASS      | Classe de encontro marcada como ambulatorial                       |
-| ENCOUNTERS        | PAYER_COVERAGE            | PAYER_COVERAGE      |                                                                    |
-| PATIENTS          | BIRTHDATE                 | BIRTHDATE           |                                                                    |
-| PATIENTS          | MARITAL                   | MARITAL             |                                                                    |
-| PATIENTS          | HEALTHCARE_COVERAGE       | HEALTHCARE_COVERAGE |                                                                    |
-| PATIENTS          | HEALTHCARE_EXPENSES       | HEALTHCARE_EXPENSES |                                                                    |
-| PATIENTS          | LON                       | LON                 |                                                                    |
-| PATIENTS          | LAT                       | LAT                 |                                                                    |
-| PATIENTS          | ZIP                       | ZIP                 |                                                                    |
-| PATIENTS          | GENDER                    | GENDER              |                                                                    |
-| PATIENTS          | ETHNICITY                 | ETHNICITY           |                                                                    |
-| PATIENTS          | RACE                      | RACE                |                                                                    |
-| ENCOUNTERS        | BASE_ENCOUNTER_COST       | BASE_ENCOUNTER_COST |Custo do encontro, sem medicamentos, imunizações, procedimentos ou outros serviços.|
+| ENCOUNTERS        | PAYER_COVERAGE            | PAYER_COVERAGE      | Valor do custo coberto pelo Pagador                                |
+| PATIENTS          | BIRTHDATE                 | BIRTHDATE           | Data em que o paciente nasceu.                                     |
+| PATIENTS          | MARITAL                   | MARITAL             | Estado civil. M é casado, S é solteiro, divórciado (D) ou viuvo (W)|
+| PATIENTS          | HEALTHCARE_COVERAGE       | HEALTHCARE_COVERAGE | Custo total ao longo da vida dos serviços de saúde que foram cobertos pela seguradora|
+| PATIENTS          | HEALTHCARE_EXPENSES       | HEALTHCARE_EXPENSES | Custo total ao longo da vida dos cuidados de saúde que o paciente pagou|
+| PATIENTS          | LON                       | LON                 | Longitude do endereço do paciente                                  |
+| PATIENTS          | LAT                       | LAT                 | Latitude do endereço do paciente                                   |
+| PATIENTS          | ZIP                       | ZIP                 | Código postal do paciente                                          |
+| PATIENTS          | GENDER                    | GENDER              | Gênero. M é masculino, F é feminino.                               |
+| PATIENTS          | ETHNICITY                 | ETHNICITY           | Descrição da etnia primária do paciente                            |
+| PATIENTS          | RACE                      | RACE                | Descrição da raça primária do paciente                             |
+| ENCOUNTERS        | BASE_ENCOUNTER_COST       | BASE_ENCOUNTER_COST | Custo do encontro, sem incluir medicamentos, imunizações, procedimentos ou outros serviços.|
 
-Tabela 2: Campos utilizados para composição do datamart a ser considerado para a geração do modelo de aprendizado de máquina. A **coluna origem** indica que o campo foi criado artificialmente de uma *feature* categórica da tabela origem.
+Tabela 2: Campos utilizados para composição do *datamart* a ser considerado para a geração do modelo de aprendizado de máquina. A **coluna origem** indica que o campo foi criado artificialmente de uma *feature* categórica da tabela origem.
 
-Após a criação do datamart, realizou-se a extração de informações relevantes para a análise dos pacientes de interesse considerando apena a condição **[TODO: nome da condição]** para que a partir do modelo, a entrada de dados fosse feita apenas considerando a condição de interesse.
+Após a criação do datamart, realizou-se a extração de informações relevantes para a análise dos pacientes de interesse considerando apena a condição de Insuficiência Cardíaca Congestiva Crônica para que a partir do modelo, a entrada de dados fosse feita apenas considerando a condição de interesse.
 
 ## Modelagem
 
