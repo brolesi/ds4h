@@ -33,7 +33,7 @@ Diante deste cenário, a pergunta de pesquisa levantada para este projeto é a s
 Para o presente trabalho, utilizou-se as seguintes ferramentas:
 
 * Tecnologia _Python_, para desenvolver as provas de conceito;
-* Bibliotecas x, y, z como suporte para as funções necessárias; **TO DO**
+* Bibliotecas _Panda, Glob, OS, Matplotlib.pyplot, Seaborn e Datetime_ como suporte para as funções necessárias;
 * _Notebook Jupyter_, para escrita dos códigos de forma colaborativa;
 * _Scripts Shell_, para execução de fluxo de dados (_data pipeline_);
 * Base de dados _Synthea_, para geração do modelo de prognóstico e também para testes.
@@ -78,7 +78,8 @@ A seguir será explicado o objetivo de cada fase, com sua respectiva aplicação
 
 ## Entendimento do problema (entendimento de negócio)
 
-Insuficiência cardíaca é uma das principais causas de mortalidade e morbidade no mundo, e está associada ao alto uso de recursos e custos com saúde. No Brasil, a prevalência de insuficiência cardíaca é de aproximadamente 2 milhões de pacientes, e sua incidência é de aproximadamente 240.000 novos casos por ano, sendo que as cidades localizadas no sul, sudeste, nordeste e centro-oeste mostraram maior risco relativo para mortalidade causada por insuficiência cardíaca, e a maioria das cidades do norte foi classificada como um fator protetivo contra esta causa de morte [6]. Diante dessa realidade, é relevante que seja realizado um estudo prognóstico de pacientes com esta condição.
+Insuficiência cardíaca é uma das principais causas de mortalidade e morbidade no mundo, e está associada ao alto uso de recursos e custos com saúde. No Brasil, a prevalência de insuficiência cardíaca é de aproximadamente 2 milhões de pacientes, e sua incidência é de aproximadamente 240.000 novos casos por ano, sendo que as cidades localizadas no sul, sudeste, nordeste e centro-oeste mostraram maior risco relativo para mortalidade causada por insuficiência cardíaca, e a maioria das cidades do norte foi classificada como um fator protetivo contra esta causa de morte [6]. 
+Observando-se os datasets usados, nota-se que as causas da morte que mais contem dados é a ICC. Diante dessa realidade, é relevante que seja realizado um estudo prognóstico de pacientes com esta condição.
 
 ## Entendimento dos dados
 
