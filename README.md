@@ -34,6 +34,7 @@ Para o presente trabalho, utilizou-se as seguintes ferramentas:
 
 * Tecnologia _Python_, para desenvolver as provas de conceito;
 * Bibliotecas _Panda, Glob, OS, Matplotlib.pyplot, Seaborn e Datetime_ como suporte para as funções necessárias;
+* _PyCaret_, para escolher o melhor modelo a ser utilizado;
 * _Notebook Jupyter_, para escrita dos códigos de forma colaborativa;
 * _Scripts Shell_, para execução de fluxo de dados (_data pipeline_);
 * Base de dados _Synthea_, para geração do modelo de prognóstico e também para testes.
