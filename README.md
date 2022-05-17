@@ -2,7 +2,7 @@
 
 # Projeto de Predição de Prognóstico de Mortalidade com Dados Sintéticos
 
-# Apresentação
+# 1. Apresentação
 
 O presente projeto foi originado no contexto das atividades da disciplina de pós-graduação [*Ciência e Visualização de Dados em Saúde*](https://ds4h.org), oferecida no primeiro semestre de 2022, na Unicamp e elaborado pelos seguintes alunos:
 
@@ -12,9 +12,10 @@ O presente projeto foi originado no contexto das atividades da disciplina de pó
 | Fabio Fogliarini Brolesi      | 023718 | Computação     |
 | Ingrid Alves de Paiva Barbosa | 182849 | Computação     |
 
-# Contextualização da Proposta
+# 2. Contextualização da Proposta
 
-A área de pesquisa de prognósticos busca entender e melhorar os resultados de prognósticos em pessoas com uma determinada doença ou condição de saúde. O objetivo geral de estudos prognósticos em contextos clínicos é ajudar clínicos, pacientes e familiares a tomar decisões esclarecidas a respeito de cuidados de saúde com base em informações disponíveis sobre cada paciente no presente para prever desfechos no futuro [1]. Além disso, ajuda os pacientes e os familiares a tomar decisões adequadas a respeito do fim da vida daqueles cujo risco de morte é muito alto e a identificar intervenções personalizadas para evitar futuras hospitalizações [2].  
+A área de pesquisa de prognósticos busca entender e melhorar os resultados de prognósticos em pessoas com uma determinada doença ou condição de saúde. O objetivo geral de estudos prognósticos em contextos clínicos é ajudar clínicos, pacientes e familiares a tomar decisões esclarecidas a respeito de cuidados de saúde com base em informações disponíveis sobre cada paciente no presente para prever desfechos no futuro [1]. Além disso, ajuda os pacientes e os familiares a tomar decisões adequadas a respeito do fim da vida daqueles cujo risco de morte é muito alto e a identificar intervenções personalizadas para evitar futuras hospitalizações [2].
+
 Os modelos prognósticos usam vários fatores em combinação para prever o risco de resultados clínicos futuros em pacientes. Um bom modelo deve (i) fornecer previsões precisas que informam os pacientes e seus cuidadores, (ii) apoiar a pesquisa clínica e (iii) permitir decisões para melhorar os resultados dos tratamentos aos pacientes [1]. Um modelo prognóstico tem três fases principais: desenvolvimento do modelo (incluindo validação interna), validação externa e investigações de impacto na prática clínica. Embora muitos modelos prognósticos sejam propostos, poucos são atualmente usados na prática clínica [1].
 
 A proposta deste projeto é montar um ou mais modelos de prognóstico que realizem a predição de mortalidade de pacientes sintéticos gerados em pelo menos dois cenários de dados fictícios. Será necessário estabelecer os parâmetros de predição, definir quais os dados sobre o paciente que serão usados para a predição, construir modelos de aprendizagem de máquina que realizem predições e apresentar o resultado do modelo de predição aplicado.
@@ -25,7 +26,7 @@ Diante deste cenário, a pergunta de pesquisa levantada para este projeto é a s
 
 > Com dados de eventos e condições de pacientes a partir dos seus registros disponíveis, é possível predizer o prognóstico de evolução para óbito de pacientes com Insuficiência Cardíaca Congestiva Crônica dentro de 7 dias?
 
-## Ferramentas
+## 2.1. Ferramentas
 
 Para o presente trabalho, utilizou-se as seguintes ferramentas:
 
@@ -36,7 +37,7 @@ Para o presente trabalho, utilizou-se as seguintes ferramentas:
 * _Scripts Shell_, para execução de fluxo de dados (_data pipeline_);
 * Base de dados _Synthea_, para geração do modelo de prognóstico e também para testes.
 
-# Metodologia
+# 3. Metodologia
 
 O presente trabalho trata-se de um estudo de caso que utiliza a metodologia CRISP-DM (CRoss-Industry Standard Process for Data Mining), criado pela SPSS Inc [5]. Este modelo é composto de 6 fases, e suas interações podem ser vistas na figura a seguir [5]: 
 
@@ -71,16 +72,25 @@ Figura 1: Metodologia CRISP-DM.
 
 A seguir será explicado o objetivo de cada fase, com sua respectiva aplicação para solucionar o problema proposto neste projeto.
 
-## Entendimento do problema (entendimento de negócio)
+## 3.1 Entendimento do problema (entendimento de negócio)
 
 Insuficiência cardíaca é uma das principais causas de mortalidade e morbidade no mundo, e está associada ao alto uso de recursos e custos com saúde. No Brasil, a prevalência de insuficiência cardíaca é de aproximadamente 2 milhões de pacientes, e sua incidência é de aproximadamente 240.000 novos casos por ano, sendo que as cidades localizadas no sul, sudeste, nordeste e centro-oeste mostraram maior risco relativo para mortalidade causada por insuficiência cardíaca, e a maioria das cidades do norte foi classificada como um fator protetivo contra esta causa de morte [6]. 
 Observando-se os datasets usados, nota-se que as causas da morte que mais contem dados é a ICC. Diante dessa realidade, é relevante que seja realizado um estudo prognóstico de pacientes com esta condição.
 
-## Entendimento dos dados
+## 3.2 Entendimento dos dados
 
-Foram usados dados dos cenários sintéticos do [Synthea](https://synthea.mitre.org/) presentes no repositório [Github](https://github.com/santanche/lab2learn/tree/master/data/synthea).
+Foram usados dados dos cenários sintéticos do [Synthea](https://synthea.mitre.org/) presentes no repositório [Github](https://github.com/santanche/lab2learn/tree/master/data/synthea). As bases utilizadas para o presente projeto são as que seguem:
 
-Os dados estão presentes em arquivos CSV (*comma separeted values*) e são os seguintes:
+* [scenario01](/data/raw/scenario01/)
+* [scenario02](/data/raw/scenario02/)
+
+O Synthea tem a missão de produzir dados de pacientes sintéticos e realistas, mas não reais, de alta qualidade e registros de saúde associados, cobrindo todos os aspectos da saúde. Os dados resultantes estão livres de restrições de custo, privacidade e segurança. Ele pode ser usado sem restrições para uma variedade de usos secundários na academia, pesquisa, indústria e governo. Cada paciente sintético do Synthea é gerado de forma independente, à medida que progride desde o nascimento até a morte por meio de representações modulares de várias doenças e condições. Cada paciente percorre todos os módulos do sistema. Quando um paciente morre ou a simulação chega ao dia atual, esse registro do paciente pode ser exportado em vários formatos diferentes [7]. A figura 2 abaixo apresenta uma sinteze da organização dos dados do Synthea.
+
+![alt text](assets/architecture.png)
+
+Figura 2 - organização dos dados do Synthea [7].
+
+Na base de dadosdo Synthea, os dados estão presentes em arquivos CSV (*comma separeted values*) e são os seguintes:
 
 * `allergies`
 * `careplans`
@@ -102,7 +112,13 @@ Os dados estão presentes em arquivos CSV (*comma separeted values*) e são os s
 
 Este projeto foi dividido em duas etapas, sendo que na primeira utilizou-se as tabelas `patients`, `encounters` e `conditions` para entender quais condições mais levavam os pacientes á óbitos, e tomar as decisões para escolha de cenário de aplicação do prognóstico. Posteriormente, na segunda etapa, utilizou-se apenas a tabela `patients` para cálculo da probabilidade de óbito em até 7 dias.
 
-## Preparação dos dados
+Estas três tabelas são as mais relevantes de toda a base, e a integração dos dados pode ser melhor compreendida a partir da estrutura apresentada na figura 3. 
+
+![alt text](assets/synthea.png)
+
+Figura 3 - Integração das tabelas `patients`, `encounters` e `conditions`.
+
+## 3.3 Preparação dos dados
 
 Após o entendimento dos dados, na primeira etapa, foram retirados dados das tabelas `patients`, `encounters` e `conditions`. A combinação dos dados de interesse presentes em cada uma das tabelas fornecidas foi feita a partir do vínculo entre elas conforme a Tabela 1, gerando um _datamart_ final para ser utilizado no modelo proposto.
 
@@ -144,25 +160,25 @@ Ao final, as colunas relevantes para o desenvolvimento do _datamart_ foram as pr
 
 Tabela 2: Campos utilizados para composição do *datamart* a ser considerado para a geração do modelo de aprendizado de máquina. A **coluna origem** indica que o campo foi criado artificialmente de uma *feature* categórica da tabela origem.
 
-Após a criação do datamart, realizou-se a extração de informações relevantes para a análise dos pacientes de interesse considerando apena a condição de Insuficiência Cardíaca Congestiva Crônica para que a partir do modelo, a entrada de dados fosse feita apenas considerando a condição de interesse.
+Após a criação do *datamart*, realizou-se a extração de informações relevantes para a análise dos pacientes de interesse considerando apena a condição de Insuficiência Cardíaca Congestiva Crônica para que a partir do modelo, a entrada de dados fosse feita apenas considerando a condição de interesse.
 
-## Modelagem
+## 3.4 Modelagem
 
-[TODO: colocar a criação de samples / treino/teste, SVM e decision tree]
-
-## Validação
-
-Os resultados obtidos a partir da análise descritiva, criação e refinamento do modelo são os que seguem:
-
-### Análise descritiva
+### 3.4.1 Análise descritiva
 
 [TODO: penso em colocar boxplot, outros pontos descritivos de análises iniciais]
 
-### Modelo
+### 4.3.2 Modelo
+
+[TODO: colocar a criação de samples / treino/teste, SVM e decision tree]
 
 Sobre o modelo, utilizou-se a técnica de *Support Vector Machines* afim de identificar a segregação a partir de hiperplanos dos dados em dois: prognóstico de evolução à óbito em até $7$ dias e prognóstico de evolução à óbito igual ou superior a $7$ dias. Dado que a quantidade de registros era pequena, utilizou-se da técnica de *data augmentation* (ou, aumento de dados, a partir da criação de dados sintéticos, baseados nos dados originais), para que as amostras (óbito em até 7 dias e óbito a partir de 7 dias) ficassem balanceadas.
 
-## Aplicação
+## 3.5 Avaliação
+
+Os resultados obtidos a partir da análise descritiva, criação e refinamento do modelo são os que seguem
+
+## 3.6 Aplicação
 
 Uma com o modelo desenhado e validado, realizou-se então o deploy do mesmo, tornando-o produtivo para ser executado no dispositivo final, e a partir daí, o uso do mesmo a partir da entrada de dados conforme estrutura da Tabela 3.
 
@@ -173,22 +189,7 @@ Uma com o modelo desenhado e validado, realizou-se então o deploy do mesmo, tor
 
 Tabela 3: Campos utilizados na entrada dos dados para processamento do modelo desenvolvido.
 
-## Bases Adotadas para o Estudo
-
-> Se só foram usadas as bases fornecidas, basta listá-las como segue:
-
-As bases utilizadas para o presente projeto são as que seguem:
-
-* [scenario01](/data/raw/scenario01/)
-* [scenario02](/data/raw/scenario02/)
-
-> Se usou também outras bases (opcional), apresentá-las como segue:
-
-| Base de Dados  | Endereço na Web   | Resumo descritivo                                |
-| -------------- | ----------------- | ------------------------------------------------ |
-| Título da Base | http://base1.org/ | Breve resumo (duas ou três linhas) sobre a base. |
-
-# Resultados Obtidos
+# 4. Resultados Obtidos
 
 > Esta seção pode opcionalmente ser apresentada em conjunto com a metodologia, intercalando método e resultados.
 >
@@ -210,23 +211,20 @@ As bases utilizadas para o presente projeto são as que seguem:
 >     * como analisar e interpretar as diferenças?
 > * testar diferentes composições de dados sobre o paciente para a predição (por exemplo, quantidade diversificadas de número de itens).
 
-# Evolução do Projeto
+# 5. Evolução do Projeto
 
 > Seção opcional se houver histórico de mudanças e evolução relevantes.
 > Relate aqui a evolução do projeto: possíveis problemas enfrentados e possíveis mudanças de trajetória. Relatar o processo para se alcançar os resultados é tão importante quanto os resultados.
 
-A partir dos resultados obtidos, existe a possibilidade de evolução do ponto de vista de utilizar / captar mais dados que possam ser relevantes para a análise e construção de um modelo mais robusto e que possa ter a capacidade de previsão mais acurada, para apoiar a definição do prognóstico médico [TODO: incrementar].
 
-Outra possibilidade é a geração de mais dados sintéticos para, a partir de uma massa de dados maior, termos um modelo com maior robustez.
-
-# Discussão
+# 6. Discussão
 > Fazer um breve debate sobre os resultados alcançados. Aqui pode ser feita a análise dos possíveis motivos que certos resultados foram alcançados. Por exemplo:
 > * por que seu modelo alcançou (ou não) um bom resultado?
 > * por que o modelo de um cenário não se desempenhou bem em outro?
 >
 > A discussão dos resultados também pode ser feita opcionalmente na seção de Resultados, na medida em que os resultados são apresentados. Aspectos importantes a serem discutidos: É possível tirar conclusões dos resultados? Quais? Há indicações de direções para estudo? São necessários trabalhos mais profundos?
 
-# Conclusão
+# 7. Conclusão
 > Destacar as principais conclusões obtidas no desenvolvimento do projeto.
 >
 > Destacar os principais desafios enfrentados.
@@ -235,6 +233,10 @@ Outra possibilidade é a geração de mais dados sintéticos para, a partir de u
 >
 > Trabalhos Futuros:
 > * o que poderia ser melhorado se houvesse mais tempo?
+
+A partir dos resultados obtidos, existe a possibilidade de evolução do ponto de vista de utilizar / captar mais dados que possam ser relevantes para a análise e construção de um modelo mais robusto e que possa ter a capacidade de previsão mais acurada, para apoiar a definição do prognóstico médico [TODO: incrementar].
+
+Outra possibilidade é a geração de mais dados sintéticos para, a partir de uma massa de dados maior, termos um modelo com maior robustez.
 
 # Referências Bibliográficas
 > Lista de artigos, links e referências bibliográficas (se houver).
@@ -248,3 +250,6 @@ Steyerberg EW, Moons KG, van der Windt DA, Hayden JA, Perel P, Schroter S, et al
 [4] https://wippesaude.com.br/2018/06/12/o-que-e-o-icc-insuficiencia-cardiaca-cronica-congestiva/
 [5] crisp
 [6] https://doi.org/10.36660/abc.20201325
+[7] https://github.com/synthetichealth/synthea/wiki/Getting-Started
+[8] https://github.com/synthetichealth/synthea/wiki/CSV-File-Data-Dictionary
+
