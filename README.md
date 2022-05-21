@@ -110,7 +110,7 @@ Na base de dadosdo Synthea, os dados estão presentes em arquivos CSV (*comma se
 * `providers`
 * `supplies`
 
-Este projeto foi dividido em duas etapas, sendo que na primeira utilizou-se as tabelas `patients`, `encounters` e `conditions` para entender quais condições mais levavam os pacientes á óbitos, e tomar as decisões para escolha de cenário de aplicação do prognóstico. Posteriormente, na segunda etapa, utilizou-se apenas a tabela `patients` para cálculo da probabilidade de óbito em até 7 dias.
+Este projeto foi dividido em duas etapas, sendo que na primeira utilizou-se as tabelas `patients`, `encounters` e `conditions` para entender quais condições mais levavam os pacientes á óbitos, e tomar as decisões para escolha de cenário de aplicação do prognóstico. Posteriormente, na segunda etapa, utilizou-se as tabela `patients` e `encounters` para cálculo da probabilidade de óbito em até 7 dias.
 
 Estas três tabelas são as mais relevantes de toda a base, e a integração dos dados pode ser melhor compreendida a partir da estrutura apresentada na figura 3. 
 
@@ -168,7 +168,7 @@ Como brevemente explicado anteiormente, esta modelagem foi dividida em duas etap
 
 ### 3.4.1 Etapa 1 - Análise descritiva
 
-Na primeira etapa foram realizadas algumas análises dos dados das tabelas `patients`, `encounters` e `conditions` para entender quais condições mais levavam os pacientes á óbitos, e tomar as decisões para escolha de cenário de aplicação do prognóstico.
+Como já citado, na primeira etapa foram realizadas algumas análises dos dados das tabelas `patients`, `encounters` e `conditions` para entender quais condições mais levavam os pacientes á óbitos, e tomar as decisões para escolha de cenário de aplicação do prognóstico.
 
 No cenário 1, foram encontrados 1174 pacientes diferentes, sendo que 174 deles já haviam ido à òbito, enquanto no cenário 2 haviam 1121 pacientes, com 121 óbitos. Em ambos os cenários haviam 1000 pacientes ainda em vida. 
 
@@ -188,7 +188,7 @@ Entretanto, percebeu-se que nem todas as condições que levaram a òbito no cen
 
 ![alt text](assets/contagem_morte2.png)
 
-Figura 5 - Maiores causas de morte em comum nos dois cenários.
+Figura 6 - Maiores causas de morte em comum nos dois cenários.
 
 É possível perceber que a condição que mais levou à óbito, somando os dois cenários, é a Insuficiência cardíaca congestiva crônica (*Chronic congestive heart failure* - 88805009).
 
@@ -196,7 +196,9 @@ Figura 5 - Maiores causas de morte em comum nos dois cenários.
 
 [TODO: colocar a criação de samples / treino/teste, SVM e decision tree]
 
-Para o modelo, primeiro foi necessário eliminar todos os dados que poderiam causar bias, restando os parâmetros já apresentados na seção 3.3. Utilizou-se a técnica de *Support Vector Machines* afim de identificar a segregação a partir de hiperplanos dos dados em dois: prognóstico de evolução à óbito em até $7$ dias e prognóstico de evolução à óbito igual ou superior a $7$ dias. Dado que a quantidade de registros era pequena, o resultado não foi como o esperado, por isso, utilizou-se da técnica de *data augmentation* (ou, aumento de dados, a partir da criação de dados sintéticos, baseados nos dados originais), para que as amostras (óbito em até 7 dias e óbito a partir de 7 dias) ficassem balanceadas.
+Para o modelo, primeiro foi necessário eliminar todos os dados que poderiam causar bias, restando os parâmetros já apresentados na seção 3.3. Em seguida, os pacientes de cada cenário foram divididos em dois grupos, sendo um daqueles que já haviam ido à òbito e o outro daqueles que ainda estavam em vida. A proposta inicial seria de utilizar os dados do grupo dos pacientes que já foram a obito para treinar o sistema e os dados do grupo dos pacientes que estão em vida para prognóstico. Entretanto, o número de pacientes que já foram a obito com a condição pré-definida não possuía o tamanho suficiente para treinar o sistema. Por essa razão, foram usados os dados dos pacientes em vida como contraponto no treinamento.
+
+Utilizou-se a técnica de *Support Vector Machines* afim de identificar a segregação a partir de hiperplanos dos dados em dois: prognóstico de evolução à óbito em até $7$ dias e prognóstico de evolução à óbito igual ou superior a $7$ dias. Dado que a quantidade de registros era pequena, o resultado não foi como o esperado, por isso, utilizou-se da técnica de *data augmentation* (ou, aumento de dados, a partir da criação de dados sintéticos, baseados nos dados originais), para que as amostras (óbito em até 7 dias e óbito a partir de 7 dias) ficassem balanceadas.
 
 Após ter o modelo desenhado e validado, realizou-se então o *deploy* do mesmo, tornando-o produtivo para ser executado no dispositivo final, e a partir daí, o uso do mesmo a partir da entrada de dados conforme estrutura da Tabela 3.
 
@@ -207,10 +209,6 @@ Após ter o modelo desenhado e validado, realizou-se então o *deploy* do mesmo,
 
 Tabela 3: Campos utilizados na entrada dos dados para processamento do modelo desenvolvido.
 
-> Esta seção pode opcionalmente ser apresentada em conjunto com a metodologia, intercalando método e resultados.
->
-> Descreva etapas para obtenção do modelo, incluindo tratamento de dados, se houve.
->
 > Apresente o seu modelo de predição e resultados alcançados.
 > Para cada modelo, apresente no mínimo:
 > * quais os dados sobre o paciente que serão usados para a predição;
@@ -253,13 +251,12 @@ Outra possibilidade é a geração de mais dados sintéticos para, a partir de u
 >
 > Fiquem à vontade para escolher o padrão de referenciamento preferido pelo grupo.
 
-[1] https://www.scielo.br/j/jbpneu/a/4v6FmcMGxnnSpCmJ3dZZrbG/?format=pdf&lang=pt
-[2] https://journals.plos.org/plosmedicine/article?id=10.1371/journal.pmed.1001381
-Steyerberg EW, Moons KG, van der Windt DA, Hayden JA, Perel P, Schroter S, et al. Prognosis Research Strategy (PROGRESS) 3: prognostic model research. PLoS Med. 2013;10(2):e1001381. https://doi.org/10.1371/journal.pmed.1001381
-[3] https://www.findacode.com/snomed/88805009--chronic-congestive-heart-failure.html?hl=88805009
-[4] https://wippesaude.com.br/2018/06/12/o-que-e-o-icc-insuficiencia-cardiaca-cronica-congestiva/
-[5] crisp
-[6] https://doi.org/10.36660/abc.20201325
-[7] https://github.com/synthetichealth/synthea/wiki/Getting-Started
-[8] https://github.com/synthetichealth/synthea/wiki/CSV-File-Data-Dictionary
+[1] Patino, C.M.,  Ferreira J.C. "Prognostic studies for health care decision making". CONTINUING EDUCATION: SCIENTIFIC METHODOLOGY, J Bras Pneumol., 43 (04), Aug 2017. https://doi.org/10.1590/S1806-37562017000000241
+[2] Steyerberg E.W., Moons K.G.M., van der Windt D.A., Hayden J.A., Perel P., Schroter S., et al. (2013) Prognosis Research Strategy (PROGRESS) 3: Prognostic Model Research. PLoS Med 10(2): e1001381. https://doi.org/10.1371/journal.pmed.1001381
+[3] SNOMED CT code (2022). "Chronic congestive heart failure   88805009" [online]. Disponível em: https://www.findacode.com/snomed/88805009--chronic-congestive-heart-failure.html?hl=88805009 Acessado em Maio de 2022.
+[4] Wippe Saúde (2022). "O que é o ICC – Insuficiência Cardíaca Crônica/Congestiva?" [online]. Disponível em: https://wippesaude.com.br/2018/06/12/o-que-e-o-icc-insuficiencia-cardiaca-cronica-congestiva/ Acessado em Maio de 2022.
+[5] P. Chapman et al., "CRISP-DM 1.0 - Step-by-step data mining guide". SPSS Inc., 2000.
+[6] Cestari, V. R. F., Garces, T. S., Sousa, G. J. B., Maranhão, T. A., Souza Neto, J. D., Pereira, M. L. D., Pessoa, V. L. M. P., Sales, J. T. L., Florêncio, R. S., Souza, L. C. , Vasconcelos, G. G. , Sobral, M. G. V., Damasceno, L. L. V., & Moreira, T. M. M. (2022). Distribuição Espacial de Mortalidade por Insuficiência Cardíaca no Brasil, 1996-2017. Arq. Bras. Cardiol., 118(1), 41-51. https://doi.org/10.36660/abc.20201325
+[7]  Synthea (2020). Getting Started [código fonte]. Disponível em: https://github.com/synthetichealth/synthea/wiki/Getting-Started Acessado em Maio de 2022.
+[8] Synthea (2020). CSV File Data Dictionary [código fonte]. Disponível em: https://github.com/synthetichealth/synthea/wiki/CSV-File-Data-Dictionary Acessado em Maio de 2022.
 
