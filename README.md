@@ -252,11 +252,18 @@ Outra possibilidade é a geração de mais dados sintéticos para, a partir de u
 > Fiquem à vontade para escolher o padrão de referenciamento preferido pelo grupo.
 
 [1] Patino, C.M.,  Ferreira J.C. "Prognostic studies for health care decision making". CONTINUING EDUCATION: SCIENTIFIC METHODOLOGY, J Bras Pneumol., 43 (04), Aug 2017. https://doi.org/10.1590/S1806-37562017000000241
+
 [2] Steyerberg E.W., Moons K.G.M., van der Windt D.A., Hayden J.A., Perel P., Schroter S., et al. (2013) Prognosis Research Strategy (PROGRESS) 3: Prognostic Model Research. PLoS Med 10(2): e1001381. https://doi.org/10.1371/journal.pmed.1001381
+
 [3] SNOMED CT code (2022). "Chronic congestive heart failure   88805009" [online]. Disponível em: https://www.findacode.com/snomed/88805009--chronic-congestive-heart-failure.html?hl=88805009 Acessado em Maio de 2022.
+
 [4] Wippe Saúde (2022). "O que é o ICC – Insuficiência Cardíaca Crônica/Congestiva?" [online]. Disponível em: https://wippesaude.com.br/2018/06/12/o-que-e-o-icc-insuficiencia-cardiaca-cronica-congestiva/ Acessado em Maio de 2022.
+
 [5] P. Chapman et al., "CRISP-DM 1.0 - Step-by-step data mining guide". SPSS Inc., 2000.
+
 [6] Cestari, V. R. F., Garces, T. S., Sousa, G. J. B., Maranhão, T. A., Souza Neto, J. D., Pereira, M. L. D., Pessoa, V. L. M. P., Sales, J. T. L., Florêncio, R. S., Souza, L. C. , Vasconcelos, G. G. , Sobral, M. G. V., Damasceno, L. L. V., & Moreira, T. M. M. (2022). Distribuição Espacial de Mortalidade por Insuficiência Cardíaca no Brasil, 1996-2017. Arq. Bras. Cardiol., 118(1), 41-51. https://doi.org/10.36660/abc.20201325
+
 [7]  Synthea (2020). Getting Started [código fonte]. Disponível em: https://github.com/synthetichealth/synthea/wiki/Getting-Started Acessado em Maio de 2022.
+
 [8] Synthea (2020). CSV File Data Dictionary [código fonte]. Disponível em: https://github.com/synthetichealth/synthea/wiki/CSV-File-Data-Dictionary Acessado em Maio de 2022.
 
