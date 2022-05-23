@@ -90,25 +90,30 @@ O Synthea tem a missão de produzir dados de pacientes sintéticos e realistas, 
 
 Figura 2 - organização dos dados do Synthea [7].
 
-Na base de dadosdo Synthea, os dados estão presentes em arquivos CSV (*comma separeted values*) e são os seguintes:
+Na base de dadosdo Synthea, os dados estão presentes em arquivos CSV (*comma separeted values*) e são os que seguem, conforme a Tabela 1:
 
-* `allergies`
-* `careplans`
-* `claims`
-* `conditions`
-* `devices`
-* `encounters`
-* `imaging_studies`
-* `immunizations`
-* `medications`
-* `observations`
-* `organizations`
-* `patients`
-* `payers`
-* `payer_transitions`
-* `procedures`
-* `providers`
-* `supplies`
+| Aruivo                    | Descrição                                                                     |
+| ------------------------- | ----------------------------------------------------------------------------- |
+| `allergies.csv`           | Dados de alergia do paciente.                                                 |
+| `careplans.csv`           | Dados do plano de atendimento ao paciente.                                    |
+| `claims.csv`              | Dados de solicitações do paciente.                                            |
+| `claims_transactions.csv` | Transações por item de linha por solicitação.                                 |
+| `conditions.csv`          | Condições ou diagnósticos do paciente.                                        |
+| `devices.csv`             | Dispositivos permanentes e semipermanentes utilizados pelo paciente.          |
+| `encounters.csv`          | Dados de encontro do paciente.                                                |
+| `imaging_studies.csv`     | Metadados de imagem do paciente.                                              |
+| `immunizations.csv`       | Dados de imunização do paciente.                                              |
+| `medications.csv`         | Dados de medicação do paciente.                                               |
+| `observations.csv`        | Observações do paciente, incluindo sinais vitais e relatórios de laboratório. |
+| `organizations.csv`       | Organizações fornecedoras, incluindo hospitais.                               |
+| `patients.csv`            | Dados demográficos do paciente.                                               |
+| `payer_transitions.csv`   | Dados de transição do pagador (ou seja, alterações no seguro de saúde).       |
+| `payers.csv`              | Dados do plano de saúde.                                                      |
+| `procedures.csv`          | Dados do procedimento do paciente, incluindo cirurgias.                       |
+| `providers.csv`           | Médicos que prestam assistência ao paciente.                                  |
+| `supplies.csv`            | Materiais utilizados na prestação de cuidados.                                |
+
+Tabela 1: arquivos disponíveis no repositório e descrição de cada um.
 
 Este projeto foi dividido em duas etapas, sendo que na primeira utilizou-se as tabelas `patients`, `encounters` e `conditions` para entender quais condições mais levavam os pacientes á óbitos, e tomar as decisões para escolha de cenário de aplicação do prognóstico. Posteriormente, na segunda etapa, utilizou-se as tabela `patients` e `encounters` para cálculo da probabilidade de óbito em até 7 dias.
 
@@ -116,47 +121,37 @@ Estas três tabelas são as mais relevantes de toda a base, e a integração dos
 
 ![alt text](assets/synthea.png)
 
-Figura 3 - Integração das tabelas `patients`, `encounters` e `conditions`.
+Figura 3 - Integração das tabelas `patients` e `encounters`.
 
 ## 3.3 Preparação dos dados
 
-Após o entendimento dos dados, na primeira etapa, foram retirados dados das tabelas `patients`, `encounters` e `conditions`. A combinação dos dados de interesse presentes em cada uma das tabelas fornecidas foi feita a partir do vínculo entre elas conforme a Tabela 1, gerando um _datamart_ final para ser utilizado no modelo proposto.
-
-|                  | **`patients`** | **`encounters`** | **`conditions`** |
-| ---------------- | -------------- | -----------------| ---------------- |
-| **`patients`**   |                |   `patient_id`   |                  |
-| **`encounters`** | `patient_id`   |                  |  `encounter_id`  |
-| **`conditions`** |                |  `encounter_id`  |                  |
-
- Tabela 1: Apresentação do vínculo entre tabelas para criação do datamart a ser utilizado pelo modelo.
-
-Já na segunda etapa, com a estruturação dos dados a partir do cruzamento entre eles, realizou-se a criação de colunas (características, ou, em inglês na área de ciência de dados, *feature*) sintéticas a partir de colunas originas de de dados categóricos para, a partir do aumento da dimensionalidade, trazer maior riquza para a criação do modelo considerando aspectos relevantes para a análise.
+Nesta etapa, com a estruturação dos dados a partir do cruzamento entre eles, realizou-se a criação de colunas (características, ou, em inglês na área de ciência de dados, *feature*) sintéticas a partir de colunas originas de de dados categóricos para, a partir do aumento da dimensionalidade, trazer maior riquza para a criação do modelo considerando aspectos relevantes para a análise.
 
 Ao final, as colunas relevantes para o desenvolvimento do _datamart_ foram as presentes na Tabela 2:
 
-| **Tabela origem** | **Campo**                 | **Coluna origem**   | **Descrição**                                                      |
-| ----------------- | ------------------------- | ------------------- | ------------------------------------------------------------------ |
-| ENCOUNTERS        | TOTAL_CLAIM_COST          | TOTAL_CLAIM_COST    | Custo total do encontro
-| ENCOUNTERS        | ENCOUNTERCLASS_wellness   | ENCOUNTERCLASS      | Classe de encontro marcada como rotineira                          |
-| ENCOUNTERS        | ENCOUNTERCLASS_urgentcare | ENCOUNTERCLASS      | Classe de encontro marcada como de urgência                        |
-| ENCOUNTERS        | ENCOUNTERCLASS_snf        | ENCOUNTERCLASS      | Classe de encontro marcada como centro de enfermagem especializada |
-| ENCOUNTERS        | ENCOUNTERCLASS_outpatient | ENCOUNTERCLASS      | Classe de encontro marcada como ambulatorial                       |
-| ENCOUNTERS        | ENCOUNTERCLASS_inpatient  | ENCOUNTERCLASS      | Classe de encontro marcada como internação                         |
-| ENCOUNTERS        | ENCOUNTERCLASS_home       | ENCOUNTERCLASS      | Classe de encontro marcada como domiciliar                         |
-| ENCOUNTERS        | ENCOUNTERCLASS_emergency  | ENCOUNTERCLASS      | Classe de encontro marcada como emergência                         |
-| ENCOUNTERS        | ENCOUNTERCLASS_ambulatory | ENCOUNTERCLASS      | Classe de encontro marcada como ambulatorial                       |
-| ENCOUNTERS        | PAYER_COVERAGE            | PAYER_COVERAGE      | Valor do custo coberto pelo Pagador                                |
-| PATIENTS          | BIRTHDATE                 | BIRTHDATE           | Data em que o paciente nasceu.                                     |
-| PATIENTS          | MARITAL                   | MARITAL             | Estado civil. M é casado, S é solteiro, divórciado (D) ou viuvo (W)|
-| PATIENTS          | HEALTHCARE_COVERAGE       | HEALTHCARE_COVERAGE | Custo total ao longo da vida dos serviços de saúde que foram cobertos pela seguradora|
-| PATIENTS          | HEALTHCARE_EXPENSES       | HEALTHCARE_EXPENSES | Custo total ao longo da vida dos cuidados de saúde que o paciente pagou|
-| PATIENTS          | LON                       | LON                 | Longitude do endereço do paciente                                  |
-| PATIENTS          | LAT                       | LAT                 | Latitude do endereço do paciente                                   |
-| PATIENTS          | ZIP                       | ZIP                 | Código postal do paciente                                          |
-| PATIENTS          | GENDER                    | GENDER              | Gênero. M é masculino, F é feminino.                               |
-| PATIENTS          | ETHNICITY                 | ETHNICITY           | Descrição da etnia primária do paciente                            |
-| PATIENTS          | RACE                      | RACE                | Descrição da raça primária do paciente                             |
-| ENCOUNTERS        | BASE_ENCOUNTER_COST       | BASE_ENCOUNTER_COST | Custo do encontro, sem incluir medicamentos, imunizações, procedimentos ou outros serviços.|
+| **Tabela origem** | **Campo**                 | **Coluna origem**   | **Descrição**                                                                               |
+| ----------------- | ------------------------- | ------------------- | ------------------------------------------------------------------------------------------- |
+| ENCOUNTERS        | TOTAL_CLAIM_COST          | TOTAL_CLAIM_COST    | Custo total do encontro                                                                     |
+| ENCOUNTERS        | ENCOUNTERCLASS_wellness   | ENCOUNTERCLASS      | Classe de encontro marcada como rotineira                                                   |
+| ENCOUNTERS        | ENCOUNTERCLASS_urgentcare | ENCOUNTERCLASS      | Classe de encontro marcada como de urgência                                                 |
+| ENCOUNTERS        | ENCOUNTERCLASS_snf        | ENCOUNTERCLASS      | Classe de encontro marcada como centro de enfermagem especializada                          |
+| ENCOUNTERS        | ENCOUNTERCLASS_outpatient | ENCOUNTERCLASS      | Classe de encontro marcada como ambulatorial                                                |
+| ENCOUNTERS        | ENCOUNTERCLASS_inpatient  | ENCOUNTERCLASS      | Classe de encontro marcada como internação                                                  |
+| ENCOUNTERS        | ENCOUNTERCLASS_home       | ENCOUNTERCLASS      | Classe de encontro marcada como domiciliar                                                  |
+| ENCOUNTERS        | ENCOUNTERCLASS_emergency  | ENCOUNTERCLASS      | Classe de encontro marcada como emergência                                                  |
+| ENCOUNTERS        | ENCOUNTERCLASS_ambulatory | ENCOUNTERCLASS      | Classe de encontro marcada como ambulatorial                                                |
+| ENCOUNTERS        | PAYER_COVERAGE            | PAYER_COVERAGE      | Valor do custo coberto pelo Pagador                                                         |
+| PATIENTS          | BIRTHDATE                 | BIRTHDATE           | Data em que o paciente nasceu.                                                              |
+| PATIENTS          | MARITAL                   | MARITAL             | Estado civil. M é casado, S é solteiro, divórciado (D) ou viuvo (W)                         |
+| PATIENTS          | HEALTHCARE_COVERAGE       | HEALTHCARE_COVERAGE | Custo total ao longo da vida dos serviços de saúde que foram cobertos pela seguradora       |
+| PATIENTS          | HEALTHCARE_EXPENSES       | HEALTHCARE_EXPENSES | Custo total ao longo da vida dos cuidados de saúde que o paciente pagou                     |
+| PATIENTS          | LON                       | LON                 | Longitude do endereço do paciente                                                           |
+| PATIENTS          | LAT                       | LAT                 | Latitude do endereço do paciente                                                            |
+| PATIENTS          | ZIP                       | ZIP                 | Código postal do paciente                                                                   |
+| PATIENTS          | GENDER                    | GENDER              | Gênero. M é masculino, F é feminino.                                                        |
+| PATIENTS          | ETHNICITY                 | ETHNICITY           | Descrição da etnia primária do paciente                                                     |
+| PATIENTS          | RACE                      | RACE                | Descrição da raça primária do paciente                                                      |
+| ENCOUNTERS        | BASE_ENCOUNTER_COST       | BASE_ENCOUNTER_COST | Custo do encontro, sem incluir medicamentos, imunizações, procedimentos ou outros serviços. |
 
 Tabela 2: Campos utilizados para composição do *datamart* a ser considerado para a geração do modelo de aprendizado de máquina. A **coluna origem** indica que o campo foi criado artificialmente de uma *feature* categórica da tabela origem.
 
