@@ -14,32 +14,41 @@ O presente projeto foi originado no contexto das atividades da disciplina de pó
 
 # 2. Contextualização da Proposta
 
+## 2.1 Estudo de prognósticos
+
 A área de pesquisa de prognósticos busca entender e melhorar os resultados de prognósticos em pessoas com uma determinada doença ou condição de saúde. O objetivo geral de estudos prognósticos em contextos clínicos é ajudar clínicos, pacientes e familiares a tomar decisões esclarecidas a respeito de cuidados de saúde com base em informações disponíveis sobre cada paciente no presente para prever desfechos no futuro [1]. Além disso, ajuda os pacientes e os familiares a tomar decisões adequadas a respeito do fim da vida daqueles cujo risco de morte é muito alto e a identificar intervenções personalizadas para evitar futuras hospitalizações [2].
 
 Os modelos prognósticos usam vários fatores em combinação para prever o risco de resultados clínicos futuros em pacientes. Um bom modelo deve (i) fornecer previsões precisas que informam os pacientes e seus cuidadores, (ii) apoiar a pesquisa clínica e (iii) permitir decisões para melhorar os resultados dos tratamentos aos pacientes [1]. Um modelo prognóstico tem três fases principais: desenvolvimento do modelo (incluindo validação interna), validação externa e investigações de impacto na prática clínica. Embora muitos modelos prognósticos sejam propostos, poucos são atualmente usados na prática clínica [1].
 
+Entre os prognósticos existentes, alguns são apresentados abaixo:
+
+* Simplified Acute Physiology Score III (SAPS3): Considera a idade, se já vêm de pré-hospitalização, qual a localização anterior (urgência, UCI e outros), se possui alguma comorbidade, qual o motivo da entrada, e variáveis medidas no momento do atendimento, para gerar a mortalidade prevista [3]. 
+* Palliative Prognostic Index (PPI): Prediz a mortalidade em pacientes terminais com base em cinco critérios, sendo eles a escala de desempenho paliativo, a ingestão oral, presença de edemas, se há dispneia em repouso ou se há delírios. Com base nestes parâmetros, é informado em até quantas semanas é esperado que este paciente venha à óbito [4].
+* Palliative Prognostic Score (PaP): Semelhante ao anterior, também foca em pacientes em cuidados paliativos. Neste caso os parâmetros de entrada são Dispneia, Anorexia, Karnofsky Performance Status, Previsão Clínica de Sobrevivência (semanas), Total de WBC e Linfócitos %, para predizer a probabilidade de sobrevivência em 30 dias [5]. 
+* MAGGIC Risk Calculator for Heart Failure (MAGGIC RCHF): Este prognóstico foca apenas em pessoas que sofrem da condição de insuficiência cardíaca, e com base nos parâmetros de entrada, estima a mortalidade em 1 e 3 anos [6].
+
+## 2.2 Proposta de projeto
+
 A proposta deste projeto é montar um ou mais modelos de prognóstico que realizem a predição de mortalidade de pacientes sintéticos gerados em pelo menos dois cenários de dados fictícios. Será necessário estabelecer os parâmetros de predição, definir quais os dados sobre o paciente que serão usados para a predição, construir modelos de aprendizagem de máquina que realizem predições e apresentar o resultado do modelo de predição aplicado.
 
-Para realizar o prognóstico de forma mais precisa, é importante escolher um cenário específico. Dentre os dados disponibilizados, a equipe optou por trabalhar com os indivíduos que sofrem de Insuficiência Cardíaca Congestiva Crônica (ICC) [3]. Esta condição ocorre porque o coração não tem força para bombear a quantidade necessária de sangue para o corpo, e com a diminuição da circulação muitas funções corporais ficam prejudicadas, pois falta oxigênio. As causas mais comuns da ICC são doenças arteriais coronarianas, infarto, hipertensão arterial, doenças das válvulas cardíacas, diabetes, outras doenças do coração ou doenças congênitas [4].
+Ao analisar os prognósticos apresentados na seção 2.1, percebeu-se que a maioria deles foca em um determinado cenário, e que há entradas e saídas muito bem definidas e apresentadas de forma clara para que o médico e a família possam interpretar. Diante deste cenário, a pergunta de pesquisa levantada então para este projeto é a seguinte:
 
-Diante deste cenário, a pergunta de pesquisa levantada para este projeto é a seguinte:
+> Com dados de eventos e condições de pacientes a partir dos seus registros disponíveis, é possível predizer o prognóstico de evolução para óbito de pacientes dentro de 7 dias e 15 dias?
 
-> Com dados de eventos e condições de pacientes a partir dos seus registros disponíveis, é possível predizer o prognóstico de evolução para óbito de pacientes com Insuficiência Cardíaca Congestiva Crônica dentro de 7 dias?
-
-## 2.1. Ferramentas
+## 2.3. Ferramentas
 
 Para o presente trabalho, utilizou-se as seguintes ferramentas:
 
 * Tecnologia _Python_, para desenvolver as provas de conceito;
 * Bibliotecas _Panda, Glob, OS, Matplotlib.pyplot, Seaborn e Datetime_ como suporte para as funções necessárias;
-* _PyCaret_, para escolher o melhor modelo a ser utilizado;
 * _Notebook Jupyter_, para escrita dos códigos em ambiente de execução;
+* _Orange Data Mining_, para treinar e testar o sistema, além de gerar as saídas;
 * _Scripts Shell_, para execução de fluxo de dados (_data pipeline_);
 * Base de dados _Synthea_, para geração do modelo de prognóstico e também para testes.
 
 # 3. Metodologia
 
-O presente trabalho trata-se de um estudo de caso que utiliza a metodologia CRISP-DM (CRoss-Industry Standard Process for Data Mining), criado pela SPSS Inc [5]. Este modelo é composto de 6 fases, e suas interações podem ser vistas na figura a seguir [5]: 
+O presente trabalho trata-se de um estudo de caso que utiliza a metodologia CRISP-DM (CRoss-Industry Standard Process for Data Mining), criado pela SPSS Inc [7]. Este modelo é composto de 6 fases, e suas interações podem ser vistas na figura a seguir [7]: 
 
 1. Entendimento do negócio/contexto
 2. Entendimento dos dados
@@ -68,14 +77,13 @@ id5(Validação) --> id1(Entendimento do negócio);
 id5(Validação) --> id6("Aplicação (deploy)");
 
 ```
-Figura 1: Metodologia CRISP-DM.
+Figura 1: Metodologia CRISP-DM [7].
 
 A seguir será explicado o objetivo de cada fase, com sua respectiva aplicação para solucionar o problema proposto neste projeto.
 
 ## 3.1 Entendimento do problema (entendimento de negócio)
 
-Insuficiência cardíaca é uma das principais causas de mortalidade e morbidade no mundo, e está associada ao alto uso de recursos e custos com saúde. No Brasil, a prevalência de insuficiência cardíaca é de aproximadamente 2 milhões de pacientes, e sua incidência é de aproximadamente 240.000 novos casos por ano, sendo que as cidades localizadas no sul, sudeste, nordeste e centro-oeste mostraram maior risco relativo para mortalidade causada por insuficiência cardíaca, e a maioria das cidades do norte foi classificada como um fator protetivo contra esta causa de morte [6]. 
-Observando-se os datasets usados, nota-se que as causas da morte que mais contem dados é a ICC. Diante dessa realidade, é relevante que seja realizado um estudo prognóstico de pacientes com esta condição.
+...
 
 ## 3.2 Entendimento dos dados
 
@@ -84,13 +92,13 @@ Foram usados dados dos cenários sintéticos do [Synthea](https://synthea.mitre.
 * [scenario01](/data/raw/scenario01/)
 * [scenario02](/data/raw/scenario02/)
 
-O Synthea tem a missão de produzir dados de pacientes sintéticos e realistas, mas não reais, de alta qualidade e registros de saúde associados, cobrindo todos os aspectos da saúde. Os dados resultantes estão livres de restrições de custo, privacidade e segurança. Ele pode ser usado sem restrições para uma variedade de usos secundários na academia, pesquisa, indústria e governo. Cada paciente sintético do Synthea é gerado de forma independente, à medida que progride desde o nascimento até a morte por meio de representações modulares de várias doenças e condições. Cada paciente percorre todos os módulos do sistema. Quando um paciente morre ou a simulação chega ao dia atual, esse registro do paciente pode ser exportado em vários formatos diferentes [7]. A figura 2 abaixo apresenta uma sinteze da organização dos dados do Synthea.
+O Synthea tem a missão de produzir dados de pacientes sintéticos e realistas, mas não reais, de alta qualidade e registros de saúde associados, cobrindo todos os aspectos da saúde. Os dados resultantes estão livres de restrições de custo, privacidade e segurança. Ele pode ser usado sem restrições para uma variedade de usos secundários na academia, pesquisa, indústria e governo. Cada paciente sintético do Synthea é gerado de forma independente, à medida que progride desde o nascimento até a morte por meio de representações modulares de várias doenças e condições. Cada paciente percorre todos os módulos do sistema. Quando um paciente morre ou a simulação chega ao dia atual, esse registro do paciente pode ser exportado em vários formatos diferentes [8]. A figura 2 abaixo apresenta uma sinteze da organização dos dados do Synthea.
 
 ![alt text](assets/architecture.png)
 
-Figura 2 - organização dos dados do Synthea [7].
+Figura 2 - organização dos dados do Synthea [8].
 
-Na base de dadosdo Synthea, os dados estão presentes em arquivos CSV (*comma separeted values*) e são os que seguem, conforme a Tabela 1:
+Na base de dadosdo Synthea, os dados estão presentes em arquivos CSV (*comma separeted values*) e são os que seguem, conforme a Tabela 1 [9]:
 
 | Aruivo                    | Descrição                                                                     |
 | ------------------------- | ----------------------------------------------------------------------------- |
@@ -113,7 +121,7 @@ Na base de dadosdo Synthea, os dados estão presentes em arquivos CSV (*comma se
 | `providers.csv`           | Médicos que prestam assistência ao paciente.                                  |
 | `supplies.csv`            | Materiais utilizados na prestação de cuidados.                                |
 
-Tabela 1: arquivos disponíveis no repositório e descrição de cada um.
+Tabela 1: arquivos disponíveis no repositório e descrição de cada um [9].
 
 Este projeto foi dividido em duas etapas, sendo que na primeira utilizou-se as tabelas `patients`, `encounters` e `conditions` para entender quais condições mais levavam os pacientes á óbitos, e tomar as decisões para escolha de cenário de aplicação do prognóstico. Posteriormente, na segunda etapa, utilizou-se as tabela `patients` e `encounters` para cálculo da probabilidade de óbito em até 7 dias.
 
@@ -272,31 +280,10 @@ Desvantagens do CART
 * Algoritmos gananciosos não podem garantir o retorno da árvore de decisão globalmente ótima. Isso pode ser mitigado treinando várias árvores, onde os recursos e as amostras são amostrados aleatoriamente com substituição.
 * Os aprendizes de árvores de decisão criam árvores tendenciosas se algumas classes dominarem . Portanto, é recomendado balancear o conjunto de dados antes de ajustar com a árvore de decisão.
 
-#### 3.4.2.3 XGBoost [TODO: fonte https://xgboost.readthedocs.io/en/stable/tutorials/model.html]
+#### 3.4.2.3 XGBoost
 
-XGBoost significa "Extreme Gradient Boosting", onde o termo "Gradient Boosting" tem origem no artigo **Greedy Function Approximation: A Gradient Boosting Machine**, de Friedman.
 
-As árvores impulsionadas (com *boosting*) por gradiente já existem há algum tempo. 
 
-O XGBoost é usado para problemas de aprendizado supervisionado, onde usamos os dados de treinamento (com várias *features*) para prever uma variável resposta.
-
-O modelo de conjunto de árvores consiste em um conjunto de árvores de classificação e regressão (*classification and regression trees* ou CART).
-Um CART é um pouco diferente das árvores de decisão, nas quais a folha contém apenas valores de decisão. No CART, uma pontuação real é associada a cada uma das folhas, o que nos dá interpretações mais ricas que vão além da classificação. Isso também permite uma abordagem unificada e baseada em princípios para otimização, como veremos em uma parte posterior deste tutorial.
-
-Normalmente, uma única árvore não é forte o suficiente para ser usada na prática. O que é realmente usado é o modelo ensemble, que soma a previsão de várias árvores juntas.
-
-As pontuações de previsão de cada árvore individual são somadas para obter a pontuação final. Se você observar o exemplo, um fato importante é que as duas árvores tentam se complementar . Matematicamente, podemos escrever nosso modelo na forma
-
-$$ \hat{y}_i = \sum_{k=1}^K f_k(x_i), f_k \in \mathcal{F} $$
- 
-Onde $K$ é o número de árvores,$f_k$ é uma função no espaço funcional $\mathcal{F}$, e $\mathcal{F}$ é o conjunto de todos os CARTs possíveis. 
-A função objetivo a ser otimizada é dada por
-
- $$ \text{obj}(\theta) = \sum_i^nl(y_i, \hat{y}_i) + \sum_{k=1}^K \omega(f_k) $$
- 
-Onde $\omega(f_k)$ é a complexidade da árvore $f_k$.
-
-Florestas aleatórias e árvores impulsionadas são realmente os mesmos modelos; a diferença surge de como eles são treinados.
 
 
 [TODO: colocar a criação de samples / treino/teste, SVM e decision tree]
@@ -360,15 +347,17 @@ Outra possibilidade é a geração de mais dados sintéticos para, a partir de u
 
 [2] Steyerberg E.W., Moons K.G.M., van der Windt D.A., Hayden J.A., Perel P., Schroter S., et al. (2013) Prognosis Research Strategy (PROGRESS) 3: Prognostic Model Research. PLoS Med 10(2): e1001381. https://doi.org/10.1371/journal.pmed.1001381
 
-[3] SNOMED CT code (2022). "Chronic congestive heart failure   88805009" [online]. Disponível em: https://www.findacode.com/snomed/88805009--chronic-congestive-heart-failure.html?hl=88805009 Acessado em Maio de 2022.
+[3] https://www.rccc.eu/ppc/indicadores/saps3.html
 
-[4] Wippe Saúde (2022). "O que é o ICC – Insuficiência Cardíaca Crônica/Congestiva?" [online]. Disponível em: https://wippesaude.com.br/2018/06/12/o-que-e-o-icc-insuficiencia-cardiaca-cronica-congestiva/ Acessado em Maio de 2022.
+[4] https://www.mdapp.co/palliative-prognostic-index-ppi-calculator-402/
 
-[5] P. Chapman et al., "CRISP-DM 1.0 - Step-by-step data mining guide". SPSS Inc., 2000.
+[5] https://www.mdapp.co/palliative-prognostic-score-pap-calculator-401/
 
-[6] Cestari, V. R. F., Garces, T. S., Sousa, G. J. B., Maranhão, T. A., Souza Neto, J. D., Pereira, M. L. D., Pessoa, V. L. M. P., Sales, J. T. L., Florêncio, R. S., Souza, L. C. , Vasconcelos, G. G. , Sobral, M. G. V., Damasceno, L. L. V., & Moreira, T. M. M. (2022). Distribuição Espacial de Mortalidade por Insuficiência Cardíaca no Brasil, 1996-2017. Arq. Bras. Cardiol., 118(1), 41-51. https://doi.org/10.36660/abc.20201325
+[6] https://www.mdcalc.com/maggic-risk-calculator-heart-failure
 
-[7]  Synthea (2020). Getting Started [código fonte]. Disponível em: https://github.com/synthetichealth/synthea/wiki/Getting-Started Acessado em Maio de 2022.
+[7] P. Chapman et al., "CRISP-DM 1.0 - Step-by-step data mining guide". SPSS Inc., 2000.
 
-[8] Synthea (2020). CSV File Data Dictionary [código fonte]. Disponível em: https://github.com/synthetichealth/synthea/wiki/CSV-File-Data-Dictionary Acessado em Maio de 2022.
+[8]  Synthea (2020). Getting Started [código fonte]. Disponível em: https://github.com/synthetichealth/synthea/wiki/Getting-Started Acessado em Maio de 2022.
+
+[9] Synthea (2020). CSV File Data Dictionary [código fonte]. Disponível em: https://github.com/synthetichealth/synthea/wiki/CSV-File-Data-Dictionary Acessado em Maio de 2022.
 
