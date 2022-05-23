@@ -189,6 +189,64 @@ Figura 6 - Maiores causas de morte em comum nos dois cenários.
 
 ### 3.4.2 Etapa 2 - Modelo
 
+Para o pipeline de dados utilizamos 3 modelos, a saber:
+
+1. Regressão logística
+2. Árvore de decisão
+3. Gradient boosting (mais especificamente XGBoosting)
+
+Abaixo discorreremos brevemente sobre cada um bem como colocaramos os parâmetros utilizados pelo trabalho.
+
+#### 3.4.2.1 Regressão logística
+
+O modelo de regressão logística tem como objetivo estudar a probabilidade de ocorrência de eventos que vamos definir por $Y$
+e que se apresenta na forma qualitativa dicotômica (vamos utilizar no caos valores $0$ para um não-evento e $1$ para um evento). Para isso, definimos um vetor de variáveis explicativas, com seus respectivos parâmetros estimados, na forma:
+
+$$Z_i = \alpha + \beta_1X_{1i} +  \beta_2X_{2i} + \cdots + \beta_kX_{ki}  $$
+
+Onde $Z$ é chamado *logito*, $\alpha$ representa a constante (bias), $\beta_j$ são os parâmetros estimados de cada variável explicativa, $X_j$ são as variáveis explicativas (métricas ou *dummies*) e $i$ é a i-ésima observação
+da amostra. Importante dizer que Z não é variável dependente,pois esta é definida por $Y$, e o objetivo é definir a expressão da
+**probabilidade** $p_i$ de ocorrência do evento de interesse para cada observação, em função do logito $Z_i$, ou seja, em
+função dos parâmetros estimados para cada variável explicativa. Para tanto, devemos definir o conceito de
+**chance** de ocorrência de um evento, também conhecida por *odds*, da seguinte forma: 
+
+$$chance(odds)_{Y_i=1} = \frac{p_i}{1-p_i}$$
+
+A regressão logística binária define o logito $Z$ como o logaritmo natural da chance, de modo que:
+
+$$ ln(chance_{Y_i=1}) = Z_i$$
+
+De onde temos então:
+
+$$ ln\left(\frac{p_i}{1-p_i}\right) = Z_i $$
+
+Na medida em que temos de identificar uma expressão para a probabilidade de *ocorrência do evento*  em
+função do logito, podemos matematicamente isolar $p_i$ da seguinte maneira:
+
+$$ \frac{p_i}{1-p_i} = e^{Z_i} $$
+logo
+$$ p_i =(1-p_i)e^{Z_i}$$
+então
+$$ p_i(1+e^{Z_i})=e^{Z_i} $$
+
+Disso então temos que:
+
+**Chance de ocorrência do evento:**
+
+$$ p_i = \frac{e^{Z_i}}{1+e^{Z_i}} = \frac{1}{1+e^{-Z_i}}$$
+
+**Chance de ocorrência de um não evento:**
+
+$$ 1 - p_i = 1 - \frac{e^{Z_i}}{1+e^{Z_i}} = \frac{1}{1+e^{Z_i}}$$
+
+#### 3.4.2.2 Árvore de decisão
+
+#### 3.4.2.3 XGBoost
+
+
+
+
+
 [TODO: colocar a criação de samples / treino/teste, SVM e decision tree]
 
 Para o modelo, primeiro foi necessário eliminar todos os dados que poderiam causar bias, restando os parâmetros já apresentados na seção 3.3. Em seguida, os pacientes de cada cenário foram divididos em dois grupos, sendo um daqueles que já haviam ido à òbito e o outro daqueles que ainda estavam em vida. A proposta inicial seria de utilizar os dados do grupo dos pacientes que já foram a obito para treinar o sistema e os dados do grupo dos pacientes que estão em vida para prognóstico. Entretanto, o número de pacientes que já foram a obito com a condição pré-definida não possuía o tamanho suficiente para treinar o sistema. Por essa razão, foram usados os dados dos pacientes em vida como contraponto no treinamento.
