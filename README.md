@@ -239,7 +239,38 @@ $$ p_i = \frac{e^{Z_i}}{1+e^{Z_i}} = \frac{1}{1+e^{-Z_i}}$$
 
 $$ 1 - p_i = 1 - \frac{e^{Z_i}}{1+e^{Z_i}} = \frac{1}{1+e^{Z_i}}$$
 
-#### 3.4.2.2 Árvore de decisão
+#### 3.4.2.2 Árvore de decisão [TODO: fonte https://towardsdatascience.com/decision-trees-in-machine-learning-641b9c4e8052]
+
+Na primeira divisão ou raiz, todas as features são consideradas e os dados de treinamento são divididos em grupos com base nessa divisão. Teremos $n$ divisões, tais quais forem as variedades da feature candidata. Para calcular quanta precisão cada divisão custará, usando uma função custo. A divisão que custa menos é escolhida. Este algoritmo é recursivo por natureza, pois os grupos formados podem ser subdivididos usando a mesma estratégia. Devido a este procedimento, este algoritmo também é conhecido como algoritmo guloso (*greedy*). Isso torna o nó raiz o melhor preditor/classificador.
+
+**Custo de uma divisão**
+
+Vamos dar uma olhada nas funções de custo usadas para classificação e regressão . Em ambos os casos as funções de custo tentam encontrar ramos mais homogêneos, ou ramos com grupos com respostas semelhantes . Isso faz sentido, podemos ter mais certeza de que uma entrada de dados de teste seguirá um determinado caminho.
+
+$$ G = \sum(pk * (1 — pk)) $$
+
+Uma pontuação Gini dá uma ideia de quão boa é uma divisão pelo quão mistas são as classes de resposta nos grupos criados pela divisão. Aqui, $pk$ é a proporção de entradas da mesma classe presentes em um determinado grupo. Uma pureza de classe perfeita ocorre quando um grupo contém todas as entradas da mesma classe, caso em que $pk$ é $1$ ou $0$ e $G = 0$, onde um nó com uma divisão de $50-50$ classes em um grupo tem a pior pureza, então para uma classificação binária terá $pk = 0,5$ e $G = 0,5$.
+
+Como um problema geralmente possui um grande conjunto de features, ele resulta em grande número de divisões, o que por sua vez resulta em uma árvore grande. Essas árvores são complexas e podem levar a overfitting. Então, é necessário saber quando parar.
+
+Uma maneira de fazer isso é definir um número mínimo de entradas de treinamento para usar em cada folha. Outra maneira é definir a profundidade máxima do seu modelo. A profundidade máxima refere-se ao comprimento do caminho mais longo de uma raiz a uma folha.
+
+O desempenho de uma árvore pode ser aumentado ainda mais pela poda . Trata- se de remover as ramificações que fazem uso de recursos de baixa relevância. Dessa forma, se reduz a complexidade da árvore e, assim, aumenta-se seu poder preditivo, reduzindo o overfitting.
+
+Vantagens do CART
+
+* Simples de entender, interpretar, visualizar.
+* As árvores de decisão executam implicitamente a triagem de variáveis ​​ou a seleção de recursos.
+* Pode lidar com dados numéricos e categóricos . Também pode lidar com problemas de várias saídas.
+* As árvores de decisão exigem relativamente pouco esforço dos usuários para a preparação dos dados.
+* As relações não lineares entre os parâmetros não afetam o desempenho da árvore.
+
+Desvantagens do CART
+
+* Os aprendizes de árvores de decisão podem criar árvores supercomplexas que não generalizam bem os dados. Isso é chamado de sobreajuste .
+* As árvores de decisão podem ser instáveis ​​porque pequenas variações nos dados podem resultar na geração de uma árvore completamente diferente. Isso é chamado de variação , que precisa ser reduzido por métodos como ensacamento e aumento .
+* Algoritmos gananciosos não podem garantir o retorno da árvore de decisão globalmente ótima. Isso pode ser mitigado treinando várias árvores, onde os recursos e as amostras são amostrados aleatoriamente com substituição.
+* Os aprendizes de árvores de decisão criam árvores tendenciosas se algumas classes dominarem . Portanto, é recomendado balancear o conjunto de dados antes de ajustar com a árvore de decisão.
 
 #### 3.4.2.3 XGBoost [TODO: fonte https://xgboost.readthedocs.io/en/stable/tutorials/model.html]
 
