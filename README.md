@@ -364,24 +364,44 @@ Para compreender os resultados dos modelos, foram gerados a curva ROC, a matriz 
 
 Figura x- Curva ROC para 7 dias com treino no cenário 1 e teste no cenário 1
 
+A Figura x apresenta a curva ROC resultante da predição de óbito de pacientes em até 7 dias, tendo sido treinado com dados do cenário 1 e testado também com o cenário 1. É possível perceber que a Regressão Logística e o XGBoosting tiveram resultados bem próximos, apesar do  XGBoosting se sobressair um pouco. Em caso de dúvidas nesta análise gráfica, pode-se consultar o valor do AUC, que é a área sobre a curva ROC. O maior valor de área possuí o melhor resultado.
 
 * Matriz de confusão:
-
 
 ![alt text](assets/mc7_1_1.png)
 
 Figura x- Matriz de confusão para 7 dias com treino no cenário 1 e teste no cenário 1
 
+Ao gerar o relatório, o Orange já gerou apenas a matriz de confusão com o melhor resultado entre os 3 modelos usados. Para a predição de óbito de pacientes em até 7 dias, tendo sido treinado com dados do cenário 1 e testado também com o cenário 1, o melhor resultado foi obtido com o modelo XGBoosting, em que houveram 658 verdadeiros negativos (que possuíam valor igual a **_False_** e realmente deveriam ser **_False_**), e 61 verdadeiros positivos (que possuíam valor igual a **True**  e realmente deveriam ser **_True_**). Foram encontrados 60 falsos positivos (que possuíam valor igual a **_True_** mas deveriam ser **_False_**) e apenas 19 falsos negativos (que possuíam valor igual a **_False_** mas deveriam ser **_True_**).
 
 * Scores:
-
 
 ![alt text](assets/score7_1_1.png)
 
 Figura x- Tabela de Score para 7 dias com treino no cenário 1 e teste no cenário 1
 
-Para analisar o resultado final, é apresentado na Figura x uma parte da base de saída gerada para treino no cenário 1 e teste no cenário 1, e na Figura x  uma parte da base de saída gerada para treino no cenário 2 e teste no cenário 2.
+A partir da matriz de confusão e da curva ROC é possível calcular as métricas dos modelos usados. Na Figura X há a área da curva ROC (AUC), a acurácia (CA), o F-score (F1), a sensibilidade (recall) e a precisão (precision) para a predição de óbito de pacientes em até 7 dias, tendo sido treinado com dados do cenário 1 e testado também com o cenário 1. É possível analisar que, apesar da AUC ser bem próxima entre a regressão logística e o XGBoosting, nas outras métricas o XGBoosting apresenta resultados melhores, principalmente do ponto de vista de precisão.
 
+Com base nestes resultados, é possível afirmar que o XGBoosting apresentou melhores resultados em todos os parâmetros analisados para predição de óbito de pacientes em até 7 dias, tendo sido treinado com dados do cenário 1 e testado também com o cenário 1. Já para os outros cenários, não foi possível chegar a uma conclusão tão unânime assim. A tabela apresentada na Figura x mostra a comparação dos resultados entre os modelos, onde as células em verde-claro representam os melhores valores, as células em vermelho representam os piores valores, e as células em verde-escuro apresentam o melhor resultado geral de cada métrica entre todos os modelos e cenários.
+
+
+![alt text](assets/comparacao_modelo.png)
+
+Figura x- ...
+
+É possível perceber que em alguns cenários, o XGBoosting apresenta os melhores resultados, já em outros a Regressão Logística se destaca. Apesar disso, ambos apresentam os piores resultados também em determinados cenários. A árvore de decisão não tem nem os melhores, nem os piores valores, ficando em uma posição intermediária. 
+
+A tabela apresentada na Figura X compara os resultados entre 7 dias e 15 dias, para os mesmos modelos e formatos de treino.
+
+![alt text](assets/comparacao_dias.png)
+
+Figura x- ...
+
+Os cenários de prognóstico para 7 dias apresentaram os melhores valores com mais frequência, quando comparados ao prognóstico de 15 dias. É importante ressaltar também que houveram duas situações em que os resultados para 7 dias e 15 dias foram exatamente os mesmos: árvore de decisão e XGBoosting tendo sido treinados e testados no cenario 1.
+
+Ao olhar de forma geral, o melhor resultado encontrado foi para o modelo XGBoosting para prognóstico de óbito em até 15 dias, tendo sido treinado no cenário 2 e testado no cenário 1.
+
+Para analisar o resultado de saída que realmente irá para o médico, é apresentado na Figura x uma parte da base de saída gerada para treino no cenário 1 e teste no cenário 1, e na Figura x  uma parte da base de saída gerada para treino no cenário 2 e teste no cenário 2.
 
 ![alt text](assets/print_output_1_1.png)
 
@@ -390,6 +410,12 @@ Figura x- Saída com treino no cenário 1 e teste no cenário 1.
 ![alt text](assets/print_output_2_2.png)
 
 Figura x- Saída com treino no cenário 2 e teste no cenário 2.
+
+É possível perceber na Figura x que para o treino e teste no cenário 1 os resultados da mortalidade em 7 dias e 15 dias foram exatamente os mesmos. Já na Figura x, onde o treino e o teste foram feitos no cenário 2, houve uma diferença nos resultados da mortalidade em 7 dias e 15, porém a diferença não foi tão siginificativa.
+
+Este ponto instigou a equipe, e ao voltar para a análise descritiva feita no início deste trabalho, percebeu-se que, no cenário 1, o número de pessoas que foram a óbito em até 15 dias é de xxx enquanto em até 7 dias é de xxx, ou seja, apenas 1 pessoa a mais. Já no cenário 2, o número de pessoas que foram a óbito em até 15 dias é de xxx enquanto em até 7 dias é de xxx, 2 pessoas a mais. No primeiro caso, como a diferença é de apenas 1 pessoa, esse valor não foi sufuciente para melhor predizer a mortalidade. No segundo caso, aumentando para 2 pessoas, o resultado melhora um pouco, porém ainda não é significativo. Para obter um resultado mais adequado, seria necessário ter uma base onde a diferença no número de pessoas que foram a óbito em um prazo em comparação a outro seja mais expressivo.
+
+Apesar da base Synthea ser muito útil para trabalhos e projetos da área da saúde, ela não é uma base com muitos indíviduos diferentes, e este foi o grande desafio da equipe ao trabalhar com estes dados.
 
 # 5. Conclusão
 > Destacar as principais conclusões obtidas no desenvolvimento do projeto.
