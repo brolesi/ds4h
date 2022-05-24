@@ -391,7 +391,7 @@ Figura x- Curva ROC para 7 dias com treino no cenário 1 e teste no cenário 1
 * Matriz de confusão:
 
 
-![alt text](assets/mc7_1_2.png)
+![alt text](assets/mc7_1_1.png)
 
 Figura x- Matriz de confusão para 7 dias com treino no cenário 1 e teste no cenário 1
 
