@@ -82,40 +82,7 @@ O trabalho desenvolvido é divulgado de forma pública em [*repositório do GitH
 
 # 3. Metodologia
 
-O presente trabalho trata-se de um estudo de caso que utiliza a metodologia CRISP-DM (CRoss-Industry Standard Process for Data Mining), criado pela SPSS Inc [7]. Este modelo é composto de 6 fases, e suas interações podem ser vistas na figura a seguir [7]: 
-
-1. Entendimento do negócio/contexto
-2. Entendimento dos dados
-3. Preparação dos dados
-4. Modelagem
-5. Avaliação
-6. Aplicação (*Deployment*)
-
-```mermaid
-flowchart  RL;
-subgraph 99[Entendimento]
-id1(Entendimento do negócio) --> id2(Entendimento dos dados);
-id2(Entendimento dos dados) --> id1(Entendimento do negócio) ;
-end
-id2(Entendimento dos dados) --> id100[Preparação dos dados];
-subgraph id100[Preparação dos dados]
-id101(Pacientes) --> id104(Datamart);
-id102(Eventos)   --> id104(Datamart);
-id103(Condições) --> id104(Datamart);
-end
-
-id100[Preparação dos dados] --> id4(Modelagem)
-id4(Modelagem) --> id100[Preparação dos dados];
-id4(Modelagem) --> id5(Validação);
-id5(Validação) --> id1(Entendimento do negócio);
-id5(Validação) --> id6("Aplicação (deploy)");
-
-```
-Figura 1: Metodologia CRISP-DM [7].
-
-A seguir será explicado o objetivo de cada fase, com sua respectiva aplicação para solucionar o problema proposto neste projeto.
-
-## 3.1 Entendimento do negócio e Entendimento dos dados
+## 3.1 Entendimento dos dados
 
 Para realizar o prognóstico, há o desafio de identificar quais serão seus dados de entrada e seus dados de saída. Além disso, também há o desafio de escolher como estes dados de entrada serão processados para gerar os dados de saída.
 
@@ -165,7 +132,41 @@ Estas três tabelas são as mais relevantes de toda a base, e a integração dos
 
 Figura 3 - Integração das tabelas `patients` e `encounters`.
 
-## 3.3 Preparação dos dados
+## 3.2 Análise descritiva
+
+Como já citado, primeiramente foram realizadas algumas análises dos dados das tabelas `patients`, `encounters` e `conditions` para entender quais condições mais levavam os pacientes á óbitos, e tomar as decisões para escolha de cenário de aplicação do prognóstico.
+
+No cenário 1, foram encontrados 1174 pacientes diferentes, sendo que 174 deles já haviam ido à òbito, enquanto no cenário 2 haviam 1121 pacientes, com 121 óbitos. Em ambos os cenários haviam 1000 pacientes ainda em vida. 
+
+Foi análisado a idade com que os pacientes foram à òbito, e a estratificação por gênero é apresentada na figura 4, na qual é possível analisar que os homens morreram em idades mais avançadas que as mulheres, em ambos os cenários. 
+
+![alt text](assets/boxplot.png)
+
+Figura 4 - Idade de falecimento por gênero em cada cenário.
+
+Foi analisada ainda as condições que mais levaram a óbito considerando o prazo de até 7 dias. É possível perceber na figura 5 que a maior causa de morte no cenário 1 é a Leucemia mielóide aguda (*Acute myeloid leukemia* - 91861009) e no cenário 2 é a Hiperlipidemia (*Hyperlipidemia* - 55822004). 
+
+![alt text](assets/contagem_morte.png)
+
+Figura 5 - maiores causas de morte por cenário
+
+Entretanto, percebeu-se que nem todas as condições que levaram a òbito no cenário 1 estavam presentes no cenário 2. Isso poderia atrapalhar no modelo que seria gerado posteriormente. Por essa razão, foi analisado quais eram as causas de morte presente em ambos os cenários, conforme apresentado na Figura 6.
+
+![alt text](assets/contagem_morte2.png)
+
+Figura 6 - Maiores causas de morte em comum nos dois cenários.
+
+É possível perceber que a condição que mais levou à óbito, somando os dois cenários, é a Insuficiência cardíaca congestiva crônica (*Chronic congestive heart failure* - 88805009).
+
+## 3.3 Modelo
+
+Para compreensão do modelo de forma mais simples, ele será dividido em 3 fases, sendo:
+
+* Fase 1 - Preparação dos dados de entrada
+* Fase 2 - Treino e teste do sistema
+* Fase 3 - Extração dos resultados para geração dos dados de saída
+
+### 3.3.1 Fase 1 - Preparação dos dados de entrada
 
 Para gerar os dados que seriam aplicados no modelo, foi desenvolvido o _notebook_ ["Dataset generator"](notebooks/Dataset Generator.ipynb). Com a estruturação dos dados a partir do cruzamento entre eles, realizou-se a criação de colunas (características, ou, em inglês na área de ciência de dados, *feature*) sintéticas a partir de colunas originas de de dados categóricos para, a partir do aumento da dimensionalidade, trazer maior riquza para a criação do modelo considerando aspectos relevantes para a análise.
 
@@ -201,49 +202,11 @@ Ainda neste arquivo gerado, foi adicionado um parâmetro chamado de _death_thres
 
 Os 04 arquivos preparados, para 7 dias e 15 dias em ambos os cenários, podem ser vistos [no repositório](https://github.com/brolesi/ds4h/tree/main/data/processed).
 
-## 3.4 Modelagem, Avaliação e Aplicação
-
-### 3.4.1 Análise descritiva
-
-Como já citado, primeiramente foram realizadas algumas análises dos dados das tabelas `patients`, `encounters` e `conditions` para entender quais condições mais levavam os pacientes á óbitos, e tomar as decisões para escolha de cenário de aplicação do prognóstico.
-
-No cenário 1, foram encontrados 1174 pacientes diferentes, sendo que 174 deles já haviam ido à òbito, enquanto no cenário 2 haviam 1121 pacientes, com 121 óbitos. Em ambos os cenários haviam 1000 pacientes ainda em vida. 
-
-Foi análisado a idade com que os pacientes foram à òbito, e a estratificação por gênero é apresentada na figura 4, na qual é possível analisar que os homens morreram em idades mais avançadas que as mulheres, em ambos os cenários. 
-
-![alt text](assets/boxplot.png)
-
-Figura 4 - Idade de falecimento por gênero em cada cenário.
-
-Foi analisada ainda as condições que mais levaram a óbito considerando o prazo de até 7 dias. É possível perceber na figura 5 que a maior causa de morte no cenário 1 é a Leucemia mielóide aguda (*Acute myeloid leukemia* - 91861009) e no cenário 2 é a Hiperlipidemia (*Hyperlipidemia* - 55822004). 
-
-![alt text](assets/contagem_morte.png)
-
-Figura 5 - maiores causas de morte por cenário
-
-Entretanto, percebeu-se que nem todas as condições que levaram a òbito no cenário 1 estavam presentes no cenário 2. Isso poderia atrapalhar no modelo que seria gerado posteriormente. Por essa razão, foi analisado quais eram as causas de morte presente em ambos os cenários, conforme apresentado na Figura 6.
-
-![alt text](assets/contagem_morte2.png)
-
-Figura 6 - Maiores causas de morte em comum nos dois cenários.
-
-É possível perceber que a condição que mais levou à óbito, somando os dois cenários, é a Insuficiência cardíaca congestiva crônica (*Chronic congestive heart failure* - 88805009).
-
-### 3.4.2 Modelo
-
-Para compreensão do modelo de forma mais simples, ele será dividido em 3 fases, sendo:
-
-* Fase 1 - Preparação dos dados de entrada
-* Fase 2 - Treino e teste do sistema
-* Fase 3 - Extração dos resultados para geração dos dados de saída
-
-#### 3.4.2.1 Fase 1 - Preparação dos dados de entrada
-
 Para o modelo, primeiro foi necessário eliminar todos os dados que poderiam causar bias, restando os parâmetros já apresentados na seção 3.3. Em seguida, os pacientes de cada cenário foram divididos em dois grupos, sendo um daqueles que já haviam ido à òbito e o outro daqueles que ainda estavam em vida. A proposta inicial seria de utilizar os dados do grupo dos pacientes que já foram a obito para treinar o sistema e os dados do grupo dos pacientes que estão em vida para prognóstico. Entretanto, o número de pacientes que já foram a obito com a condição pré-definida não possuía o tamanho suficiente para treinar o sistema. Por essa razão, foram usados os dados dos pacientes em vida como contraponto no treinamento.
 
 Utilizou-se a técnica de *Support Vector Machines* afim de identificar a segregação a partir de hiperplanos dos dados em dois: prognóstico de evolução à óbito em até $7$ dias (ou em até $7$ dias) e prognóstico de evolução à óbito igual ou superior a $7$ dias (ou superior a $15$ dias). Dado que a quantidade de registros era pequena, o resultado não foi como o esperado, por isso, utilizou-se da técnica de *data augmentation* (ou, aumento de dados, a partir da criação de dados sintéticos, baseados nos dados originais), para que as amostras ficassem balanceadas.
 
-#### 3.4.2.2 Fase 2 - Treino e teste do sistema
+### 3.3.2 Fase 2 - Treino e teste do sistema
 
 É o núcleo do modelo em si foi feito em dois _Workflows_ do _Orange Data Mining_, sendo um para óbito em até 7 dias e outro para óbito em até 15 dias. Ambos seguem o mesmo padrão e conceitos.
 
@@ -276,7 +239,7 @@ Figura x- Configuração do treino com o cenário 2 e teste com o cenário 1
 
 Já para o _pipeline_ de dados foram usados 3 modelos, a saber:
 
-**A. Regressão logística**
+#### A. Regressão logística
 
 O modelo de regressão logística tem como objetivo estudar a probabilidade de ocorrência de eventos, aqui chamado de $Y$, apresentado na forma qualitativa dicotômica (aqui usados no caos os valores $0$ para um não-evento e $1$ para um evento). Para isso, foi definido um vetor de variáveis explicativas, com seus respectivos parâmetros estimados, na forma [REF Regressão]:
 
@@ -324,7 +287,7 @@ No workflow, a regressão logística foi configurada conforme apresentado na fig
 
 Figura x- Configuração da regressão logística
 
-**B. Árvore de decisão**
+#### B. Árvore de decisão
 
 O segundo método usado foi a árvore de decisão, onde na primeira divisão ou raiz, todas as features são consideradas e os dados de treinamento são divididos em grupos com base nessa divisão. Serão feitas $n$ divisões, tais quais forem as variedades da _feature_ candidata. Para calcular quanta precisão cada divisão custará, usando uma função custo. A divisão que custa menos é escolhida. Este algoritmo é recursivo por natureza, pois os grupos formados podem ser subdivididos usando a mesma estratégia. Devido a este procedimento, este algoritmo também é conhecido como algoritmo guloso (*greedy*). Isso torna o nó raiz o melhor preditor/classificador.
 
@@ -361,33 +324,24 @@ No workflow, a árvore de decisão foi configurada conforme apresentado na figur
 
 Figura x- Configuração da árvore de decisão
 
-**C. _Gradient boosting_ (mais especificamente XGBoosting)**
+#### C. _Gradient boosting_ (mais especificamente XGBoosting)
 
-#### 3.4.2.3 XGBoost [TODO: fonte https://xgboost.readthedocs.io/en/stable/tutorials/model.html]
+XGBoost significa "Extreme Gradient Boosting", onde o termo "Gradient Boosting" tem origem no artigo **Greedy Function Approximation: A Gradient Boosting Machine**, de Friedman [REF].
 
-XGBoost significa "Extreme Gradient Boosting", onde o termo "Gradient Boosting" tem origem no artigo **Greedy Function Approximation: A Gradient Boosting Machine**, de Friedman.
+As árvores impulsionadas por gradiente já existem há algum tempo. O XGBoost é usado para problemas de aprendizado supervisionado, onde usamos os dados de treinamento (com várias *features*) para prever uma variável resposta. O modelo de conjunto de árvores consiste em um conjunto de árvores de classificação e regressão (*classification and regression trees* ou CART). Um CART é um pouco diferente das árvores de decisão, nas quais a folha contém apenas valores de decisão. No CART, uma pontuação real é associada a cada uma das folhas, o que nos dá interpretações mais ricas que vão além da classificação. Isso também permite uma abordagem unificada e baseada em princípios para otimização.
 
-As árvores impulsionadas (com *boosting*) por gradiente já existem há algum tempo. 
-
-O XGBoost é usado para problemas de aprendizado supervisionado, onde usamos os dados de treinamento (com várias *features*) para prever uma variável resposta.
-
-O modelo de conjunto de árvores consiste em um conjunto de árvores de classificação e regressão (*classification and regression trees* ou CART).
-Um CART é um pouco diferente das árvores de decisão, nas quais a folha contém apenas valores de decisão. No CART, uma pontuação real é associada a cada uma das folhas, o que nos dá interpretações mais ricas que vão além da classificação. Isso também permite uma abordagem unificada e baseada em princípios para otimização, como veremos em uma parte posterior deste tutorial.
-
-Normalmente, uma única árvore não é forte o suficiente para ser usada na prática. O que é realmente usado é o modelo ensemble, que soma a previsão de várias árvores juntas.
-
-As pontuações de previsão de cada árvore individual são somadas para obter a pontuação final. Se você observar o exemplo, um fato importante é que as duas árvores tentam se complementar . Matematicamente, podemos escrever nosso modelo na forma
+Normalmente, uma única árvore não é forte o suficiente para ser usada na prática. O que é realmente usado é o modelo ensemble, que soma a previsão de várias árvores juntas. As pontuações de previsão de cada árvore individual são somadas para obter a pontuação final. Se você observar o exemplo, um fato importante é que as duas árvores tentam se complementar. Matematicamente, podemos escrever nosso modelo na forma:
 
 $$ \hat{y}_i = \sum_{k=1}^K f_k(x_i), f_k \in \mathcal{F} $$
 
 Onde $K$ é o número de árvores,$f_k$ é uma função no espaço funcional $\mathcal{F}$, e $\mathcal{F}$ é o conjunto de todos os CARTs possíveis. 
-A função objetivo a ser otimizada é dada por
+A função objetivo a ser otimizada é dada por:
 
  $$ \text{obj}(\theta) = \sum_i^nl(y_i, \hat{y}_i) + \sum_{k=1}^K \omega(f_k) $$
 
 Onde $\omega(f_k)$ é a complexidade da árvore $f_k$.
 
-Florestas aleatórias e árvores impulsionadas são realmente os mesmos modelos; a diferença surge de como eles são treinados.
+Florestas aleatórias e árvores impulsionadas são realmente os mesmos modelos, a diferença surge de como eles são treinados.
 
 No workflow, o XGBoosting foi configurado conforme apresentado na figura X.
 
@@ -395,7 +349,7 @@ No workflow, o XGBoosting foi configurado conforme apresentado na figura X.
 
 Figura x- Configuração do XGBoosting
 
-#### 3.4.2.3 Fase 3 - Extração dos resultados para geração dos dados de saída
+#### 3.3.3 Fase 3 - Extração dos resultados para geração dos dados de saída
 
 Ao final da execução do workflow é gerado um arquivo de saída com as probabilidades de óbito em 7 dias e em 15 dias para cada modelo gerado. Este arquivo não é entendivel por uma pessoa leiga, por essa razão precisa ser tratado. O notebook ["output_generator"](https://github.com/brolesi/ds4h/blob/main/notebooks/output_generator.ipynb) foi desenvolvido para esta finalidade. Poderiam ser mantidos todos os modelos e também todas as 4 formas de treino/teste apresentadas, mas elas gerariam muitas saídas diferentes, então foram geradas apenas duas para exemplo e comparação. Foi feito um arquivo de saída para treino e teste no cenário 1 e um arquivo de saída para treino e teste no cenário 2. Este arquivo de saída é do tipo .csv possui apenas 3 colunas, sendo elas, o Id do paciente, sua probabilidade de ir à óbito em 7 dias e sua probabilidade de ir à obito em 15 dias.
 
@@ -464,8 +418,6 @@ Outra possibilidade é a geração de mais dados sintéticos para, a partir de u
 [5] https://www.mdapp.co/palliative-prognostic-score-pap-calculator-401/
 
 [6] https://www.mdcalc.com/maggic-risk-calculator-heart-failure
-
-[7] P. Chapman et al., "CRISP-DM 1.0 - Step-by-step data mining guide". SPSS Inc., 2000.
 
 [8]  Synthea (2020). Getting Started [código fonte]. Disponível em: https://github.com/synthetichealth/synthea/wiki/Getting-Started Acessado em Maio de 2022.
 
