@@ -11,6 +11,7 @@ O presente projeto foi originado no contexto das atividades da disciplina de pó
 | Bruna Osti                    | 231024 | Computação     |
 | Fabio Fogliarini Brolesi      | 023718 | Computação     |
 | Ingrid Alves de Paiva Barbosa | 182849 | Computação     |
+
 Tabela 1 - Eqipe autora do projeto.
 
 # 2. Contextualização da Proposta
@@ -97,6 +98,7 @@ Foram usados dados dos cenários sintéticos do [Synthea](https://synthea.mitre.
 O _Synthea_ tem a missão de produzir dados de pacientes sintéticos e realistas, mas não reais, de alta qualidade e registros de saúde associados, cobrindo todos os aspectos da saúde. Os dados resultantes estão livres de restrições de custo, privacidade e segurança. Ele pode ser usado sem restrições para uma variedade de usos secundários na academia, pesquisa, indústria e governo. Cada paciente sintético do _Synthea_ é gerado de forma independente, à medida que progride desde o nascimento até a morte por meio de representações modulares de várias doenças e condições. Cada paciente percorre todos os módulos do sistema. Quando um paciente morre ou a simulação chega ao dia atual, esse registro do paciente pode ser exportado em vários formatos diferentes [8]. A figura 1 apresenta uma sinteze da organização dos dados do _Synthea_.
 
 ![alt text](assets/architecture.png)
+
 Figura 1 - organização dos dados do Synthea [8].
 
 Na base de dados do _Synthea_, os dados estão presentes em arquivos CSV (*comma separeted values*) e são os que seguem, conforme a Tabela 2 [9]:
@@ -129,6 +131,7 @@ Utilizou-se as tabelas `patients`, `encounters` e `conditions` para fazer uma an
 Estas três tabelas são as mais relevantes de toda a base, e a integração dos dados pode ser melhor compreendida a partir da estrutura apresentada na Figura 2. 
 
 ![alt text](assets/synthea.png)
+
 Figura 2 - Integração das tabelas `patients` e `encounters`.
 
 ## 3.2 Análise descritiva
@@ -140,16 +143,19 @@ No cenário 1, foram encontrados 1174 pacientes diferentes, sendo que 174 deles 
 Foi análisado a idade com que os pacientes foram à òbito, e a estratificação por gênero é apresentada na Figura 3, na qual é possível analisar que os homens morreram em idades mais avançadas que as mulheres, em ambos os cenários. 
 
 ![alt text](assets/boxplot.png)
+
 Figura 3 - Idade de falecimento por gênero em cada cenário.
 
 Foi analisada ainda as condições que mais levaram a óbito considerando o prazo de até 7 dias. É possível perceber na Figura 4 que a maior causa de morte no cenário 1 é a Leucemia mielóide aguda (*Acute myeloid leukemia* - 91861009) e no cenário 2 é a Hiperlipidemia (*Hyperlipidemia* - 55822004). 
 
 ![alt text](assets/contagem_morte.png)
+
 Figura 4 - maiores causas de morte por cenário.
 
 Entretanto, percebeu-se que nem todas as condições que levaram a òbito no cenário 1 estavam presentes no cenário 2. Isso poderia atrapalhar no modelo que seria gerado posteriormente. Por essa razão, foi analisado quais eram as causas de morte presente em ambos os cenários, conforme apresentado na Figura 5.
 
 ![alt text](assets/contagem_morte2.png)
+
 Figura 5 - Maiores causas de morte em comum nos dois cenários.
 
 É possível perceber que a condição que mais levou à óbito, somando os dois cenários, é a Insuficiência cardíaca congestiva crônica (*Chronic congestive heart failure* - 88805009).
@@ -211,21 +217,25 @@ Para cada _workflow_ foram construidas 4 estruturas diferentes, para comparaçã
 * Treino com o cenário 1 e teste com o cenário 1:
  
  ![alt text](assets/7d_1_1.png)
+
 Figura 6 - Configuração do treino com o cenário 1 e teste com o cenário 1.
  
 * Treino com o cenário 2 e teste com o cenário 2:
 
 ![alt text](assets/7d_2_2.png)
+
 Figura 7- Configuração do treino com o cenário 2 e teste com o cenário 2.
 
 * Treino com o cenário 1 e teste com o cenário 2:
 
 ![alt text](assets/7d_1_2.png)
+
 Figura 8- Configuração do treino com o cenário 1 e teste com o cenário 2.
 
 * Treino com o cenário 2 e teste com o cenário 1:
 
 ![alt text](assets/7d_2_1.png)
+
 Figura 9 - Configuração do treino com o cenário 2 e teste com o cenário 1.
 
 Já para o _pipeline_ de dados foram usados 3 modelos, a saber:
@@ -234,17 +244,17 @@ Já para o _pipeline_ de dados foram usados 3 modelos, a saber:
 
 O modelo de regressão logística tem como objetivo estudar a probabilidade de ocorrência de eventos, aqui chamado de $Y$, apresentado na forma qualitativa dicotômica (aqui usados no caos os valores $0$ para um não-evento e $1$ para um evento). Para isso, foi definido um vetor de variáveis explicativas, com seus respectivos parâmetros estimados, na forma [10]:
 
-$$Z_i = \alpha + \beta_1X_{1i} +  \beta_2X_{2i} + \cdots + \beta_kX_{ki}  $$ [10]
+$$Z_i = \alpha + \beta_1X_{1i} +  \beta_2X_{2i} + \cdots + \beta_kX_{ki}  $$ 
 
 em que, $Z$ é o *logito*, $\alpha$ representa a constante (bias), $\beta_j$ são os parâmetros estimados de cada variável explicativa, $X_j$ são as variáveis explicativas (métricas ou *dummies*) e $i$ é a i-ésima observação da amostra [10].
 
 É importante destacar que Z não é variável dependente, já que é definida por $Y$. O objetivo é definir a expressão da **probabilidade de óbito em 7 ou 15 dias** $p_i$ de ocorrência, em função do logito $Z_i$, ou seja, em função dos parâmetros estimados para cada variável explicativa. Para tanto, devemos definir o conceito de **chance** de ocorrência de um evento, também conhecida por *odds*, da seguinte forma [10]: 
 
-$$chance(odds)_{Y_i=1} = \frac{p_i}{1-p_i}$$ [10]
+$$chance(odds)_{Y_i=1} = \frac{p_i}{1-p_i}$$ 
 
 A regressão logística binária define o logito $Z$ como o logaritmo natural da chance, de modo que:
 
-$$ ln(chance_{Y_i=1}) = Z_i$$ [10]
+$$ ln(chance_{Y_i=1}) = Z_i$$ 
 
 De onde tem-se:
 
@@ -252,29 +262,30 @@ $$ ln\left(\frac{p_i}{1-p_i}\right) = Z_i $$ [10]
 
 Na medida em que é necessário identificar uma expressão para a probabilidade de **ocorrência do evento**  em função do logito, pode-se matematicamente isolar $p_i$ da seguinte maneira:
 
-$$ \frac{p_i}{1-p_i} = e^{Z_i} $$ [10]
+$$ \frac{p_i}{1-p_i} = e^{Z_i} $$ 
 
 logo
 
-$$ p_i =(1-p_i)e^{Z_i}$$ [10]
+$$ p_i =(1-p_i)e^{Z_i}$$ 
 
 então
 
-$$ p_i(1+e^{Z_i})=e^{Z_i} $$ [10]
+$$ p_i(1+e^{Z_i})=e^{Z_i} $$
 
 Disso então tem-se finalmente que:
 
 **Chance de ocorrência do evento:**
 
-$$ p_i = \frac{e^{Z_i}}{1+e^{Z_i}} = \frac{1}{1+e^{-Z_i}}$$ [10]
+$$ p_i = \frac{e^{Z_i}}{1+e^{Z_i}} = \frac{1}{1+e^{-Z_i}}$$
 
 **Chance de ocorrência de um não evento:**
 
-$$ 1 - p_i = 1 - \frac{e^{Z_i}}{1+e^{Z_i}} = \frac{1}{1+e^{Z_i}}$$ [10]
+$$ 1 - p_i = 1 - \frac{e^{Z_i}}{1+e^{Z_i}} = \frac{1}{1+e^{Z_i}}$$ 
 
 No workflow, a regressão logística foi configurada conforme apresentado na Figura 10.
 
 ![alt text](assets/orange-lr-params.png)
+
 Figura 10 - Configuração da regressão logística.
 
 #### B. Árvore de decisão
@@ -285,7 +296,7 @@ Ao olhar para o custo de uma divisão, é necessário olhar as funções de cust
 
 Há ainda a chamada pontuação Gini, conforme equação a seguir:
 
-$$ G = \sum(pk * (1 — pk)) $$ [11]
+$$ G = \sum(pk * (1 — pk)) $$
 
 Uma pontuação Gini dá uma ideia de quão boa é uma divisão pelo quão mistas são as classes de resposta nos grupos criados pela divisão. Aqui, $pk$ é a proporção de entradas da mesma classe presentes em um determinado grupo. Uma pureza de classe perfeita ocorre quando um grupo contém todas as entradas da mesma classe, caso em que $pk$ é $1$ ou $0$ e $G = 0$, onde um nó com uma divisão de $50-50$ classes em um grupo tem a pior pureza, então para uma classificação binária terá $pk = 0,5$ e $G = 0,5$ [11].
 
@@ -311,6 +322,7 @@ Mas também há desvantagens [11]:
 No workflow, a árvore de decisão foi configurada conforme apresentado na Figura 11.
 
 ![alt text](assets/orange-tree-params.png)
+
 Figura 11 - Configuração da árvore de decisão.
 
 #### C. _Gradient boosting_ (mais especificamente XGBoosting)
@@ -321,12 +333,12 @@ As árvores impulsionadas por gradiente já existem há algum tempo. O XGBoost �
 
 Normalmente, uma única árvore não é forte o suficiente para ser usada na prática. O que é realmente usado é o modelo ensemble, que soma a previsão de várias árvores juntas. As pontuações de previsão de cada árvore individual são somadas para obter a pontuação final. Se você observar o exemplo, um fato importante é que as duas árvores tentam se complementar [13]. Matematicamente, podemos escrever nosso modelo na forma:
 
-$$ \hat{y}_i = \sum_{k=1}^K f_k(x_i), f_k \in \mathcal{F} $$ [13]
+$$ \hat{y}_i = \sum_{k=1}^K f_k(x_i), f_k \in \mathcal{F} $$ 
 
 Onde $K$ é o número de árvores,$f_k$ é uma função no espaço funcional $\mathcal{F}$, e $\mathcal{F}$ é o conjunto de todos os CARTs possíveis. 
 A função objetivo a ser otimizada é dada por:
 
- $$ \text{obj}(\theta) = \sum_i^nl(y_i, \hat{y}_i) + \sum_{k=1}^K \omega(f_k) $$ [13]
+ $$ \text{obj}(\theta) = \sum_i^nl(y_i, \hat{y}_i) + \sum_{k=1}^K \omega(f_k) $$
 
 Onde $\omega(f_k)$ é a complexidade da árvore $f_k$.
 
@@ -335,6 +347,7 @@ Florestas aleatórias e árvores impulsionadas são realmente os mesmos modelos,
 No workflow, o XGBoosting foi configurado conforme apresentado na Figura 12.
 
 ![alt text](assets/orange-xgboost-params.png)
+
 Figura 12 - Configuração do XGBoosting.
 
 #### 3.3.3 Fase 3 - Extração dos resultados para geração dos dados de saída
@@ -348,6 +361,7 @@ Para compreender os resultados dos modelos, foram gerados a curva ROC, a matriz 
 * Curva ROC:
 
 ![alt text](assets/roc7_1_1.png)
+
 Figura 13 - Curva ROC para 7 dias com treino no cenário 1 e teste no cenário 1.
 
 A Figura 13 apresenta a curva ROC resultante da predição de óbito de pacientes em até 7 dias, tendo sido treinado com dados do cenário 1 e testado também com o cenário 1. É possível perceber que a Regressão Logística e o XGBoosting tiveram resultados bem próximos, apesar do  XGBoosting se sobressair um pouco. Em caso de dúvidas nesta análise gráfica, pode-se consultar o valor do AUC, que é a área sobre a curva ROC. O maior valor de área possuí o melhor resultado.
@@ -355,6 +369,7 @@ A Figura 13 apresenta a curva ROC resultante da predição de óbito de paciente
 * Matriz de confusão:
 
 ![alt text](assets/mc7_1_1.png)
+
 Figura 14 - Matriz de confusão para 7 dias com treino no cenário 1 e teste no cenário 1.
 
 Ao gerar o relatório, o _Orange_ já gerou apenas a matriz de confusão com o melhor resultado entre os 3 modelos usados. Para a predição de óbito de pacientes em até 7 dias, tendo sido treinado com dados do cenário 1 e testado também com o cenário 1, o melhor resultado foi obtido com o modelo XGBoosting, em que houveram 658 verdadeiros negativos (que possuíam valor igual a **_False_** e realmente deveriam ser **_False_**), e 61 verdadeiros positivos (que possuíam valor igual a **True**  e realmente deveriam ser **_True_**). Foram encontrados 60 falsos positivos (que possuíam valor igual a **_True_** mas deveriam ser **_False_**) e apenas 19 falsos negativos (que possuíam valor igual a **_False_** mas deveriam ser **_True_**).
@@ -362,6 +377,7 @@ Ao gerar o relatório, o _Orange_ já gerou apenas a matriz de confusão com o m
 * Scores:
 
 ![alt text](assets/score7_1_1.png)
+
 Figura 15 - Tabela de Score para 7 dias com treino no cenário 1 e teste no cenário 1.
 
 A partir da matriz de confusão e da curva ROC é possível calcular as métricas dos modelos usados. Na Figura 15 há a área da curva ROC (AUC), a acurácia (CA), o F-score (F1), a sensibilidade (_recall_) e a precisão (_precision_) para a predição de óbito de pacientes em até 7 dias, tendo sido treinado com dados do cenário 1 e testado também com o cenário 1. É possível analisar que, apesar da AUC ser bem próxima entre a regressão logística e o XGBoosting, nas outras métricas o XGBoosting apresenta resultados melhores, principalmente do ponto de vista de precisão.
@@ -369,6 +385,7 @@ A partir da matriz de confusão e da curva ROC é possível calcular as métrica
 Com base nestes resultados, é possível afirmar que o XGBoosting apresentou melhores resultados em todos os parâmetros analisados para predição de óbito de pacientes em até 7 dias, tendo sido treinado com dados do cenário 1 e testado também com o cenário 1. Já para os outros cenários, não foi possível chegar a uma conclusão tão unânime assim. A tabela apresentada na Figura 16 mostra a comparação dos resultados entre os modelos, onde as células em verde-claro representam os melhores valores, as células em vermelho representam os piores valores, e as células em verde-escuro apresentam o melhor resultado geral de cada métrica entre todos os modelos e cenários.
 
 ![alt text](assets/comparacao_modelo.png)
+
 Figura 16 - Comparação dos resultados com base nos modelos.
 
 É possível perceber que em alguns cenários, o XGBoosting apresenta os melhores resultados, já em outros a Regressão Logística se destaca. Apesar disso, ambos apresentam os piores resultados também em determinados cenários. A árvore de decisão não tem nem os melhores, nem os piores valores, ficando em uma posição intermediária. 
@@ -376,6 +393,7 @@ Figura 16 - Comparação dos resultados com base nos modelos.
 A tabela apresentada na Figura 17 compara os resultados entre 7 dias e 15 dias, para os mesmos modelos e formatos de treino.
 
 ![alt text](assets/comparacao_dias.png)
+
 Figura 17 - Comparação dos resultados com base no número de dias para óbito.
 
 Os cenários de prognóstico para 7 dias apresentaram os melhores valores com mais frequência, quando comparados ao prognóstico de 15 dias. É importante ressaltar também que houveram duas situações em que os resultados para 7 dias e 15 dias foram exatamente os mesmos: árvore de decisão e XGBoosting tendo sido treinados e testados no cenario 1.
@@ -385,9 +403,11 @@ Ao olhar de forma geral, o melhor resultado encontrado foi para o modelo XGBoost
 Para analisar o resultado de saída que realmente irá para o médico, é apresentado na Figura 18 uma parte da base de saída gerada para treino no cenário 1 e teste no cenário 1, e na Figura 19 uma parte da base de saída gerada para treino no cenário 2 e teste no cenário 2.
 
 ![alt text](assets/print_output_1_1.png)
+
 Figura 18 - Saída com treino no cenário 1 e teste no cenário 1.
 
 ![alt text](assets/print_output_2_2.png)
+
 Figura 19 - Saída com treino no cenário 2 e teste no cenário 2.
 
 É possível perceber na Figura 18 que para o treino e teste no cenário 1 os resultados da mortalidade em 7 dias e 15 dias foram exatamente os mesmos. Já na Figura 19, onde o treino e o teste foram feitos no cenário 2, houve uma diferença nos resultados da mortalidade em 7 dias e 15, porém a diferença não foi tão siginificativa.
