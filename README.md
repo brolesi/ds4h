@@ -378,6 +378,41 @@ Ao final da execução do workflow é gerado um arquivo de saída com as probabi
 
 # 4. Resultados e Discussão
 
+Para compreender os resultados dos modelos, foram gerados a curva ROC, a matriz de confusão e a tabela de Scores, com AUC, CA, F1, Precision e Recall. Como são 04 tipos de treino e teste, para 2 cenários diferentes (07 dias e 15 dias), o volume de figuras para trazer ao relatório seria muito alto, por isso, aqui serão apresentados apenas um de cada, e os resultados completos podem ser vistos no relatórios gerados pelo Orange: [Relatório 7 dias](https://github.com/brolesi/ds4h/blob/main/assets/report-7-days-roc.pdf) e [Relatório 15 dias](https://github.com/brolesi/ds4h/blob/main/assets/report-15-days-roc.pdf)
+
+* Curva ROC:
+
+
+![alt text](assets/roc7_1_1.png)
+
+Figura x- Curva ROC para 7 dias com treino no cenário 1 e teste no cenário 1
+
+
+* Matriz de confusão:
+
+
+![alt text](assets/mc7_1_2.png)
+
+Figura x- Matriz de confusão para 7 dias com treino no cenário 1 e teste no cenário 1
+
+
+* Scores:
+
+
+![alt text](assets/score7_1_1.png)
+
+Figura x- Tabela de Score para 7 dias com treino no cenário 1 e teste no cenário 1
+
+Para analisar o resultado final, é apresentado na Figura x uma parte da base de saída gerada para treino no cenário 1 e teste no cenário 1, e na Figura x  uma parte da base de saída gerada para treino no cenário 2 e teste no cenário 2.
+
+
+![alt text](assets/print_output_1_1.png)
+
+Figura x- Saída com treino no cenário 1 e teste no cenário 1.
+
+![alt text](assets/print_output_2_2.png)
+
+Figura x- Saída com treino no cenário 2 e teste no cenário 2.
 
 # 5. Conclusão
 > Destacar as principais conclusões obtidas no desenvolvimento do projeto.
