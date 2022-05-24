@@ -101,7 +101,7 @@ Figura 2 - organização dos dados do Synthea [8].
 
 Na base de dadosdo Synthea, os dados estão presentes em arquivos CSV (*comma separeted values*) e são os que seguem, conforme a Tabela 1 [9]:
 
-| Aruivo                    | Descrição                                                                     |
+| Arquivo                   | Descrição                                                                     |
 | ------------------------- | ----------------------------------------------------------------------------- |
 | `allergies.csv`           | Dados de alergia do paciente.                                                 |
 | `careplans.csv`           | Dados do plano de atendimento ao paciente.                                    |
