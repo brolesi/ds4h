@@ -231,15 +231,52 @@ Figura 6 - Maiores causas de morte em comum nos dois cenários.
 
 ### 3.4.2 Modelo
 
-O modelo em si foi feito em dois _Workflows_ do _Orange Data Mining_, sendo um para óbito em até 7 dias e outro para óbito em até 15 dias. Ambos seguem o mesmo padrão e conceitos.
+Para compreensão do modelo de forma mais simples, ele será dividido em 3 fases, sendo:
 
-Para o _pipeline_ de dados foram usados 3 modelos, a saber:
+* Fase 1 - Preparação dos dados de entrada
+* Fase 2 - Treino e teste do sistema
+* Fase 3 - Extração dos resultados para geração dos dados de saída
 
-1. Regressão logística
-2. Árvore de decisão
-3. _Gradient boosting_ (mais especificamente XGBoosting)
+#### 3.4.2.1 Fase 1 - Preparação dos dados de entrada
 
-#### 3.4.2.1 Regressão logística
+Para o modelo, primeiro foi necessário eliminar todos os dados que poderiam causar bias, restando os parâmetros já apresentados na seção 3.3. Em seguida, os pacientes de cada cenário foram divididos em dois grupos, sendo um daqueles que já haviam ido à òbito e o outro daqueles que ainda estavam em vida. A proposta inicial seria de utilizar os dados do grupo dos pacientes que já foram a obito para treinar o sistema e os dados do grupo dos pacientes que estão em vida para prognóstico. Entretanto, o número de pacientes que já foram a obito com a condição pré-definida não possuía o tamanho suficiente para treinar o sistema. Por essa razão, foram usados os dados dos pacientes em vida como contraponto no treinamento.
+
+Utilizou-se a técnica de *Support Vector Machines* afim de identificar a segregação a partir de hiperplanos dos dados em dois: prognóstico de evolução à óbito em até $7$ dias (ou em até $7$ dias) e prognóstico de evolução à óbito igual ou superior a $7$ dias (ou superior a $15$ dias). Dado que a quantidade de registros era pequena, o resultado não foi como o esperado, por isso, utilizou-se da técnica de *data augmentation* (ou, aumento de dados, a partir da criação de dados sintéticos, baseados nos dados originais), para que as amostras ficassem balanceadas.
+
+#### 3.4.2.2 Fase 2 - Treino e teste do sistema
+
+É o núcleo do modelo em si foi feito em dois _Workflows_ do _Orange Data Mining_, sendo um para óbito em até 7 dias e outro para óbito em até 15 dias. Ambos seguem o mesmo padrão e conceitos.
+
+Para cada _workflow_ foram construidas 4 estruturas diferentes, para comparação dos resultados:
+
+* Treino com o cenário 1 e teste com o cenário 1:
+ 
+ ![alt text](assets/7d_1_1.png)
+
+Figura x- Configuração do treino com o cenário 1 e teste com o cenário 1
+ 
+* Treino com o cenário 2 e teste com o cenário 2:
+
+![alt text](assets/7d_2_2.png)
+
+Figura x- Configuração do treino com o cenário 2 e teste com o cenário 2
+
+* Treino com o cenário 1 e teste com o cenário 2:
+
+![alt text](assets/7d_1_2.png)
+
+Figura x- Configuração do treino com o cenário 1 e teste com o cenário 2
+
+* Treino com o cenário 2 e teste com o cenário 1:
+
+![alt text](assets/7d_2_1.png)
+
+Figura x- Configuração do treino com o cenário 2 e teste com o cenário 1
+
+
+Já para o _pipeline_ de dados foram usados 3 modelos, a saber:
+
+**A. Regressão logística**
 
 O modelo de regressão logística tem como objetivo estudar a probabilidade de ocorrência de eventos, aqui chamado de $Y$, apresentado na forma qualitativa dicotômica (aqui usados no caos os valores $0$ para um não-evento e $1$ para um evento). Para isso, foi definido um vetor de variáveis explicativas, com seus respectivos parâmetros estimados, na forma [REF Regressão]:
 
@@ -281,7 +318,13 @@ $$ p_i = \frac{e^{Z_i}}{1+e^{Z_i}} = \frac{1}{1+e^{-Z_i}}$$
 
 $$ 1 - p_i = 1 - \frac{e^{Z_i}}{1+e^{Z_i}} = \frac{1}{1+e^{Z_i}}$$
 
-#### 3.4.2.2 Árvore de decisão [TODO: fonte https://towardsdatascience.com/decision-trees-in-machine-learning-641b9c4e8052]
+No workflow, a regressão logística foi configurada conforme apresentado na figura X.
+
+![alt text](assets/orange-lr-params.png)
+
+Figura x- Configuração da regressão logística
+
+**B. Árvore de decisão**
 
 O segundo método usado foi a árvore de decisão, onde na primeira divisão ou raiz, todas as features são consideradas e os dados de treinamento são divididos em grupos com base nessa divisão. Serão feitas $n$ divisões, tais quais forem as variedades da _feature_ candidata. Para calcular quanta precisão cada divisão custará, usando uma função custo. A divisão que custa menos é escolhida. Este algoritmo é recursivo por natureza, pois os grupos formados podem ser subdivididos usando a mesma estratégia. Devido a este procedimento, este algoritmo também é conhecido como algoritmo guloso (*greedy*). Isso torna o nó raiz o melhor preditor/classificador.
 
@@ -312,49 +355,29 @@ Mas também há desvantagens:
 * Algoritmos gananciosos não podem garantir o retorno da árvore de decisão globalmente ótima. Isso pode ser mitigado treinando várias árvores, onde os recursos e as amostras são amostrados aleatoriamente com substituição.
 * Os aprendizes de árvores de decisão criam árvores tendenciosas se algumas classes dominarem . Portanto, é recomendado balancear o conjunto de dados antes de ajustar com a árvore de decisão.
 
-#### 3.4.2.3 XGBoost
+No workflow, a árvore de decisão foi configurada conforme apresentado na figura X.
+
+![alt text](assets/orange-tree-params.png)
+
+Figura x- Configuração da árvore de decisão
+
+**C. _Gradient boosting_ (mais especificamente XGBoosting)**
+
+EXPLICAR AQUI
 
 
+No workflow, o XGBoosting foi configurado conforme apresentado na figura X.
 
+![alt text](assets/orange-xgboost-params.png)
 
+Figura x- Configuração do XGBoosting
 
-[TODO: colocar a criação de samples / treino/teste, SVM e decision tree]
+#### 3.4.2.3 Fase 3 - Extração dos resultados para geração dos dados de saída
 
-Para o modelo, primeiro foi necessário eliminar todos os dados que poderiam causar bias, restando os parâmetros já apresentados na seção 3.3. Em seguida, os pacientes de cada cenário foram divididos em dois grupos, sendo um daqueles que já haviam ido à òbito e o outro daqueles que ainda estavam em vida. A proposta inicial seria de utilizar os dados do grupo dos pacientes que já foram a obito para treinar o sistema e os dados do grupo dos pacientes que estão em vida para prognóstico. Entretanto, o número de pacientes que já foram a obito com a condição pré-definida não possuía o tamanho suficiente para treinar o sistema. Por essa razão, foram usados os dados dos pacientes em vida como contraponto no treinamento.
+Ao final da execução do workflow é gerado um arquivo de saída com as probabilidades de óbito em 7 dias e em 15 dias para cada modelo gerado. Este arquivo não é entendivel por uma pessoa leiga, por essa razão precisa ser tratado. O notebook ["output_generator"](https://github.com/brolesi/ds4h/blob/main/notebooks/output_generator.ipynb) foi desenvolvido para esta finalidade. Poderiam ser mantidos todos os modelos e também todas as 4 formas de treino/teste apresentadas, mas elas gerariam muitas saídas diferentes, então foram geradas apenas duas para exemplo e comparação. Foi feito um arquivo de saída para treino e teste no cenário 1 e um arquivo de saída para treino e teste no cenário 2. Este arquivo de saída é do tipo .csv possui apenas 3 colunas, sendo elas, o Id do paciente, sua probabilidade de ir à óbito em 7 dias e sua probabilidade de ir à obito em 15 dias.
 
-Utilizou-se a técnica de *Support Vector Machines* afim de identificar a segregação a partir de hiperplanos dos dados em dois: prognóstico de evolução à óbito em até $7$ dias e prognóstico de evolução à óbito igual ou superior a $7$ dias. Dado que a quantidade de registros era pequena, o resultado não foi como o esperado, por isso, utilizou-se da técnica de *data augmentation* (ou, aumento de dados, a partir da criação de dados sintéticos, baseados nos dados originais), para que as amostras (óbito em até 7 dias e óbito a partir de 7 dias) ficassem balanceadas.
+# 4. Resultados e Discussão
 
-Após ter o modelo desenhado e validado, realizou-se então o *deploy* do mesmo, tornando-o produtivo para ser executado no dispositivo final, e a partir daí, o uso do mesmo a partir da entrada de dados conforme estrutura da Tabela 3.
-
-| **Campo** | **Descrição**                |
-| --------- | ---------------------------- |
-| A         | Identifica o tipo de sintoma |
-| D         | Identifica o tempo de vida   |
-
-Tabela 3: Campos utilizados na entrada dos dados para processamento do modelo desenvolvido.
-
-> Apresente o seu modelo de predição e resultados alcançados.
-> Para cada modelo, apresente no mínimo:
-> * quais os dados sobre o paciente que serão usados para a predição;
-> * qual a abordagem/modelo adotado;
-> * resultados do preditor (apresente da forma mais rica possível, usando tabelas e gráficos - métricas e curva ROC são bem vindos);
-> * breve discussão sobre os resultados obtidos.
->
-> Nesta seção, lembre-se das sugestões de análise:
-> * analisar diferentes composições de treinamento e análise do modelo:
->   * um modelo treinado/validado no cenário 1 e testado no cenário 2 e vice-versa;
->   * um modelo treinado e validado com os dados dos dois cenários;
->   * nos modelos dos dois itens anteriores:
->     * houve diferença de resultados?
->     * como analisar e interpretar as diferenças?
-> * testar diferentes composições de dados sobre o paciente para a predição (por exemplo, quantidade diversificadas de número de itens).
-
-# 4. Discussão
-> Fazer um breve debate sobre os resultados alcançados. Aqui pode ser feita a análise dos possíveis motivos que certos resultados foram alcançados. Por exemplo:
-> * por que seu modelo alcançou (ou não) um bom resultado?
-> * por que o modelo de um cenário não se desempenhou bem em outro?
->
-> A discussão dos resultados também pode ser feita opcionalmente na seção de Resultados, na medida em que os resultados são apresentados. Aspectos importantes a serem discutidos: É possível tirar conclusões dos resultados? Quais? Há indicações de direções para estudo? São necessários trabalhos mais profundos?
 
 # 5. Conclusão
 > Destacar as principais conclusões obtidas no desenvolvimento do projeto.
@@ -371,9 +394,6 @@ A partir dos resultados obtidos, existe a possibilidade de evolução do ponto d
 Outra possibilidade é a geração de mais dados sintéticos para, a partir de uma massa de dados maior, termos um modelo com maior robustez.
 
 # Referências Bibliográficas
-> Lista de artigos, links e referências bibliográficas (se houver).
->
-> Fiquem à vontade para escolher o padrão de referenciamento preferido pelo grupo.
 
 [1] Patino, C.M.,  Ferreira J.C. "Prognostic studies for health care decision making". CONTINUING EDUCATION: SCIENTIFIC METHODOLOGY, J Bras Pneumol., 43 (04), Aug 2017. https://doi.org/10.1590/S1806-37562017000000241
 
@@ -392,4 +412,12 @@ Outra possibilidade é a geração de mais dados sintéticos para, a partir de u
 [8]  Synthea (2020). Getting Started [código fonte]. Disponível em: https://github.com/synthetichealth/synthea/wiki/Getting-Started Acessado em Maio de 2022.
 
 [9] Synthea (2020). CSV File Data Dictionary [código fonte]. Disponível em: https://github.com/synthetichealth/synthea/wiki/CSV-File-Data-Dictionary Acessado em Maio de 2022.
+
+[10] ref ML
+
+[11] livro
+
+[12] https://towardsdatascience.com/decision-trees-in-machine-learning-641b9c4e8052
+
+[13] ref gradiente
 
