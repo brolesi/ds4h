@@ -14,7 +14,7 @@ O presente projeto foi originado no contexto das atividades da disciplina de pó
 
 # 2. Contextualização da Proposta
 
-## 2.1 Estudo de prognósticos
+## 2.1. Estudo de prognósticos
 
 A área de pesquisa de prognósticos busca entender e melhorar os resultados de prognósticos em pessoas com uma determinada doença ou condição de saúde. O objetivo geral de estudos prognósticos em contextos clínicos é ajudar clínicos, pacientes e familiares a tomar decisões esclarecidas a respeito de cuidados de saúde com base em informações disponíveis sobre cada paciente no presente para prever desfechos no futuro [1]. Além disso, ajuda os pacientes e os familiares a tomar decisões adequadas a respeito do fim da vida daqueles cujo risco de morte é muito alto e a identificar intervenções personalizadas para evitar futuras hospitalizações [2].
 
@@ -27,7 +27,7 @@ Entre os prognósticos existentes, alguns são apresentados abaixo:
 * Palliative Prognostic Score (PaP): Semelhante ao anterior, também foca em pacientes em cuidados paliativos. Neste caso os parâmetros de entrada são Dispneia, Anorexia, Karnofsky Performance Status, Previsão Clínica de Sobrevivência (semanas), Total de WBC e Linfócitos %, para predizer a probabilidade de sobrevivência em 30 dias [5]. 
 * MAGGIC Risk Calculator for Heart Failure (MAGGIC RCHF): Este prognóstico foca apenas em pessoas que sofrem da condição de insuficiência cardíaca, e com base nos parâmetros de entrada, estima a mortalidade em 1 e 3 anos [6].
 
-## 2.2 Proposta de projeto
+## 2.2. Proposta de projeto
 
 A proposta deste projeto é montar um ou mais modelos de prognóstico que realizem a predição de mortalidade de pacientes sintéticos gerados em pelo menos dois cenários de dados fictícios. Será necessário estabelecer os parâmetros de predição, definir quais os dados sobre o paciente que serão usados para a predição, construir modelos de aprendizagem de máquina que realizem predições e apresentar o resultado do modelo de predição aplicado.
 
@@ -45,6 +45,40 @@ Para o presente trabalho, utilizou-se as seguintes ferramentas:
 * _Orange Data Mining_, para treinar e testar o sistema, além de gerar as saídas;
 * _Scripts Shell_, para execução de fluxo de dados (_data pipeline_);
 * Base de dados _Synthea_, para geração do modelo de prognóstico e também para testes.
+
+## 2.4. Organização do repositório
+
+O trabalho desenvolvido é divulgado de forma pública em [*repositório do GitHub*](https://github.com/brolesi/ds4h) e sua organização foi feita da seguinte forma:
+
+~~~
+├── README.md                         <- relatório do projeto (você está aqui!)
+│
+├── data
+│   ├── interim                        <- dados intermediários usados para gerar os dados de saída
+|     ├── results7_1_1.csv             <- resultado treinado no cenário 1 e testado no cenário 1 para 7 dias
+|     ├── results7_2_2.csv             <- resultado treinado no cenário 2 e testado no cenário 2 para 7 dias
+|     ├── results15_1_1.csv            <- resultado treinado no cenário 1 e testado no cenário 1 para 15 dias
+|     └── results15_2_2.csv            <- resultado treinado no cenário 2 e testado no cenário 2 para 15 dias
+│   ├── processed                      <- dados finais usados para a modelagem
+|     ├── (...)15days_scenario1.csv    <- resultado do notebook "Dataset Generator" para 15 dias no cenário 1
+|     ├── (...)15days_scenario2.csv    <- resultado do notebook "Dataset Generator" para 15 dias no cenário 2
+|     ├── (...)7days_scenario1.csv     <- resultado do notebook "Dataset Generator" para 7 dias no cenário 1
+|     └── (...)7days_scenario2.csv     <- resultado do notebook "Dataset Generator" para 7 dias no cenário 2
+│   ├── output                         <- dados de saída que podem ser usados pelos médicos
+|     ├── output_1_1.csv               <- resultado do notebook "output_generator" para treino no cenário 1 e teste no cenário 1
+|     └── output_2_2.csv               <- resultado do notebook "output_generator" para treino no cenário 2 e teste no cenário 2
+│   └── raw                            <- dados originais sem modificações copiados da base do Synthea.
+│
+├── notebooks                          <- Jupyter notebooks gerados  
+│   ├── Dataset Generator.ipynb        <- Notebook que gera dos arquivos que serão usados de entrada no Orange
+|   └── output_generator.ipynb         <- Notebook que gera os arquivos de saída com o prognóstico, com base na saída do Orange
+├── src                                <- workflows desenvolvidos no Orange
+|   ├── cenarios-07-dias.ows           <- Workflow para prognóstico de óbito em 7 dias
+|   ├── cenarios-15-dias.ows           <- Workflow para prognóstico de óbito em 15 dias
+│   └── README.md                      <- instruções básicas de execução
+│
+└── assets                             <- mídias usadas no projeto
+~~~
 
 # 3. Metodologia
 
@@ -81,11 +115,11 @@ Figura 1: Metodologia CRISP-DM [7].
 
 A seguir será explicado o objetivo de cada fase, com sua respectiva aplicação para solucionar o problema proposto neste projeto.
 
-## 3.1 Entendimento do problema (entendimento de negócio)
+## 3.1 Entendimento do negócio e Entendimento dos dados
 
-...
+Para realizar o prognóstico, há o desafio de identificar quais serão seus dados de entrada e seus dados de saída. Além disso, também há o desafio de escolher como estes dados de entrada serão processados para gerar os dados de saída.
 
-## 3.2 Entendimento dos dados
+Neste trabalho, optou-se pela tecnologia _Machine Learning_, que usa de fórmulas e métodos para ensinar a máquina de acordo com um alvo, assim, ela sabe como agir em determinadas situações [ref ML]. Neste trabalho, com base em dados já existentes, será ensinado a uma máquina quais os parâmetros que influenciaram mais ou menos na evolução de uma pessoa à òbito, para que ela aprenda e diga qual a probabilidade de que uma determinada pessoa viva, com determinadas características, venha a óbito em 7 dias ou em 15 dias.
 
 Foram usados dados dos cenários sintéticos do [Synthea](https://synthea.mitre.org/) presentes no repositório [Github](https://github.com/santanche/lab2learn/tree/master/data/synthea). As bases utilizadas para o presente projeto são as que seguem:
 
@@ -123,7 +157,7 @@ Na base de dadosdo Synthea, os dados estão presentes em arquivos CSV (*comma se
 
 Tabela 1: arquivos disponíveis no repositório e descrição de cada um [9].
 
-Este projeto foi dividido em duas etapas, sendo que na primeira utilizou-se as tabelas `patients`, `encounters` e `conditions` para entender quais condições mais levavam os pacientes á óbitos, e tomar as decisões para escolha de cenário de aplicação do prognóstico. Posteriormente, na segunda etapa, utilizou-se as tabela `patients` e `encounters` para cálculo da probabilidade de óbito em até 7 dias.
+Utilizou-se as tabelas `patients`, `encounters` e `conditions` para fazer uma análise exploratória dos dados. Posteriormente, utilizou-se as tabela `patients` e `encounters` para cálculo da probabilidade de óbito em até 7 dias e em até 15 dias.
 
 Estas três tabelas são as mais relevantes de toda a base, e a integração dos dados pode ser melhor compreendida a partir da estrutura apresentada na figura 3. 
 
@@ -133,7 +167,7 @@ Figura 3 - Integração das tabelas `patients` e `encounters`.
 
 ## 3.3 Preparação dos dados
 
-Nesta etapa, com a estruturação dos dados a partir do cruzamento entre eles, realizou-se a criação de colunas (características, ou, em inglês na área de ciência de dados, *feature*) sintéticas a partir de colunas originas de de dados categóricos para, a partir do aumento da dimensionalidade, trazer maior riquza para a criação do modelo considerando aspectos relevantes para a análise.
+Para gerar os dados que seriam aplicados no modelo, foi desenvolvido o _notebook_ ["Dataset generator"](notebooks/Dataset Generator.ipynb). Com a estruturação dos dados a partir do cruzamento entre eles, realizou-se a criação de colunas (características, ou, em inglês na área de ciência de dados, *feature*) sintéticas a partir de colunas originas de de dados categóricos para, a partir do aumento da dimensionalidade, trazer maior riquza para a criação do modelo considerando aspectos relevantes para a análise.
 
 Ao final, as colunas relevantes para o desenvolvimento do _datamart_ foram as presentes na Tabela 2:
 
@@ -163,15 +197,15 @@ Ao final, as colunas relevantes para o desenvolvimento do _datamart_ foram as pr
 
 Tabela 2: Campos utilizados para composição do *datamart* a ser considerado para a geração do modelo de aprendizado de máquina. A **coluna origem** indica que o campo foi criado artificialmente de uma *feature* categórica da tabela origem.
 
-Após a criação do *datamart*, realizou-se a extração de informações relevantes para a análise dos pacientes de interesse considerando apena a condição de Insuficiência Cardíaca Congestiva Crônica para que a partir do modelo, a entrada de dados fosse feita apenas considerando a condição de interesse.
+Ainda neste arquivo gerado, foi adicionado um parâmetro chamado de _death_threshould_ que possui valor **_True_** quando o paciente foi a óbito em 7 dias ou em 15 dias e **_False_** em caso contrário. Esse parâmetro será o alvo posteriormente no modelo. 
+
+Os 04 arquivos preparados, para 7 dias e 15 dias em ambos os cenários, podem ser vistos [no repositório](https://github.com/brolesi/ds4h/tree/main/data/processed).
 
 ## 3.4 Modelagem, Avaliação e Aplicação
 
-Como brevemente explicado anteiormente, esta modelagem foi dividida em duas etapas, sendo a primeira de análises exploratórias, para auxiliar na definição do cenário e a segunda de modelagem propriamente dita, já específica para o cenário determinado.
+### 3.4.1 Análise descritiva
 
-### 3.4.1 Etapa 1 - Análise descritiva
-
-Como já citado, na primeira etapa foram realizadas algumas análises dos dados das tabelas `patients`, `encounters` e `conditions` para entender quais condições mais levavam os pacientes á óbitos, e tomar as decisões para escolha de cenário de aplicação do prognóstico.
+Como já citado, primeiramente foram realizadas algumas análises dos dados das tabelas `patients`, `encounters` e `conditions` para entender quais condições mais levavam os pacientes á óbitos, e tomar as decisões para escolha de cenário de aplicação do prognóstico.
 
 No cenário 1, foram encontrados 1174 pacientes diferentes, sendo que 174 deles já haviam ido à òbito, enquanto no cenário 2 haviam 1121 pacientes, com 121 óbitos. Em ambos os cenários haviam 1000 pacientes ainda em vida. 
 
@@ -195,28 +229,25 @@ Figura 6 - Maiores causas de morte em comum nos dois cenários.
 
 É possível perceber que a condição que mais levou à óbito, somando os dois cenários, é a Insuficiência cardíaca congestiva crônica (*Chronic congestive heart failure* - 88805009).
 
-### 3.4.2 Etapa 2 - Modelo
+### 3.4.2 Modelo
 
-Para o pipeline de dados utilizamos 3 modelos, a saber:
+O modelo em si foi feito em dois _Workflows_ do _Orange Data Mining_, sendo um para óbito em até 7 dias e outro para óbito em até 15 dias. Ambos seguem o mesmo padrão e conceitos.
+
+Para o _pipeline_ de dados foram usados 3 modelos, a saber:
 
 1. Regressão logística
 2. Árvore de decisão
-3. Gradient boosting (mais especificamente XGBoosting)
-
-Abaixo discorreremos brevemente sobre cada um bem como colocaramos os parâmetros utilizados pelo trabalho.
+3. _Gradient boosting_ (mais especificamente XGBoosting)
 
 #### 3.4.2.1 Regressão logística
 
-O modelo de regressão logística tem como objetivo estudar a probabilidade de ocorrência de eventos que vamos definir por $Y$
-e que se apresenta na forma qualitativa dicotômica (vamos utilizar no caos valores $0$ para um não-evento e $1$ para um evento). Para isso, definimos um vetor de variáveis explicativas, com seus respectivos parâmetros estimados, na forma:
+O modelo de regressão logística tem como objetivo estudar a probabilidade de ocorrência de eventos, aqui chamado de $Y$, apresentado na forma qualitativa dicotômica (aqui usados no caos os valores $0$ para um não-evento e $1$ para um evento). Para isso, foi definido um vetor de variáveis explicativas, com seus respectivos parâmetros estimados, na forma [REF Regressão]:
 
 $$Z_i = \alpha + \beta_1X_{1i} +  \beta_2X_{2i} + \cdots + \beta_kX_{ki}  $$
 
-Onde $Z$ é chamado *logito*, $\alpha$ representa a constante (bias), $\beta_j$ são os parâmetros estimados de cada variável explicativa, $X_j$ são as variáveis explicativas (métricas ou *dummies*) e $i$ é a i-ésima observação
-da amostra. Importante dizer que Z não é variável dependente,pois esta é definida por $Y$, e o objetivo é definir a expressão da
-**probabilidade** $p_i$ de ocorrência do evento de interesse para cada observação, em função do logito $Z_i$, ou seja, em
-função dos parâmetros estimados para cada variável explicativa. Para tanto, devemos definir o conceito de
-**chance** de ocorrência de um evento, também conhecida por *odds*, da seguinte forma: 
+em que, $Z$ é o *logito*, $\alpha$ representa a constante (bias), $\beta_j$ são os parâmetros estimados de cada variável explicativa, $X_j$ são as variáveis explicativas (métricas ou *dummies*) e $i$ é a i-ésima observação da amostra.
+
+É importante destacar que Z não é variável dependente, já que é definida por $Y$. O objetivo é definir a expressão da **probabilidade de óbito em 7 ou 15 dias** $p_i$ de ocorrência, em função do logito $Z_i$, ou seja, em função dos parâmetros estimados para cada variável explicativa. Para tanto, devemos definir o conceito de **chance** de ocorrência de um evento, também conhecida por *odds*, da seguinte forma: 
 
 $$chance(odds)_{Y_i=1} = \frac{p_i}{1-p_i}$$
 
@@ -224,20 +255,23 @@ A regressão logística binária define o logito $Z$ como o logaritmo natural da
 
 $$ ln(chance_{Y_i=1}) = Z_i$$
 
-De onde temos então:
+De onde tem-se:
 
 $$ ln\left(\frac{p_i}{1-p_i}\right) = Z_i $$
 
-Na medida em que temos de identificar uma expressão para a probabilidade de *ocorrência do evento*  em
-função do logito, podemos matematicamente isolar $p_i$ da seguinte maneira:
+Na medida em que é necessário identificar uma expressão para a probabilidade de **ocorrência do evento**  em função do logito, pode-se matematicamente isolar $p_i$ da seguinte maneira:
 
 $$ \frac{p_i}{1-p_i} = e^{Z_i} $$
+
 logo
+
 $$ p_i =(1-p_i)e^{Z_i}$$
+
 então
+
 $$ p_i(1+e^{Z_i})=e^{Z_i} $$
 
-Disso então temos que:
+Disso então tem-se finalmente que:
 
 **Chance de ocorrência do evento:**
 
@@ -249,34 +283,32 @@ $$ 1 - p_i = 1 - \frac{e^{Z_i}}{1+e^{Z_i}} = \frac{1}{1+e^{Z_i}}$$
 
 #### 3.4.2.2 Árvore de decisão [TODO: fonte https://towardsdatascience.com/decision-trees-in-machine-learning-641b9c4e8052]
 
-Na primeira divisão ou raiz, todas as features são consideradas e os dados de treinamento são divididos em grupos com base nessa divisão. Teremos $n$ divisões, tais quais forem as variedades da feature candidata. Para calcular quanta precisão cada divisão custará, usando uma função custo. A divisão que custa menos é escolhida. Este algoritmo é recursivo por natureza, pois os grupos formados podem ser subdivididos usando a mesma estratégia. Devido a este procedimento, este algoritmo também é conhecido como algoritmo guloso (*greedy*). Isso torna o nó raiz o melhor preditor/classificador.
+O segundo método usado foi a árvore de decisão, onde na primeira divisão ou raiz, todas as features são consideradas e os dados de treinamento são divididos em grupos com base nessa divisão. Serão feitas $n$ divisões, tais quais forem as variedades da _feature_ candidata. Para calcular quanta precisão cada divisão custará, usando uma função custo. A divisão que custa menos é escolhida. Este algoritmo é recursivo por natureza, pois os grupos formados podem ser subdivididos usando a mesma estratégia. Devido a este procedimento, este algoritmo também é conhecido como algoritmo guloso (*greedy*). Isso torna o nó raiz o melhor preditor/classificador.
 
-**Custo de uma divisão**
+Ao olhar para o custo de uma divisão, é necessário olhar as funções de custo usadas para classificação e regressão. Em ambos os casos as funções de custo tentam encontrar ramos mais homogêneos, ou ramos com grupos com respostas semelhantes. Isso dá mais certeza de que uma entrada de dados de teste seguirá um determinado caminho.
 
-Vamos dar uma olhada nas funções de custo usadas para classificação e regressão . Em ambos os casos as funções de custo tentam encontrar ramos mais homogêneos, ou ramos com grupos com respostas semelhantes . Isso faz sentido, podemos ter mais certeza de que uma entrada de dados de teste seguirá um determinado caminho.
+Há ainda a chamada pontuação Gini, conforme equação a seguir:
 
 $$ G = \sum(pk * (1 — pk)) $$
 
 Uma pontuação Gini dá uma ideia de quão boa é uma divisão pelo quão mistas são as classes de resposta nos grupos criados pela divisão. Aqui, $pk$ é a proporção de entradas da mesma classe presentes em um determinado grupo. Uma pureza de classe perfeita ocorre quando um grupo contém todas as entradas da mesma classe, caso em que $pk$ é $1$ ou $0$ e $G = 0$, onde um nó com uma divisão de $50-50$ classes em um grupo tem a pior pureza, então para uma classificação binária terá $pk = 0,5$ e $G = 0,5$.
 
-Como um problema geralmente possui um grande conjunto de features, ele resulta em grande número de divisões, o que por sua vez resulta em uma árvore grande. Essas árvores são complexas e podem levar a overfitting. Então, é necessário saber quando parar.
+Como um problema geralmente possui um grande conjunto de _features_, ele resulta em grande número de divisões, o que por sua vez resulta em uma árvore grande. Essas árvores são complexas e podem levar a _overfitting_, então, é necessário saber quando parar. Uma maneira de fazer isso é definir um número mínimo de entradas de treinamento para usar em cada folha. Outra maneira é definir a profundidade máxima do seu modelo. A profundidade máxima refere-se ao comprimento do caminho mais longo de uma raiz a uma folha. 
 
-Uma maneira de fazer isso é definir um número mínimo de entradas de treinamento para usar em cada folha. Outra maneira é definir a profundidade máxima do seu modelo. A profundidade máxima refere-se ao comprimento do caminho mais longo de uma raiz a uma folha.
+O desempenho de uma árvore pode ser aumentado ainda mais pela poda. Trata-se de remover as ramificações que fazem uso de recursos de baixa relevância. Dessa forma, se reduz a complexidade da árvore e, assim, aumenta-se seu poder preditivo, reduzindo o _overfitting_.
 
-O desempenho de uma árvore pode ser aumentado ainda mais pela poda . Trata- se de remover as ramificações que fazem uso de recursos de baixa relevância. Dessa forma, se reduz a complexidade da árvore e, assim, aumenta-se seu poder preditivo, reduzindo o overfitting.
+Entre as vantagens da árvore de decisão estão:
 
-Vantagens do CART
-
-* Simples de entender, interpretar, visualizar.
-* As árvores de decisão executam implicitamente a triagem de variáveis ​​ou a seleção de recursos.
-* Pode lidar com dados numéricos e categóricos . Também pode lidar com problemas de várias saídas.
+* É simples de entender, interpretar, visualizar.
+* As árvores de decisão executam implicitamente a triagem de variáveis ou a seleção de recursos.
+* Pode lidar com dados numéricos e categóricos. Também pode lidar com problemas de várias saídas.
 * As árvores de decisão exigem relativamente pouco esforço dos usuários para a preparação dos dados.
 * As relações não lineares entre os parâmetros não afetam o desempenho da árvore.
 
-Desvantagens do CART
+Mas também há desvantagens:
 
-* Os aprendizes de árvores de decisão podem criar árvores supercomplexas que não generalizam bem os dados. Isso é chamado de sobreajuste .
-* As árvores de decisão podem ser instáveis ​​porque pequenas variações nos dados podem resultar na geração de uma árvore completamente diferente. Isso é chamado de variação , que precisa ser reduzido por métodos como ensacamento e aumento .
+* Os aprendizes de árvores de decisão podem criar árvores supercomplexas que não generalizam bem os dados. Isso é chamado de sobreajuste.
+* As árvores de decisão podem ser instáveis porque pequenas variações nos dados podem resultar na geração de uma árvore completamente diferente. Isso é chamado de variação , que precisa ser reduzido por métodos como ensacamento e aumento.
 * Algoritmos gananciosos não podem garantir o retorno da árvore de decisão globalmente ótima. Isso pode ser mitigado treinando várias árvores, onde os recursos e as amostras são amostrados aleatoriamente com substituição.
 * Os aprendizes de árvores de decisão criam árvores tendenciosas se algumas classes dominarem . Portanto, é recomendado balancear o conjunto de dados antes de ajustar com a árvore de decisão.
 
