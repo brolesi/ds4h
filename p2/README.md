@@ -12,7 +12,7 @@ O presente projeto foi originado no contexto das atividades da disciplina de pó
 | Fabio Fogliarini Brolesi      | 023718 | Computação     |
 | Ingrid Alves de Paiva Barbosa | 182849 | Computação     |
 
-Tabela 1 - Eqipe autora do projeto.
+Tabela 1 - Equipe autora do projeto.
 
 # 2. Contextualização da Proposta
 
