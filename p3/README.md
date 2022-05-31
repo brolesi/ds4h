@@ -25,7 +25,7 @@ Alexander-Bloch Aaron F., Raznahan Armin, Shinohara Russell T., Mathias Samuel R
 Dataset | Endereço na Web | Resumo descritivo
 ----- | ----- | -----
 comorbidity_odds_matrix | [comorbidity_odds_matrix.csv](https://github.com/brolesi/comorbidity_networks/blob/master/comorbidity_odds_matrix.csv) | Uma matriz de 95x95 de adjacência de comorbidades.
-comorbidity_pmat_matrix | (https://github.com/brolesi/comorbidity_networks/blob/master/comorbidity_pmat_matrix.csv) | Uma matriz 95x95 de p-values da regressão logística
+comorbidity_pmat_matrix | [comorbidity_pmat_matrix.csv](https://github.com/brolesi/comorbidity_networks/blob/master/comorbidity_pmat_matrix.csv) | Uma matriz 95x95 de p-values da regressão logística
 
 # Método
 > Método usado para a análise -- adaptações feitas, ferramentas utilizadas, abordagens de análise adotadas e respectivos algoritmos.
