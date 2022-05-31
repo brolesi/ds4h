@@ -24,7 +24,7 @@ Alexander-Bloch Aaron F., Raznahan Armin, Shinohara Russell T., Mathias Samuel R
 ## Dados usados como entrada
 Dataset | Endereço na Web | Resumo descritivo
 ----- | ----- | -----
-Título do Dataset | http://base1.org/ | Breve resumo (duas ou três linhas) sobre o dataset.
+comorbidity_odds_matrix | [https://github.com/brolesi/comorbidity_networks/blob/master/comorbidity_odds_matrix.csv](https://github.com/brolesi/comorbidity_networks/blob/master/comorbidity_odds_matrix.csv) | Uma matriz de adjacência de comorbidades.
 
 # Método
 > Método usado para a análise -- adaptações feitas, ferramentas utilizadas, abordagens de análise adotadas e respectivos algoritmos.
