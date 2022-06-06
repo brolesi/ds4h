@@ -43,16 +43,19 @@ Para realizar o trabalho os autores se basearam na versão de 2011 do DrugBank, 
 Para cada par de DDI observado, existe uma gravidade definida pela base [Drugs.com](drugs.com), sendo classificada em maior, moderada, menor ou n/a. Essas gravidades foram numericamente normalizadas, e baseado nisso foram gerados os pesos das arestas. Os pesos das arestas representam a probilidade de um medicamento ser prescrito simultaneamente com outro medicamento, e seu risco de gerar comorbidades por terem sido co-administrados. O peso pode ser calculado conforme a equação apresentada na Figura 1.
 
 ![alt text](assets/peso.png)
+
 Figura 1 - Equação do peso.
 
 A partir desta definição acima, foram criadas duas equações para representar o risco de interação em mulheres e em homens, sendo que um é o inverso do outro. A equação do risco de interação para mulheres é apresentado na Figura 2.
 
 ![alt text](assets/RRI(F).png)
+
 Figura 2 - Equação do risco de interação para mulheres.
 
 Na geração da rede, os nós representam os medicamentos e as arestas representam as interações entre cada medicamento entre si, sendo que os pesos das arestas são definidos pela equação da Figura 1 já apresentada. Já o tamanho dos nós representam a probabilidade de interação daquele medicamento com outros, e é definido pela equação da Figura 3 abaixo, sendo que os nós maiores são considerados os mais perigosos de serem co-administrados.
 
 ![alt text](assets/PI(I).png)
+
 Figura 3 - Equação da probabilidade de interação por medicamento.
 
 Por fim, as cores das arestas se baseam nos riscos de interação para homens e mulheres. A cor azul representa os riscos em homens e a cor vermelha representa os riscos em mulheres, e quanto mais escura a cor, maior o risco (consequentemente, quando mais clara, menor o risco). 
@@ -60,6 +63,7 @@ Por fim, as cores das arestas se baseam nos riscos de interação para homens e 
 Para melhor compreensão da idade neste cenário, os pacientes foram divididos em grupos por idade, e o risco de cada grupo foi calculado, seguindo o mesmo conceito do cálculo por gênero, conforme apresentado na equação da Figura 4.
 
 ![alt text](assets/RI.png)
+
 Figura 4 - Equação do risco de interação por faixa etária.
 
 Foi definido um modelo nulo para treinar um sistema que seja capaz de identificar o aumento esperado do risco de determinada interação considerando o gênero e a faixa etária. Para isso, foram utilizadas ferramentas de aprendizado de máquina, com os classificadores lineares _Support Vector Machine_ (SVM) e Regressão Logística, fazendo a validação cruzada estratificada 4 vezes, para garantir um bom desempenho. As variáveis demográficas usadas foram a Idade (faixa etária), gênero, número de medicamentos, e número de co-administrações. Já como característica binária usou-se uma variável definida como 1 caso o paciente tenha recebido determinado medicamento, e como 0 caso contrário. Isso permite que os classificadores sejam treinados para definir a probabilidade de uma determinada combinação de medicamentos. 
@@ -89,17 +93,20 @@ A entrada para a construção da rede foi o arquivo [ddi.csv](https://github.com
 
 As cores dos nós foram baseadas nas 11 categorias de medicamentos apresentadas pelo autor. Para essa implementação foi criada a coluna _class_ (em nodes) de forma manual, a partir dos valores da coluna _class i_ e _class j_ do arquivo original "ddi.csv". Assim, cada medicamento teve a definição de sua respectiva categoria. Em seguida, foi usada a configuração **_Style >> fill color (na aba nodes)_**, para buscar as categorias na coluna _class_ e associá-las às suas cores, conforme Figura 5 abaixo. 
 
-![alt text](assets/tamanho_nó.png)
+![alt text](assets/cor_nó.png)
+
 Figura 5 - Configuração das cores dos nós.
 
 Já o tamanho dos nós está relacionado com a probabilidade da interação, representado na coluna PI(i). Esta replicação de configuração foi feita em **_Style >> Size (aba Node) >> seleção da coluna PI(i)_**, conforme apresentado na Figura 6.
 
-![alt text](assets/RI.png)
+![alt text](assets/tamanho_nó.png)
+
 Figura 6 - Configuração dos tamanhos dos nós.
 
 A largura da aresta foi feita com base no peso, sendo que quanto maior o peso, mais grossa é a aresta. Isso foi configurado em **_Style >> Width (na aba edge) >> Seleção coluna tau_**, conforme Figura 7.
 
 ![alt text](assets/tamanho_aresta.png)
+
 Figura 7 - Configuração das larguras das arestas.
 
 A intensidade da cor da aresta é baseada no risco de interação, sendo azul para homem e vermelho para mulher. Aqui foi necessário dividir a rede em dois arquivos, um para cada gênero, pois não seria possível colocar os riscos de interação masculino e feminono na mesma rede. Para cada uma das duas redes, o processo das configurações anteriores foi o mesmo, tendo uma diferença apenas para essa configuração.  
@@ -107,9 +114,11 @@ A intensidade da cor da aresta é baseada no risco de interação, sendo azul pa
 Na rede com o risco de interação masculino, a configuração foi feita em **_Style >> Stroke color (na aba edge) >> Seleção da coluna RRI^M >> Seleção do tipo "Continuous mapping" >> Seleção das cores em gradiente azul_** conforme apresentado na Figura 8. Já para a rede com o risco de interação feminino, a configuração contínua não estava disponível, por isso foi necessário usar o tipo discreto em **_Style >> Stroke color (na aba edge) >> Seleção da coluna RRI^F >> Seleção do tipo "Discrete mapping" >> Seleção das cores de forma manual em tons de vermelho_** conforme Figura 9.
 
 ![alt text](assets/cor_aresta_M.png)
+
 Figura 8 - Configuração das cores das arestas para a rede de RRI(M).
 
 ![alt text](assets/cor_aresta_F.png)
+
 Figura 9 - Configuração das cores das arestas para a rede de RRI(F).
 
 # 6. Resultados
