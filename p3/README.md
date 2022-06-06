@@ -31,18 +31,18 @@ O experimento deste trabalho iniciou com a análise e tratamento dos dados. Em s
 ## 4.1. Tratamento dos dados
 A equipe recebeu os prontuários da prefeitura de Blumenau de 18 meses, entre Janeiro de 2014 e Junho de 2015, e analisaram os relatórios de medicamentos e dosagens prescritos no período. Estes dados foram anonimizados na fonte e manteve-se apenas as dosagens com os medicamentos e algumas variáveis demográficas como gênero, idade, bairro, estado civil e escolaridade. O conscentimento para coleta dos dados não é de responsabilidade da equipe, já que não foram eles os responsáveis pela coleta.
 
-Os nomes dos medicamentos foram traduzidos para o inglês, foram eliminados os casos ambíguos, e foram usados identificadores para os medicamentos (baseado no DrugBank ID, que é explicado melhor na seção X). Medicamentos com vários componentes, como por exemplo a Amoxicilina 500 mg e Clavulanato 125 mg, foram divididos por seus componentes. Além disso, foram dispensadas substância que não estão presentes no DrugBank, como por exemplo, o leite em pó e complexos vitamínicos. Após todos os tratamentos, 122 medicamentos únicos foram mantidos para análise.
+Os nomes dos medicamentos foram traduzidos para o inglês, foram eliminados os casos ambíguos, e foram usados identificadores para os medicamentos (baseado no DrugBank ID, que é explicado melhor na seção 4.2). Medicamentos com vários componentes, como por exemplo a Amoxicilina 500 mg e Clavulanato 125 mg, foram divididos por seus componentes. Além disso, foram dispensadas substância que não estão presentes no DrugBank, como por exemplo, o leite em pó e complexos vitamínicos. Após todos os tratamentos, 122 medicamentos únicos foram mantidos para análise.
 
 Dentro do período considerado, foram registradas 1.573.678 administrações de medicamentos à 132.722 pacientes distintos, equivalente à 17% da população da cidade. Destes pacientes, 41,5% são homens e 58,5% são mulheres. Um total de 46% destes pacientes declararam a escolaridade, e destes, 46,77% relatou ter o ensino fundamental incompleto e 20,49% o ensino médio completo ou superior. O percentual de pacientes que receberam pelo menos dois medicamentos é de 78,97%, e é com esse grupo que a equipe trabalhou, afinal, apenas eles poderiam ter alguma DDI.
 
 É importante ressaltar que a equipe afirmou que não existiam meios para saber se os pacientes realmente tomaram os medicamentos prescritos, então a análise pressupõe que todos os medicamentos prescritos foram administrados.
 
 ## 4.2. Método do artigo
-Para realizar o trabalho os autores se basearam na versão de 2011 do DrugBank, uma base de dados aberta de medicamentos, que possuí informações de DDI. Essa base possuí identificadores para cada medicamento, chamados de DBID. Foram criadas variáveis para analizar a prescrição de mais de um medicamento simultaneamente, conforme a Figura x, onde "a" é o numero de dias por intervalo de uso do medicamento, "y" é o total de dias do uso do medicamento somando todos os intervalos. Quando mais de um medicamento foi utilizado simultâneamente, eles são analisados em pares, e a quantidade de pares é representada pela variavel "t". Se aquela interação está presente no DrugBank é marcado em vermelho (e recebe valor s = 1), caso contrário é marcado em laranja (e recebe valor s = 0).
+Para realizar o trabalho os autores se basearam na versão de 2011 do DrugBank, uma base de dados aberta de medicamentos, que possuí informações de DDI. Essa base possuí identificadores para cada medicamento, chamados de DBID. Foram criadas variáveis para analizar a prescrição de mais de um medicamento simultaneamente, conforme a Figura x, onde $a$ é o numero de dias por intervalo de uso do medicamento, λ é o total de dias do uso do medicamento somando todos os intervalos. Quando mais de um medicamento foi utilizado simultâneamente, eles são analisados em pares, e a quantidade de pares é representada pela variavel ψ. Se aquela interação está presente no DrugBank é marcado em vermelho (e recebe valor  φ = 1), caso contrário é marcado em laranja (e recebe valor φ = 0).
 
 Para cada par de DDI observado, existe uma gravidade definida pela base [Drugs.com](drugs.com), sendo classificada em maior, moderada, menor ou n/a. Essas gravidades foram numericamente normalizadas, e baseado nisso foram gerados os pesos das arestas. Os pesos das arestas representam a probilidade de um medicamento ser prescrito simultaneamente com outro medicamento, e seu risco de gerar comorbidades por terem sido co-administrados.
 
-EQ. GERAL PESO AQUI
+EQ. GERAL PESO AQUI  
 
 A partir desta definição acima, foram criadas duas equações para representar o risco de interação em mulheres e em homens, sendo que um é o inverso do outro. 
 
@@ -82,6 +82,34 @@ comorbidity_pmat_matrix | [comorbidity_sexeffect_pval_matrix.csv](https://github
 # 5. Método
 > Método usado para a análise -- adaptações feitas, ferramentas utilizadas, abordagens de análise adotadas e respectivos algoritmos.
 > Etapas do processo reproduzido.
+
+O primeiro passo deste trabalho foi a leitura completa do artigo para compreensão o trabalho realizado, a e exploração dos arquivos fornecidos, e a análise do material complementar. A partir disso, a equipe dividiu o trabalho em trẽs grandes frentes: (i) análise exploratória dos dados, (ii) construção da rede complexa, (iii) aprendizado de máquina. Para reprodução do trabalho não haveria tempo hábil para realizar as três frentes, e já que os outros trabalhamos já focaram em analise exploratória (P1) e aprendizado de máquina (P2), optamos por fazer apenas a frente de redes complexas.
+
+A partir desta definição, foi executado o código [build_ddi_network.py](https://github.com/rionbr/DDIBlumenau/blob/master/build_ddi_network.py) fornecido pelos autores do artigo, porém pela ferramenta Cytoscape seria possível obter mais detalhes e uma visualização mais interessante da rede. Sendo assim, foram implementadas duas redes, uma para o sexo feminino e outra para o sexo masculino, usando a ferramenta cytoscape.
+
+A entrada para a construção da rede foi o arquivo [ddi.csv](https://github.com/rionbr/DDIBlumenau/blob/master/csv/ddi.csv). A origem é a coluna _class i_, que representa o primeiro medicamento e o alvo é a coluna _class j_, que repreenta o medicamento que interaje com o primeiro. O peso é definido pela coluna _tau_. 
+
+As cores dos nós foram baseados nas 11 categorias de medicamentos apresentados pelo autor. Para isso, foi criada a coluna class (em nodes) de forma manual, para que cada medicamento tivesse sua respectiva categoria. Em seguida, foi usada a configuração Style >> fill color (nodes), e adicionado as categorias e suas cores, conforme figura abaixo. 
+
+FIGURA AQUI
+
+Já o tamanho dos nós está relacionado com a probabilidade da interação, representado na coluna PI(i). Esta implementação foi feita em style >> size (aba Node) >> seleção coluna PI(i), conforme apresentado na figura
+
+
+FIGURA AQUI
+
+A largura da aresta foi feita com base no peso, sendo que quanto maior o peso, mais grossa é a aresta. Isso foi configurado em style >> width (aba edge) >> seleção coluna tau, conforme figura.
+
+
+FIGURA AQUI
+
+Aintensidade da cor da aresta é baseada no risco de interação, sendo azul para homem e vermelho para mulher. Aqui é onde foi necessário dividir a rede em dois arquivos, um para cada gênero. Em cada um deles o processo foi o mesmo. Em style >> Stroke color (aba edge) >> lista de valores e cores baseado na coluna RRI(F) para mulheres e RRI(M) para homens, conforme as duas figuras abaixo
+
+
+FIGURA AQUI
+
+FIGURA AQUI
+
 
 # 6. Resultados
 > Apresente os resultados obtidos pela sua adaptação.
