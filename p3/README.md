@@ -74,10 +74,7 @@ COLOCAR TUDO? OU SÓ O QUE USAMOS?
 
 Dataset | Endereço na Web | Resumo descritivo
 ----- | ----- | -----
-comorbidity_odds_matrix | [comorbidity_odds_matrix.csv](https://github.com/brolesi/ds4h/blob/main/p3/comorbidity_odds_matrix.csv) | Uma matriz de 95x95 de adjacência de comorbidades.
-comorbidity_pmat_matrix | [comorbidity_pmat_matrix.csv](https://github.com/brolesi/ds4h/blob/main/p3/comorbidity_pmat_matrix.csv) | Uma matriz 95x95 de p-values da regressão logística
-comorbidity_sexeffect_odds_matrix | [comorbidity_pmat_matrix.csv](https://github.com/brolesi/ds4h/blob/main/p3/comorbidity_sexeffect_odds_matrix.csv) | Uma matriz 95x95 de efeito de interação do sexo
-comorbidity_pmat_matrix | [comorbidity_sexeffect_pval_matrix.csv](https://github.com/brolesi/ds4h/blob/main/p3/comorbidity_sexeffect_pval_matrix.csv) | Uma matriz 95x95 de p-values da interação do sexo a partir da regressão logística
+ddi.csv | [ddi.csv](https://github.com/brolesi/ds4h/blob/main/p3/data/raw/ddi.csv) | Matriz de interação entre drogas
 
 # 5. Método
 > Método usado para a análise -- adaptações feitas, ferramentas utilizadas, abordagens de análise adotadas e respectivos algoritmos.
