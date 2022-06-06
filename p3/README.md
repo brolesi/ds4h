@@ -84,12 +84,16 @@ Dataset | Endereço na Web | Resumo descritivo
 ----- | ----- | -----
 ddi.csv | [ddi.csv](https://github.com/brolesi/ds4h/blob/main/p3/data/raw/ddi.csv) | Matriz de interação entre drogas
 
+Tabela 2 - Arquivo utilizado para a reprodução do grafo complexo.
+
+O conjunto de datasets do artigo contém mais arquivos, porém para a análise considerando a rede complexa, utilizamos apenas este que possuía os dados relevantes para a análise. 
+
 # 5. Método
 O primeiro passo deste trabalho foi a leitura completa do artigo para melhor compreensão do que foi realizado. Nesse primeiro momento também foi feita a exploração dos arquivos fornecidos pelos autores em repositório online, e a análise do material complementar. A partir disso, dividiu-se o trabalho em trẽs grandes frentes: (i) análise exploratória dos dados, (ii) construção da rede complexa, (iii) aprendizado de máquina. Para reprodução do trabalho não haveria tempo hábil para realizar as três frentes, e já que os outros projetos realizados na disciplina já focaram em analise exploratória (P1) e aprendizado de máquina (P2), optamos por fazer apenas a frente de redes complexas.
 
 A partir desta definição, foi executado o código [build_ddi_network.py](https://github.com/rionbr/DDIBlumenau/blob/master/build_ddi_network.py) fornecido pelos autores do artigo, que é responsável por construir a rede complexa e gerar gráficos para visualizá-la. Porém pela ferramenta _Cytoscape_ seria possível obter mais detalhes e uma visualização mais interessante da rede. Sendo assim, foram implementadas duas redes usando a ferramenta _Cytoscape_, uma para o sexo feminino e outra para o sexo masculino.
 
-A entrada para a construção da rede foi o arquivo [ddi.csv](https://github.com/rionbr/DDIBlumenau/blob/master/csv/ddi.csv). A origem é a coluna _class i_, que representa o primeiro medicamento, e o alvo é a coluna _class j_, que repreenta o medicamento que interaje com o primeiro. O peso é definido pela coluna _tau_.
+A entrada para a construção da rede foi o arquivo [ddi.csv](https://github.com/brolesi/ds4h/blob/main/p3/data/raw/ddi.csv). A origem é a coluna _class i_, que representa o primeiro medicamento, e o alvo é a coluna _class j_, que repreenta o medicamento que interaje com o primeiro. O peso é definido pela coluna _tau_.
 
 As cores dos nós foram baseadas nas 11 categorias de medicamentos apresentadas pelo autor. Para essa implementação foi criada a coluna _class_ (em nodes) de forma manual, a partir dos valores da coluna _class i_ e _class j_ do arquivo original "ddi.csv". Assim, cada medicamento teve a definição de sua respectiva categoria. Em seguida, foi usada a configuração **_Style >> fill color (na aba nodes)_**, para buscar as categorias na coluna _class_ e associá-las às suas cores, conforme Figura 5 abaixo. 
 
