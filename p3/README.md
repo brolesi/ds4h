@@ -48,7 +48,7 @@ Equação 1 - Equação do peso.
 
 A partir desta definição acima, foram criadas duas equações para representar o risco de interação em mulheres e em homens, sendo que um é o inverso do outro. A equação do risco de interação para mulheres é apresentado na equação 2.
 
-$$ RRI^{\mathrm{F}} = \frac{{P({\mathrm{\Phi }}^u > 0|u \in U^{\mathrm{F}})}}{{P({\mathrm{\Phi }}^u > 0{\mathrm{|}}u \in U^{\mathrm{M}})}} = \frac{{|U^{{\mathrm{\Phi }},{\mathrm{F}}}|/|U^{\mathrm{F}}|}}{{|U^{{\mathrm{\Phi }},{\mathrm{M}}}|/|U^{\mathrm{M}}|}} $$
+$$ RRI ^ {\mathrm{F}} = \frac{{P({\mathrm{\Phi }} ^ u > 0|u \in U^{\mathrm{F}})}}{{P({\mathrm{\Phi }}^u > 0{\mathrm{|}}u \in U^{\mathrm{M}})}} = \frac{{|U^{{\mathrm{\Phi }},{\mathrm{F}}}|/|U^{\mathrm{F}}|}}{{|U^{{\mathrm{ \Phi }},{\mathrm{M}}}| / |U^{\mathrm{M}}|}} $$
 
 Equação 2 - Equação do risco de interação para mulheres.
 
