@@ -42,7 +42,7 @@ Para realizar o trabalho os autores se basearam na versão de 2011 do DrugBank, 
 
 Para cada par de DDI observado, existe uma gravidade definida pela base [Drugs.com](drugs.com), sendo classificada em maior, moderada, menor ou n/a. Essas gravidades foram numericamente normalizadas, e baseado nisso foram gerados os pesos das arestas. Os pesos das arestas representam a probilidade de um medicamento ser prescrito simultaneamente com outro medicamento, e seu risco de gerar comorbidades por terem sido co-administrados. O peso pode ser calculado conforme a equação apresentada na equação 1.
 
-$$\tau _{i,j}^{\mathrm{\Psi }} = \frac{{\mathop {\sum}\limits_{u \in U_{i,j}^{\mathrm{\Psi }}} {\tau _{i,j}^{u}} }}{{|U_{i,j}^{\mathrm{\Psi }}|}}$$
+$$\tau_{i,j}^{\mathrm{\Psi }} = \frac{{\mathop {\sum}\limits_{u \in U_{i,j}^{\mathrm{\Psi }}} {\tau_{i,j}^{u}} }}{{|U_{i,j}^{\mathrm{\Psi }}|}}$$
 
 Equação 1 - Equação do peso.
 
