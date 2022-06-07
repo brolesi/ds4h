@@ -40,28 +40,31 @@ Dentro do período considerado, foram registradas 1.573.678 administrações de 
 ## 4.2. Método do artigo
 Para realizar o trabalho os autores se basearam na versão de 2011 do DrugBank, uma base de dados aberta de medicamentos, que possuí informações de DDI. Essa base possuí identificadores para cada medicamento, chamados de DBID. Foram criadas variáveis para analizar a prescrição de mais de um medicamento simultaneamente, conforme a Figura x, onde $a$ é o numero de dias por intervalo de uso do medicamento, λ é o total de dias do uso do medicamento somando todos os intervalos. Quando mais de um medicamento foi utilizado simultâneamente, eles são analisados em pares, e a quantidade de pares é representada pela variavel ψ. Se aquela interação está presente no DrugBank é marcado em vermelho (e recebe valor  φ = 1), caso contrário é marcado em laranja (e recebe valor φ = 0).
 
-Para cada par de DDI observado, existe uma gravidade definida pela base [Drugs.com](drugs.com), sendo classificada em maior, moderada, menor ou n/a. Essas gravidades foram numericamente normalizadas, e baseado nisso foram gerados os pesos das arestas. Os pesos das arestas representam a probilidade de um medicamento ser prescrito simultaneamente com outro medicamento, e seu risco de gerar comorbidades por terem sido co-administrados. O peso pode ser calculado conforme a equação apresentada na eq. 1.
-$$\tau _{i,j}^{\mathrm{\Psi }} = \frac{{\mathop {\sum}\limits_{u \in U_{i,j}^{\mathrm{\Psi }}} {\tau _{i,j}^{u}} }}{{|U_{i,j}^{\mathrm{\Psi }}|}}$$
+Para cada par de DDI observado, existe uma gravidade definida pela base [Drugs.com](drugs.com), sendo classificada em maior, moderada, menor ou n/a. Essas gravidades foram numericamente normalizadas, e baseado nisso foram gerados os pesos das arestas. Os pesos das arestas representam a probilidade de um medicamento ser prescrito simultaneamente com outro medicamento, e seu risco de gerar comorbidades por terem sido co-administrados. O peso pode ser calculado conforme a equação apresentada na Figura 1.
 
-Eq 1 - Equação do peso.
+![alt text](assets/peso.png)
 
-A partir desta definição acima, foram criadas duas equações para representar o risco de interação em mulheres e em homens, sendo que um é o inverso do outro. A equação do risco de interação para mulheres é apresentado na eq. 2.
+Figura 1 - Equação do peso.
 
-$$ RRI^{\mathrm{F}} = \frac{{P({\mathrm{\Phi }}^u > 0|u \in U^{\mathrm{F}})}}{{P({\mathrm{\Phi }}^u > 0{\mathrm{|}}u \in U^{\mathrm{M}})}} = \frac{{|U^{{\mathrm{\Phi }},{\mathrm{F}}}|/|U^{\mathrm{F}}|}}{{|U^{{\mathrm{\Phi }},{\mathrm{M}}}|/|U^{\mathrm{M}}|}} $$
+A partir desta definição acima, foram criadas duas equações para representar o risco de interação em mulheres e em homens, sendo que um é o inverso do outro. A equação do risco de interação para mulheres é apresentado na Figura 2.
 
-Eq 2 - Equação do risco de interação para mulheres.
+![alt text](assets/RRI(F).png)
 
-Na geração da rede, os nós representam os medicamentos e as arestas representam as interações entre cada medicamento entre si, sendo que os pesos das arestas são definidos pela equação da eq. 1 já apresentada. Já o tamanho dos nós representam a probabilidade de interação daquele medicamento com outros, e é definido pela equação da eq. 3 abaixo, sendo que os nós maiores são considerados os mais perigosos de serem co-administrados.
-$$ PI(i) = \frac{{\mathop {\sum}\nolimits_j {{\mathrm{\Phi }}_{i,j}} }}{{\mathop {\sum}\nolimits_j {{\mathrm{\Psi }}_{i,j}} }} $$
+Figura 2 - Equação do risco de interação para mulheres.
 
-Eq 3 - Equação da probabilidade de interação por medicamento.
+Na geração da rede, os nós representam os medicamentos e as arestas representam as interações entre cada medicamento entre si, sendo que os pesos das arestas são definidos pela equação da Figura 1 já apresentada. Já o tamanho dos nós representam a probabilidade de interação daquele medicamento com outros, e é definido pela equação da Figura 3 abaixo, sendo que os nós maiores são considerados os mais perigosos de serem co-administrados.
+
+![alt text](assets/PI(I).png)
+
+Figura 3 - Equação da probabilidade de interação por medicamento.
 
 Por fim, as cores das arestas se baseam nos riscos de interação para homens e mulheres. A cor azul representa os riscos em homens e a cor vermelha representa os riscos em mulheres, e quanto mais escura a cor, maior o risco (consequentemente, quando mais clara, menor o risco). 
 
-Para melhor compreensão da idade neste cenário, os pacientes foram divididos em grupos por idade, e o risco de cada grupo foi calculado, seguindo o mesmo conceito do cálculo por gênero, conforme apresentado na eq. 4.
-$$ RI^{[y_1,y_2]} = \frac{{P({\mathrm{\Phi }}^u > 0|u \in U^{[y_1,y_2]})}}{{P({\mathrm{\Psi }}^u > 0|u \in U^{[y_1,y_2]})}}, $$
+Para melhor compreensão da idade neste cenário, os pacientes foram divididos em grupos por idade, e o risco de cada grupo foi calculado, seguindo o mesmo conceito do cálculo por gênero, conforme apresentado na equação da Figura 4.
 
-Eq. 4 - Equação do risco de interação por faixa etária.
+![alt text](assets/RI.png)
+
+Figura 4 - Equação do risco de interação por faixa etária.
 
 Foi definido um modelo nulo para treinar um sistema que seja capaz de identificar o aumento esperado do risco de determinada interação considerando o gênero e a faixa etária. Para isso, foram utilizadas ferramentas de aprendizado de máquina, com os classificadores lineares _Support Vector Machine_ (SVM) e Regressão Logística, fazendo a validação cruzada estratificada 4 vezes, para garantir um bom desempenho. As variáveis demográficas usadas foram a Idade (faixa etária), gênero, número de medicamentos, e número de co-administrações. Já como característica binária usou-se uma variável definida como 1 caso o paciente tenha recebido determinado medicamento, e como 0 caso contrário. Isso permite que os classificadores sejam treinados para definir a probabilidade de uma determinada combinação de medicamentos. 
 
@@ -123,6 +126,29 @@ Figura 8 - Configuração das cores das arestas para a rede de RRI(M).
 Figura 9 - Configuração das cores das arestas para a rede de RRI(F).
 
 # 6. Resultados
-> Apresente os resultados obtidos pela sua adaptação.
-> Confronte os seus resultados com aqueles do artigo.
-> Esta seção opcionalmente pode ser apresentada em conjunto com o método.
+Com as configurações realizadas, tem-se como resultado as duas redes apresentadas na Figura 10, para risco de interação masculino, e Figura 11, para risco de interação feminino.
+
+![alt text](assets/redeM.png)
+
+Figura 10 - Rede para risco de interação masculino.
+
+![alt text](assets/redeF.png)
+
+Figura 11 - Rede para risco de interação feminino.
+
+A rede elaborada pelos autores do artigo é apresentada na Figura 12. No trabalho original a implementação foi feita em apenas uma rede, já em nossa reprodução dividiu-se em duas redes por limitações no uso da ferramenta _Cytoscape_. Apesar disso, todas as outras configurações da rede reproduziram exatamente o que foi realizado pelos autores.
+
+![alt text](assets/41746_2019_141_Fig1_HTML.png)
+
+Figura 12 - Rede do trabalho original.
+
+É possível verificar que o medicamento XXX é o que possuí maior probabilidade de interação com outros medicamentos, sendo que para os homens, o medicamento com maior risco é o XXX enquanto para as mulheres é o medicamento YYY.
+
+> DÁ PRA EXPLORAR MAIS RESULTADOS AQUI?
+
+# 7. Conclusão
+O artigo escolhido visou analisar as reações causadas em pacientes por interações medicamentosas. Para isso, teve-se acesso aos prontuários médicos dos pacientes da cidade de Blumenau, no Sul do Brasil, do período de Janeiro de 2014 a Junho de 2015. O trabalho realizou uma análise exploratória dos dados, seguida da construção da rede, e por fim de um aprendizado de máquina. Foram fornecidos todos os códigos implementados, os arquivos ".csv" usados como entradas (já anonimizados), e um material complementar com explicações detalhadas dos processos realizados.
+
+Nesta reprodução o foco foi na construção da rede. Para isso, usou-se o arquivo ddi.csv e a ferramenta _Cytoscape_. Todas as implementações foram realizadas e as redes puderam ser comparadas. Apesar de algumas limitações enfrentadas, foi possível reproduzir a construção da rede com êxito, e grande parte disso deve-se ao nível de detalhes fornecidos pelos autores. Houve a preocupação de fornecer todos os materiais, códigos e arquivos necessários para uma completa compreensão e reprodução do trabalho.
+
+Conclui-se reforçando a importância da divulgação não só dos resultados finais, mas de todos os processos adotados em trabalhos científicos, para que toda comunidade seja capaz de reproduzí-lo, aprendendo com os acertos, erros e desafios enfrentados ao longo do desenvolvimento.
