@@ -54,7 +54,7 @@ Equação 2 - Equação do risco de interação para mulheres.
 
 Na geração da rede, os nós representam os medicamentos e as arestas representam as interações entre cada medicamento entre si, sendo que os pesos das arestas são definidos pela equação da equação 1 já apresentada. Já o tamanho dos nós representam a probabilidade de interação daquele medicamento com outros, e é definido pela equação da equação 3 abaixo, sendo que os nós maiores são considerados os mais perigosos de serem co-administrados.
 
-$$ PI(i) = \frac{{\mathop {\sum}\nolimits_j {{\mathrm{\Phi }}_{i,j}} }}{{\mathop {\sum}\nolimits_j {{\mathrm{\Psi }}_{i,j}} }} $$
+$$ PI(i) = \frac{{\mathop{\sum}\nolimits_j{{\mathrm{\Phi }}_{i,j}}}}{{\mathop{\sum}\nolimits_j{{\mathrm{\Psi }}_{i,j}}}} $$
 
 Equação 3 - Equação da probabilidade de interação por medicamento.
 
@@ -62,7 +62,7 @@ Por fim, as cores das arestas se baseam nos riscos de interação para homens e 
 
 Para melhor compreensão da idade neste cenário, os pacientes foram divididos em grupos por idade, e o risco de cada grupo foi calculado, seguindo o mesmo conceito do cálculo por gênero, conforme apresentado na equação da equação 4.
 
-$$ RI^{[y_1,y_2]} = \frac{{P({\mathrm{\Phi }}^u > 0|u \in U^{[y_1,y_2]})}}{{P({\mathrm{\Psi }}^u > 0|u \in U^{[y_1,y_2]})}}, $$
+$$ RI^{[y_1,y_2]} = \frac{{P({\mathrm{\Phi }}^u > 0|u \in U^{[y_1,y_2]})}}{{P({\mathrm{\Psi }}^u > 0|u \in U^{[y_1,y_2]})}}$$
 
 Equação 4 - Equação do risco de interação por faixa etária.
 
