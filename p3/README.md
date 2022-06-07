@@ -40,7 +40,7 @@ Diante desse cenário, o trabalho visou realizar um estudo longitudinal em larga
 
 Os autores do trabalho tiveram acesso à todos os prontuários médicos de 18 meses (Jan 2014 – Jun 2015), fornecidos pela prefeitura do município. Após as análises de dados e construção das redes complexas, foram constatados que 181 pares de medicamentos que podem interagir e causar reações foram dispensados, mas 4% dos pacientes receberam pares de medicamentos que provavelmente resultarão em ADR. Ao profundar na análise dos dados, também foi identificado que mulheres tem um risco 60% maior de DDI do que homens, e essa taxa pode aumentar para 90% quando considera-se as interações com graves reações, e curiosamente, foi identificado que isso esta relacionado a causas sociais ou biológicas não conhecidas ainda. As pessoas idosas, com idade entre 70 e 79 anos têm um risco de 34% de DDI. Por fim, eles também forneceram uma rede de medicamentos e fatores demográficos paran categorizar o DDI.
 
-A equipe disponibilizou um [repositório no GitHub](https://github.com/rionbr/DDIBlumenau) que contém todos os códigos desenvolvidos, além dos arquivos com os dados de entrada para que pudessem ser reproduzidos. Além disso, há um [material complementar](https://static-content.springer.com/esm/art%3A10.1038%2Fs41746-019-0141-x/MediaObjects/41746_2019_141_MOESM1_ESM.pdf) disponibilizado que contém informações, gráficos e resultados extras para auxiliar na reprodução.
+Os autores disponibilizaram um [repositório no GitHub](https://github.com/rionbr/DDIBlumenau) que contém todos os códigos desenvolvidos, além dos arquivos com os dados de entrada para que pudessem ser reproduzidos. Além disso, há um [material complementar](https://static-content.springer.com/esm/art%3A10.1038%2Fs41746-019-0141-x/MediaObjects/41746_2019_141_MOESM1_ESM.pdf) disponibilizado que contém informações, gráficos e resultados extras para auxiliar na reprodução.
 
 # 5. Breve descrição do experimento que foi replicado
 O experimento deste trabalho iniciou com a análise e tratamento dos dados. Em seguida, foi desenvolvido o método em si, em que calcula-se o risco relacionado ao gênero e à idade, com a geração da rede de DDI, e com os classificadores de aprendizado de máquina. Uma breve explicação de cada etapa do método usado será apresentado a seguir. 
@@ -48,7 +48,7 @@ O experimento deste trabalho iniciou com a análise e tratamento dos dados. Em s
 ## 5.1. Tratamento dos dados
 A equipe recebeu os prontuários da prefeitura de Blumenau de 18 meses, entre Janeiro de 2014 e Junho de 2015, e analisaram os relatórios de medicamentos e dosagens prescritos no período. Estes dados foram anonimizados na fonte e manteve-se apenas as dosagens com os medicamentos e algumas variáveis demográficas como gênero, idade, bairro, estado civil e escolaridade. O conscentimento para coleta dos dados não é de responsabilidade da equipe, já que não foram eles os responsáveis pela coleta.
 
-Os nomes dos medicamentos foram traduzidos para o inglês, foram eliminados os casos ambíguos, e foram usados identificadores para os medicamentos (baseado no DrugBank ID, que é explicado melhor na seção 4.2). Medicamentos com vários componentes, como por exemplo a Amoxicilina 500 mg e Clavulanato 125 mg, foram divididos por seus componentes. Além disso, foram dispensadas substância que não estão presentes no DrugBank, como por exemplo, o leite em pó e complexos vitamínicos. Após todos os tratamentos, 122 medicamentos únicos foram mantidos para análise.
+Os nomes dos medicamentos foram traduzidos para o inglês, foram eliminados os casos ambíguos, e foram usados identificadores para os medicamentos (baseado no DrugBank ID, que é explicado melhor na seção 5.2). Medicamentos com vários componentes, como por exemplo a Amoxicilina 500 mg e Clavulanato 125 mg, foram divididos por seus componentes. Além disso, foram dispensadas substância que não estão presentes no DrugBank, como por exemplo, o leite em pó e complexos vitamínicos. Após todos os tratamentos, 122 medicamentos únicos foram mantidos para análise.
 
 Dentro do período considerado, foram registradas 1.573.678 administrações de medicamentos à 132.722 pacientes distintos, equivalente à 17% da população da cidade. Destes pacientes, 41,5% são homens e 58,5% são mulheres. Um total de 46% destes pacientes declararam a escolaridade, e destes, 46,77% relatou ter o ensino fundamental incompleto e 20,49% o ensino médio completo ou superior. O percentual de pacientes que receberam pelo menos dois medicamentos é de 78,97%, e é com esse grupo que a equipe trabalhou, afinal, apenas eles poderiam ter alguma DDI.
 
@@ -87,7 +87,7 @@ $$ RI^{[y_1,y_2]} = \frac{{P({\mathrm{\Phi }}^u > 0|u \in U^{[y_1,y_2]})}}{{P({\
 
 Equação 4 - Equação do risco de interação por faixa etária.
 
-Foi definido um modelo nulo para treinar um sistema que seja capaz de identificar o aumento esperado do risco de determinada interação considerando o gênero e a faixa etária. Para isso, foram utilizadas ferramentas de aprendizado de máquina, com os classificadores lineares _Support Vector Machine_ (SVM) e Regressão Logística, fazendo a validação cruzada estratificada 4 vezes, para garantir um bom desempenho. As variáveis demográficas usadas foram a Idade (faixa etária), gênero, número de medicamentos, e número de co-administrações. Já como característica binária usou-se uma variável definida como 1 caso o paciente tenha recebido determinado medicamento, e como 0 caso contrário. Isso permite que os classificadores sejam treinados para definir a probabilidade de uma determinada combinação de medicamentos. 
+Foi definido pelos autores um modelo nulo para treinar um sistema que seja capaz de identificar o aumento esperado do risco de determinada interação considerando o gênero e a faixa etária. Para isso, foram utilizadas ferramentas de aprendizado de máquina, com os classificadores lineares _Support Vector Machine_ (SVM) e Regressão Logística, fazendo a validação cruzada estratificada 4 vezes, para garantir um bom desempenho. As variáveis demográficas usadas foram a Idade (faixa etária), gênero, número de medicamentos, e número de co-administrações. Já como característica binária usou-se uma variável definida como 1 caso o paciente tenha recebido determinado medicamento, e como 0 caso contrário. Isso permite que os classificadores sejam treinados para definir a probabilidade de uma determinada combinação de medicamentos. 
 
 Os classificadores são comparados a três modelos nulos:
 
@@ -95,7 +95,7 @@ Os classificadores são comparados a três modelos nulos:
 * Modelo nulo do tipo "lançamento de moedas" tendencioso, com base na frequência de cada classe
 * Modelo nulo que encontra a melhor idade de corte para cada gênero, sendo que acima do crote, todos são considerado afetados pela DDI. 
 
-Para avaliar o desempelho dos classficadores, considerou-se o coeficiente de correlação de Matthew (MCC), a área sober a curva ROC (AUC ROC), e a área sob a curva de precisão e recuperação (AUC P/R).
+Para avaliar o desempelho dos classficadores, os autores consideraram o coeficiente de correlação de Matthew (MCC), a área sober a curva ROC (AUC ROC), e a área sob a curva de precisão e recuperação (AUC P/R).
 
 ## 5.3. Dados fornecidos
 
@@ -175,10 +175,6 @@ A rede elaborada pelos autores do artigo é apresentada na Figura 9. No trabalho
 ![alt text](assets/41746_2019_141_Fig1_HTML.png)
 
 Figura 9 - Rede do trabalho original.
-
-É possível verificar que o medicamento XXX é o que possuí maior probabilidade de interação com outros medicamentos, sendo que para os homens, o medicamento com maior risco é o XXX enquanto para as mulheres é o medicamento YYY.
-
-> DÁ PRA EXPLORAR MAIS RESULTADOS AQUI?
 
 # 8. Conclusão
 O artigo escolhido visou analisar as reações causadas em pacientes por interações medicamentosas. Para isso, teve-se acesso aos prontuários médicos dos pacientes da cidade de Blumenau, no Sul do Brasil, do período de Janeiro de 2014 a Junho de 2015. O trabalho realizou uma análise exploratória dos dados, seguida da construção da rede, e por fim de um aprendizado de máquina. Foram fornecidos todos os códigos implementados, os arquivos ".csv" usados como entradas (já anonimizados), e um material complementar com explicações detalhadas dos processos realizados.
