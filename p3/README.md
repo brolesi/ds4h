@@ -54,7 +54,7 @@ Equação 2 - Equação do risco de interação para mulheres.
 
 Na geração da rede, os nós representam os medicamentos e as arestas representam as interações entre cada medicamento entre si, sendo que os pesos das arestas são definidos pela equação da equação 1 já apresentada. Já o tamanho dos nós representam a probabilidade de interação daquele medicamento com outros, e é definido pela equação da equação 3 abaixo, sendo que os nós maiores são considerados os mais perigosos de serem co-administrados.
 
-$$ PI(i) = \frac{{\mathop{\sum}\nolimits_j{{\mathrm{\Phi }}_{i,j}}}}{{\mathop{\sum}\nolimits_j{{\mathrm{\Psi }}_{i,j}}}} $$
+$$ PI(i) = \frac{{\mathop{\sum}_{j}{{\mathrm{\Phi }}_{i,j}}}}{{\mathop{\sum}_{j}{{\mathrm{\Psi }}_{i,j}}}} $$
 
 Equação 3 - Equação da probabilidade de interação por medicamento.
 
