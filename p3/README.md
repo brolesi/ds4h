@@ -176,6 +176,8 @@ A rede elaborada pelos autores do artigo é apresentada na Figura 9. No trabalho
 
 Figura 9 - Rede do trabalho original.
 
+Nas três figuras de rede é possível identificar a presença de 75 nós e 181 arestas, sendo que para mulheres, há maior predominância de cores intensas (escuras), que representam um risco de interação maior. Com isso, pode-se afirmar que as mulheres estão sujeitas a DDIs mais graves, quando comparadas aos homens. O tamanho dos nós representa a probabilidade de interação, e o maior valor é para o medicamento "Digoxin", que é pertencente à categoria "Cardiovascular agents". A largura da aresta representa o peso, e o maior peso é 0.69537773, para a interação entre "Haloperidol", da classe "Psychotherapeutic agents" e "Biperiden", da classe "CNS agents". Esta interação está associada ao fato de que Anticolinérgicos incluem risco de psicose e discinesia tardia.
+
 # 8. Conclusão
 O artigo escolhido visou analisar as reações causadas em pacientes por interações medicamentosas. Para isso, teve-se acesso aos prontuários médicos dos pacientes da cidade de Blumenau, no Sul do Brasil, do período de Janeiro de 2014 a Junho de 2015. O trabalho realizou uma análise exploratória dos dados, seguida da construção da rede, e por fim de um aprendizado de máquina. Foram fornecidos todos os códigos implementados, os arquivos ".csv" usados como entradas (já anonimizados), e um material complementar com explicações detalhadas dos processos realizados.
 
