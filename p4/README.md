@@ -20,7 +20,7 @@ erythematosus* - SLE) é uma doença inflamatória crônica e de causa ainda
 desconhecida. São reconhecidos dois tipos principais de lúpus, sendo (i)
 o cutâneo, que se manifesta apenas com manchas na pele, e (ii) o
 sistêmico, em que um ou mais órgãos internos são acometidos
-[@borba2008].
+[1].
 
 Sua natureza é auto-imune, devido à presença de diversos
 auto-anticorpos. O SLE evolui com manifestações clínicas polimórficas,
@@ -28,7 +28,7 @@ sendo mais exacerbadas em alguns períodos, e menos em outros, chamado de
 período de remissão. Sua etiologia ainda não foi totalmente esclarecida,
 mas já foi identificado que o desenvolvimento da doença está ligado a
 predisposição genética e fatores ambientais, como luz ultravioleta e
-alguns medicamentos [@magalhaes2021].
+alguns medicamentos [2].
 
 Devido às incertezas relacionadas com essa doença, há vários hipóteses
 levantadas e sendo estudadas para identificar etiologias mais prováveis
@@ -38,12 +38,12 @@ Um dos órgãos afetados pelo SLE é o cérebro. É muito comum entre os
 estudos médicos se falar em lesões na substância branca cerebral (do
 inglês *White Matter Lesions* - WMLs), já que elas podem causar deficit
 funcional significativo. A etiologia de uma WML pode ser isquêmica ou
-desmielinizante [@rittner2022].
+desmielinizante [3].
 
 Sabe-se que as lesões isquêmicas podem acontecer, por exemplo, em
-pacientes que sofreram um Acidente Vascular Cerebral (AVC) [@castro2003]
-[@telemedicina2021]. Já dentre as doenças desmielinizantes, a principal
-e mais conhecida é a Esclerose Múltipla (EM) [@ineuro2013].
+pacientes que sofreram um Acidente Vascular Cerebral (AVC) [4]
+[5]. Já dentre as doenças desmielinizantes, a principal
+e mais conhecida é a Esclerose Múltipla (EM) [6].
 
 A etiologia da lesão é importante para um tratamento adequado e um
 método que seja capaz de distinguir lesões isquêmicas de
@@ -51,7 +51,7 @@ desmielinizantes pode ser usado para caracterizar lesões com etiologia
 desconhecida, como é o caso do SLE.
 
 Até o momento não existem estudos publicados que analisaram WMLs de
-diferentes etiologias [@rittner2022]. Diante disso, as perguntas a serem
+diferentes etiologias [3]. Diante disso, as perguntas a serem
 respondidas neste estudo seguem abaixo:
 
 **RQ1: Qual é a etiologia mais provável das lesões presentes em
@@ -85,7 +85,7 @@ Entre as abordagens existentes, optou-se pelo uso de técnicas de
 aprendizado de máquina (do inglês *machine learning*). Apesar de não ter
 precisão tão alta quanto técnicas de *deep learning*, o *machine
 learning* possui explicabilidade, fator importante para responder a RQ2
-[@britannica0000].
+[7].
 
 Entre as técnicas de *machine learning* existentes, escolheu-se o
 *Support-vector machine* (SVM). O SVM é um modelo de aprendizado
@@ -96,7 +96,7 @@ binário não probabilístico. Ele mapeia exemplos de treinamento para
 pontos no espaço para maximizar a largura da lacuna entre as duas
 categorias existentes. Novos exemplos são então mapeados nesse mesmo
 espaço e previstos para pertencer a uma categoria com base em qual lado
-da lacuna eles se enquadram [@corin1995].
+da lacuna eles se enquadram [8].
 
 O aprendizado do modelo será feito com base em imagens de lesões
 isquêmicas ou desmielinizantes. Para lesões isquêmicas serão
@@ -129,10 +129,10 @@ outras mais escuras, e que suas intensidades variem em escalas
 diferentes. Por isso, a normalização é aplicada, com a intenção de fazer
 todas as imagens terem intensidades que variam dentro de uma mesma
 escala. Foram estudadas diversas formas de normalização, foi escolhida
-uma técnica apresentada no trabalho [@rittner2015]. Escolhemos usá-la
+uma técnica apresentada no trabalho [9]. Escolhemos usá-la
 porque nos estudos, este método apresentou um resultado muito bom nos
 classificadores. Essa normalização se baseia no seguinte passo a passo
-[@collewet2004]:
+[10]:
 
 -   Retira-se a média de todas as imagens a serem usadas no treino.
 
@@ -268,13 +268,13 @@ núcleo da solução, o especialista da área da saúde continua sendo a peça
 fundamental para agir com base em uma previsão. É preciso ter essa
 compreensão do modelo para fornecer dados ao especialista, permitindo
 que ele avalie, com base nos conceitos da área se aquela previsão é ou
-não confiável [@ribeiro2016].
+não confiável [11].
 
 Entre as formas de buscar essa explicabilidade, há uma técnica chamada
 LIME, que explica as previsões de qualquer classificador de maneira
 interpretável e fiel, aprendendo um modelo interpretável localmente em
 torno da previsão. Esta técnica é flexível também para classificação de
-imagem [@ribeiro2016].
+imagem [11].
 
 Com o uso do LIME, espera-se ser possível explicar quais características
 mais influenciaram na decisão do classificador pela lesão isquêmica ou
@@ -285,7 +285,7 @@ desmielinizante.
 Para o presente trabalho, foi feita a análise das máscaras das lesões
 considerando a solidez, calculada como:
 
-$$solidez = \frac{\acute{a}rea \; dobjeto \; imagem}{fecho \; convexo \; do \; objeto} $$
+$$solidez = \frac{\acute{a}rea \ do\ objeto}{fecho \ convexo \ do \ objeto} $$
 
 Ela indica o quando to fecho convexo é utilizado para compor o objeto.
 Quanto maior a solidez, maior área dentro do fecho ele ocupa.
@@ -297,22 +297,23 @@ avaliada individualmente no aspecto de solidez.
 ### Excentricidade
 
 Para a definição de excentricidade nos apoiamos na figura
-[1](#fig:excentricidade){reference-type="ref"
-reference="fig:excentricidade"} conforme [@pedriniintroduccao]
-(adaptado) foi obtida a equação
-[\[eq:Excentricidade\]](#eq:Excentricidade){reference-type="ref"
-reference="eq:Excentricidade"}:
+[1] conforme [12]
+(adaptado) foi obtida a equação:
 
 ![Objetos e suas respectivas dimensões para cálculo de excentricidade
-[@pedriniintroduccao] (adaptado) - (a) ilustração de eixos maior e menor
+[12] (adaptado) - (a) ilustração de eixos maior e menor
 de um objeto; (b) objeto com excentricidade alta; (c) objeto com
 excentricidade baixa.](assets/excentricidade2.png)
+Figura 1: Objetos e suas respectivas dimensões para cálculo de excentricidade
+[12] (adaptado) - (a) ilustração de eixos maior e menor
+de um objeto; (b) objeto com excentricidade alta; (c) objeto com
+excentricidade baixa.
 
 $$excentricidade = \frac{A}{B}$$
 
-Para o cálculo, foi utilizada a abordagem de [@pedriniintroduccao].
+Para o cálculo, foi utilizada a abordagem de [12].
 
-Conforme [@wirth2001shape], o eixo maior são os pontos do maior segmento
+Conforme [13], o eixo maior são os pontos do maior segmento
 de reta que pode ser definido dentro do objeto. Eles são computados a
 partir da avaliação de todos os pixels de borda e encontrando o par com
 a maior distância, como $P_1={x_1, y_1}$ e $P_2 = {x_2, y_2}$.
@@ -356,10 +357,9 @@ classificador (Tab. [1]):
 
 Tabela 1: Métricas dos classificadores.
 
-[\[tab:metricas\]]{#tab:metricas label="tab:metricas"}
 
 Conforme os resultados apresentados na Tab.
-[1](#tab:metricas){reference-type="ref" reference="tab:metricas"}, é
+[1], é
 possível perceber que os classificadores c\_norm\_roi e c\_norm tiveram
 resultados ruins, por isso foram desconsiderados. O classificador c\_roi
 teve um resultado muito bom, porém o classificador sem pré-processamento
@@ -433,8 +433,7 @@ Tabela 2: Resultado do modelo aplicado aos pacientes com lúpus
 Isso é considerado um erro do classificador, por isso, o tipo que
 apresentou maior percentual será o tipo classificado para aquele
 paciente. Feito isso, temos então o resultado da tabela
-[3](#tabela_resultado_frequencia){reference-type="ref"
-reference="tabela_resultado_frequencia"}.
+[3].
 
 |             | AVC | EM  | Total |
 | ----------- | --- | --- | ----- |
@@ -444,20 +443,21 @@ reference="tabela_resultado_frequencia"}.
 Tabela 3: Frequência e porcentagem dos resultados do modelo aplicados ao conjunto de dados de SLE disponibilizado
 
 
-A figura [2](#fig:avc_em_sle){reference-type="ref"
-reference="fig:avc_em_sle"} apresenta as lesões analisadas:
+A figura [2] apresenta as lesões analisadas:
 
 ![Imagens típicas das lesões analisadas. À esquerda, cérebro com AVC, ao
 centro, cérebro com EM e à direita cérebro com
-SLE](assets/avc_em_sle.png){#fig:avc_em_sle width="450pt"}
+SLE](assets/avc_em_sle.png)
+Figura 2: Imagens típicas das lesões analisadas. À esquerda, cérebro com AVC, ao
+centro, cérebro com EM e à direita cérebro com
+SLE
 
 ## Explicabilidade
 
 Conforme já explicado, utilizou-se o LIME como ferramenta de apoio para
 buscar alguma explicabilidade ao resultado do classificador.
 
-Na tabela [4](#lime_treino){reference-type="ref"
-reference="lime_treino"}, a primeira coluna representa as
+Na tabela [4], a primeira coluna representa as
 características, e as outras colunas seus valores. Foi escolhido
 aleatoriamente um paciente de AVC e outro de EM, e em ambos, as
 características que mais influenciaram na decisão foram a variância e o
@@ -492,13 +492,18 @@ desvio padrão.
 Tabela 4: Explicabilidade para o Treino
 
 ![Gráfico de explicabilidade para um paciente com
-AVC.](assets/10.png){#fig:treino_AVC}
+AVC.](assets/10.png)
+
+Figura 3: Gráfico de explicabilidade para um paciente com
+AVC.
 
 ![Gráfico de explicabilidade para um paciente com
-EM.](assets/212.png){#fig:treino_EM}
+EM.](assets/212.png)
 
-Já para a tabela [5](#lime_teste){reference-type="ref"
-reference="lime_teste"}, a primeira coluna representa as
+Figura 4: Gráfico de explicabilidade para um paciente com
+EM.
+
+Já para a tabela [5], a primeira coluna representa as
 características, e as outras colunas seus valores. Foi escolhido
 aleatoriamente um paciente de AVC e outro de EM, as características que
 mais influenciaram na decisão foram o conjunto SRE e correlação para o
@@ -536,40 +541,48 @@ caso do EM são inversamente relacionadas.
   Tabela 5: Explicabilidade para o Teste
 
 ![Gráfico de explicabilidade para um paciente com Lúpus classificado
-como AVC.](assets/600.png){#fig:teste_AVC}
+como AVC.](assets/600.png)
+
+Figura 5: Gráfico de explicabilidade para um paciente com Lúpus classificado
+como AVC.
 
 ![Gráfico de explicabilidade para um paciente com Lúpus classificado
-como EM.](assets/601.png){#fig:teste_EM}
+como EM.](assets/601.png)
 
-## Solidez {#Solidez}
+Figura 6: Gráfico de explicabilidade para um paciente com Lúpus classificado
+como EM.
+## Solidez
 
 Com relação à solidez, o que foi obtido a partir da análise dos dados
 presentes a partir das máscaras das lesões de cérebro (considerando AVC,
-EM e SLE), a Figura [7](#fig:solidez_resultado){reference-type="ref"
-reference="fig:solidez_resultado"} mostra o histograma para estes tipos.
+EM e SLE), a Figura [7] mostra o histograma para estes tipos.
 Nota-se que um volume alto de registros entre 0.7 e 0.9, mostrando que
 as lesões em sua maioria tem a área próxima ao fecho convexo da própria
 lesão. Também é possível notar, a partir da estimativa de densidade por
 *Kernel*, que SLE e EM parecem ter uma forma parecida.
 
 ![Resultado do cálculo de solidez das máscaras de lesões apresentadas
-para o trabalho.](assets/solidez_resultado.png){#fig:solidez_resultado
-width="400pt"}
+para o trabalho.](assets/solidez_resultado.png)
 
-## Excentricidade {#Excentricidade}
+Figura 7: Resultado do cálculo de solidez das máscaras de lesões apresentadas
+para o trabalho.
+
+## Excentricidade
 
 Observou-se a partir das imagens de lesão o resultado do histograma
 presente na Figura
-[8](#fig:excentricidade_resultado){reference-type="ref"
-reference="fig:excentricidade_resultado"}, ou seja, máscaras de AVC com
+[8], ou seja, máscaras de AVC com
 maior frequência e também com maior excentricidade, e excentricidade de
 EM e SLE concentradas próximo a valores menores, mostrando que são
 lesões menos longas.
 
 ![Resultado do cálculo de excentricidade das máscaras de lesões
 apresentadas para o
-trabalho.](assets/excentricidade_resultado.png){#fig:excentricidade_resultado
-width="400pt"}
+trabalho.](assets/excentricidade_resultado.png)
+
+Figura 8: Resultado do cálculo de excentricidade das máscaras de lesões
+apresentadas para o
+trabalho.
 
 # Limitações
 
@@ -639,7 +652,7 @@ extração manual de características de imagens baseadas em descritores
 (como de forma, área, textura, por exemplo).
 
 # Referências
-Referências
+
 [1] E. F. e. a. Borba, “Consenso de lúpus eritematoso sistêmico,” Revista Brasileira de Reumatologia, vol. 48,
 no. 4, pp. 196–207, Nov 2008.
 
@@ -654,8 +667,7 @@ isquêmico,” Acta Cirúrgica Brasileira, vol. 17, no. 3, pp. 96–100, Abr 200
 [5] D. J. A. Morsch. (2021) Isquemia cerebral: Sintomas, riscos, sequelas e diferenÇas do avc. [Online].
 Available: https://telemedicinamorsch.com.br/blog/isquemia-cerebral
 
-[6] D. M. Miranda. (2013) Doenças desmielinizantes. [Online]. Available: http://www.ineuro.com.br/
-para-os-pacientes/doencas-desmielinizantes/comment-page-1/#comments
+[6] D. M. Miranda. (2013) Doenças desmielinizantes. [Online]. Available: http://www.ineuro.com.br/para-os-pacientes/doencas-desmielinizantes/comment-page-1/#comments
 
 [7] B. Copeland. artificial intelligence. [Online]. Available: https://www.britannica.com/technology/
 artificial-intelligence/Reasoning
