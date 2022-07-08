@@ -6,6 +6,7 @@
 
 O presente projeto foi originado no contexto das atividades da disciplina de pós-graduação [*Ciência e Visualização de Dados em Saúde*](https://ds4h.org), oferecida no primeiro semestre de 2022, na Unicamp.
 
+O relatório em formato PDF pode ser encontrado em [assets/Report_P4.pdf](assets/Report_P4.pdf).
 
 | Nome                          | RA     | Especialização |
 | ----------------------------- | ------ | -------------- |
