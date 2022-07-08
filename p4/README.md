@@ -73,7 +73,7 @@ Além disso, pretende-se identificar quais características da lesão mais
 influenciam na classificação da lesão como isquêmica ou desmielinizante,
 para a partir disso, aproximar-se de uma etiologia para o SLE.
 
-# Metodologia {#Metodologia}
+# Metodologia
 
 
 Para responder as questões de pesquisa levantadas e atingir o objetivo
@@ -473,8 +473,8 @@ desvio padrão.
 | Median          | 1.81         | -0.55       |
 | Kurtosis        | 1.02         | 1.02        |
 | Skewness        | 1.02         | 1.02        |
-| Var             | 1.41         | -1.24       |
-| Std             | 1.33         | -1.32       |
+| Var             | **1.41**     | **-1.24**   |
+| Std             | **1.33**     | **-1.32**   |
 | diss            | 1.02         | -1.18       |
 | cont            | 0.77         | -1.25       |
 | eng             | -1.01        | 1.20        |
@@ -513,7 +513,7 @@ caso do EM são inversamente relacionadas.
 
 | Característica | Paciente 600 (AVC) | Paciente 601 (EM) |
 | -------------- | ------------------ | ----------------- |
-| SRE            | -0.64              | 0.02              |
+| SRE            | **-0.64**          | 0.02              |
 | LRE            | -0.66              | -0.32             |
 | GLU            | -0.38              | -0.17             |
 | RLU            | -0.31              | -0.21             |
@@ -523,11 +523,11 @@ caso do EM são inversamente relacionadas.
 | Kurtosis       | -1.00              | -1.00             |
 | Skewness       | -1.00              | -1.00             |
 | Var            | 0.04               | -0.91             |
-| Std            | 0.11               | -0.85             |
+| Std            | 0.11               | **-0.85**         |
 | diss           | 0.17               | -0.14             |
 | cont           | -0.01              | -0.20             |
 | eng            | -1.11              | -0.16             |
-| corr           | 0.12               | -1.12             |
+| corr           | **0.12**           | **-1.12**         |
 | ASM            | -1.02              | -0.22             |
 | homo           | -0.23              | 0.12              |
 | lbp81Mean      | -0.29              | 0.09              |
