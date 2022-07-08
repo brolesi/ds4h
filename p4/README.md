@@ -344,19 +344,17 @@ dilatação (c\_roi), (iii) apenas com normalização (c\_norm), (iv) sem
 pré-processamento (c\_x).
 
 Após o treino e validação, obteve-se as seguintes métricas para cada
-classificador (Tab. [1](#tab:metricas){reference-type="ref"
-reference="tab:metricas"}):
+classificador (Tab. [1]):
 
-::: {#tab:metricas}
-  Classificador   Acurácia   Precisão   *Recall*   f1        Matriz de Confusão
-  --------------- ---------- ---------- ---------- --------- ------------------------
-  c\_norm\_roi    0.64486    0.51049    0.92405    0.65766   \[65, 70\], \[6, 73\]
-  c\_roi          0.94860    0.89535    0.97468    0.93333   \[126, 9\], \[2, 77\]
-  c\_norm         0.84579    0.73958    0.89873    0.81143   \[110, 25\], \[8, 71\]
-  c\_x            0.98131    1.0        0.94937    0.97403   \[135, 0\], \[4, 75\]
+| Classificador | Acurácia | Precisão | *Recall* | f1      | Matriz de Confusão     |
+| ------------- | -------- | -------- | -------- | ------- | ---------------------- |
+| c\_norm\_roi  | 0.64486  | 0.51049  | 0.92405  | 0.65766 | \[65, 70\], \[6, 73\]  |
+| c\_roi        | 0.94860  | 0.89535  | 0.97468  | 0.93333 | \[126, 9\], \[2, 77\]  |
+| c\_norm       | 0.84579  | 0.73958  | 0.89873  | 0.81143 | \[110, 25\], \[8, 71\] |
+| c\_x          | 0.98131  | 1.0      | 0.94937  | 0.97403 | \[135, 0\], \[4, 75\]  |
+|               |
 
-  : Métricas dos classificadores.
-:::
+Tabela 1: Métricas dos classificadores.
 
 [\[tab:metricas\]]{#tab:metricas label="tab:metricas"}
 
@@ -407,30 +405,274 @@ para um mesmo paciente, todos os cortes deveriam ter as lesões
 classificadas como um mesmo tipo. Porém, na prática, não foi isso que
 aconteceu. Houveram 35 pacientes que tiveram seus recortes classificados
 de forma diferente. Por isso, a tabela
-[2](#tabela_resultado){reference-type="ref"
-reference="tabela_resultado"} apresenta o paciente, o tipo de
+[2] apresenta o paciente, o tipo de
 classificação e o percentual de cada tipo. Quando o percentual é de
 100%, significa que todos os cortes daquele paciente tiveram a mesma
 classificação. Quando o percentual é menor que 100% significa que houve
 uma parte dos cortes daquele paciente classificado como AVC e outra
 parte como EM.
 
-::: {#tabela_resultado}
-  Paciente   Tipo             Percentual
-  ---------- ------ --------------------
-  600        AVC                     1.0
-  601        EM                      1.0
-  602        EM                      1.0
-  603        AVC      0.4444444444444444
-  603        EM       0.5555555555555556
-  604        AVC                     1.0
-  605        AVC      0.3333333333333333
-  605        EM       0.6666666666666666
-  606        EM                      1.0
-  \...       \...                   \...
-  676        AVC                     1.0
-  677        AVC                     1.0
-  678        AVC                     1.0
+| Paciente | Tipo | Percentual         |
+| -------- | ---- | ------------------ |
+| 600      | AVC  | 1.0                |
+| 601      | EM   | 1.0                |
+| 602      | EM   | 1.0                |
+| 603      | AVC  | 0.4444444444444444 |
+| 603      | EM   | 0.5555555555555556 |
+| 604      | AVC  | 1.0                |
+| 605      | AVC  | 0.3333333333333333 |
+| 605      | EM   | 0.6666666666666666 |
+| 606      | EM   | 1.0                |
+| \...     | \... | \...               |
+| 676      | AVC  | 1.0                |
+| 677      | AVC  | 1.0                |
+| 678      | AVC  | 1.0                |
 
-  : Resultado do modelo aplicado aos pacientes com lúpus
-:::
+Tabela 2: Resultado do modelo aplicado aos pacientes com lúpus
+
+Isso é considerado um erro do classificador, por isso, o tipo que
+apresentou maior percentual será o tipo classificado para aquele
+paciente. Feito isso, temos então o resultado da tabela
+[3](#tabela_resultado_frequencia){reference-type="ref"
+reference="tabela_resultado_frequencia"}.
+
+|             | AVC | EM  | Total |
+| ----------- | --- | --- | ----- |
+| Frequência  | 53  | 26  | 78    |
+| Porcentagem | 68% | 32% | 100%  |
+
+Tabela 3: Frequência e porcentagem dos resultados do modelo aplicados ao conjunto de dados de SLE disponibilizado
+
+
+A figura [2](#fig:avc_em_sle){reference-type="ref"
+reference="fig:avc_em_sle"} apresenta as lesões analisadas:
+
+![Imagens típicas das lesões analisadas. À esquerda, cérebro com AVC, ao
+centro, cérebro com EM e à direita cérebro com
+SLE](assets/avc_em_sle.png){#fig:avc_em_sle width="450pt"}
+
+## Explicabilidade
+
+Conforme já explicado, utilizou-se o LIME como ferramenta de apoio para
+buscar alguma explicabilidade ao resultado do classificador.
+
+Na tabela [4](#lime_treino){reference-type="ref"
+reference="lime_treino"}, a primeira coluna representa as
+características, e as outras colunas seus valores. Foi escolhido
+aleatoriamente um paciente de AVC e outro de EM, e em ambos, as
+características que mais influenciaram na decisão foram a variância e o
+desvio padrão.
+
+| Características | Paciente AVC | Paciente EM |
+| --------------- | ------------ | ----------- |
+| SRE             | 0.13         | -0.02       |
+| LRE             | -0.80        | 1.10        |
+| GLU             | -0.70        | 1.08        |
+| RLU             | 1.59         | -0.74       |
+| RPC             | 1.56         | -1.00       |
+| Mean            | 1.33         | -1.23       |
+| Median          | 1.81         | -0.55       |
+| Kurtosis        | 1.02         | 1.02        |
+| Skewness        | 1.02         | 1.02        |
+| Var             | 1.41         | -1.24       |
+| Std             | 1.33         | -1.32       |
+| diss            | 1.02         | -1.18       |
+| cont            | 0.77         | -1.25       |
+| eng             | -1.01        | 1.20        |
+| corr            | 0.89         | -0.62       |
+| ASM             | -0.99        | 1.21        |
+| homo            | -1.05        | 1.13        |
+| lbp81Mean       | -1.07        | 1.10        |
+| lbp81Median     | 0.00         | 0.00        |
+| lbp81Kurtosis   | -1.01        | 1.08        |
+| lbp81Skewness   | -1.01        | 1.08        |
+| lbp81Var        | 1.12         | -1.07       |
+| lbp81Std        | 1.09         | -1.06       |
+
+Tabela 4: Explicabilidade para o Treino
+
+![Gráfico de explicabilidade para um paciente com
+AVC.](assets/10.png){#fig:treino_AVC}
+
+![Gráfico de explicabilidade para um paciente com
+EM.](assets/212.png){#fig:treino_EM}
+
+Já para a tabela [5](#lime_teste){reference-type="ref"
+reference="lime_teste"}, a primeira coluna representa as
+características, e as outras colunas seus valores. Foi escolhido
+aleatoriamente um paciente de AVC e outro de EM, as características que
+mais influenciaram na decisão foram o conjunto SRE e correlação para o
+paciente 600, e conjunto correlação e desvio padrão para o paciente 601.
+Nota-se que a textura auxilia na predição do AVC, assim como podemos
+verificar que a correlação dos pontos da imagem são relacionadas, mas no
+caso do EM são inversamente relacionadas.
+
+| Característica | Paciente 600 (AVC) | Paciente 601 (EM) |
+| -------------- | ------------------ | ----------------- |
+| SRE            | -0.64              | 0.02              |
+| LRE            | -0.66              | -0.32             |
+| GLU            | -0.38              | -0.17             |
+| RLU            | -0.31              | -0.21             |
+| RPC            | 0.27               | -0.06             |
+| Mean           | 0.71               | -0.38             |
+| Median         | 1.06               | 0.02              |
+| Kurtosis       | -1.00              | -1.00             |
+| Skewness       | -1.00              | -1.00             |
+| Var            | 0.04               | -0.91             |
+| Std            | 0.11               | -0.85             |
+| diss           | 0.17               | -0.14             |
+| cont           | -0.01              | -0.20             |
+| eng            | -1.11              | -0.16             |
+| corr           | 0.12               | -1.12             |
+| ASM            | -1.02              | -0.22             |
+| homo           | -0.23              | 0.12              |
+| lbp81Mean      | -0.29              | 0.09              |
+| lbp81Median    | 0.00               | 0.00              |
+| lbp81Kurtosis  | -0.20              | 0.39              |
+| lbp81Skewness  | -0.20              | 0.39              |
+| lbp81Var       | 0.32               | 0.01              |
+| lbp81-0.17Std  | 0.35               | 0.06              |
+
+  Tabela 5: Explicabilidade para o Teste
+
+![Gráfico de explicabilidade para um paciente com Lúpus classificado
+como AVC.](assets/600.png){#fig:teste_AVC}
+
+![Gráfico de explicabilidade para um paciente com Lúpus classificado
+como EM.](assets/601.png){#fig:teste_EM}
+
+## Solidez {#Solidez}
+
+Com relação à solidez, o que foi obtido a partir da análise dos dados
+presentes a partir das máscaras das lesões de cérebro (considerando AVC,
+EM e SLE), a Figura [7](#fig:solidez_resultado){reference-type="ref"
+reference="fig:solidez_resultado"} mostra o histograma para estes tipos.
+Nota-se que um volume alto de registros entre 0.7 e 0.9, mostrando que
+as lesões em sua maioria tem a área próxima ao fecho convexo da própria
+lesão. Também é possível notar, a partir da estimativa de densidade por
+*Kernel*, que SLE e EM parecem ter uma forma parecida.
+
+![Resultado do cálculo de solidez das máscaras de lesões apresentadas
+para o trabalho.](assets/solidez_resultado.png){#fig:solidez_resultado
+width="400pt"}
+
+## Excentricidade {#Excentricidade}
+
+Observou-se a partir das imagens de lesão o resultado do histograma
+presente na Figura
+[8](#fig:excentricidade_resultado){reference-type="ref"
+reference="fig:excentricidade_resultado"}, ou seja, máscaras de AVC com
+maior frequência e também com maior excentricidade, e excentricidade de
+EM e SLE concentradas próximo a valores menores, mostrando que são
+lesões menos longas.
+
+![Resultado do cálculo de excentricidade das máscaras de lesões
+apresentadas para o
+trabalho.](assets/excentricidade_resultado.png){#fig:excentricidade_resultado
+width="400pt"}
+
+# Limitações
+
+
+-   As análises foram feitas com imagens BMP e PNG projetadas para
+    escala de cinza;
+
+-   Para os padrões binários locais, uma das características da imagem,
+    utilizamos apenas a parametrização com o raio como 1 e a quantidade
+    de pontos vizinhos circularmente simétricos como 8;
+
+-   Para a matriz de comprimento de corrida a orientação é de 0º e a
+    normalização do nível de pixels é 8;
+
+-   Apenas imagens com máscara foram consideradas para o treino;
+
+-   Não foi feita uma análise de qualidade acerca das máscaras para
+    avaliar se elas faziam sentido (não estavam invertidas, por
+    exemplo);
+
+-   Os resultados são limitados a imagens com características
+    semelhantes à massa de dados que possuímos;
+
+-   Não foram utilizadas técnicas de aumentação de dados, nem redes
+    neurais profundas, mas as características das imagens já citadas em
+    [3](#Metodologia){reference-type="ref" reference="Metodologia"};
+
+-   Não foi feita uma validação sobre potenciais *outliers* com relação
+    a características das máscaras de lesão;
+
+-   As pessoas que criaram o presente documento não tem domínio completo
+    do tema para realizar qualquer julgamento sobre qualidade das
+    imagens e/ou máscaras.
+
+# Conclusão
+
+
+Conforme os resultados do classificador, entende-se que as lesões de SLE
+sejam mais próximas da isquêmica (AVC). Porém, ao analisar os resultados
+de solidez e excentricidade, pode-se dizer que o formato das lesões se
+aproximaram mais das lesões desmielinizantes (EM).
+
+O classificador não usou nenhum parâmetro relacionado ao formato para
+tomar decisões. Se a solidez e excentricidade realmente possuem
+influência na lesão de Lúpus, seria interessante treinar outro
+classificador considerando estes parâmetros, o que pode ser avaliado
+como um trabalho futuro.
+
+Para o presente trabalho, utilizou-se de descritores de imagem e
+estatísticas de histograma. Um ponto importante a ser colocado é que os
+descritores foram escolhidos sem critérios definidos por profissionais
+da área de saúde, o que pode trazer certa dificuldade para um resultado
+e/ou análises mais precisas e aprofundadas.
+
+Dado o cenário de que não houve um acesso a profissionais de saúde para
+validação e modelo, e pensando numa possibilidade de abarcar mais
+características, uma *feature engineering* ou engenharia de atributos
+poderia ser delegada a uma rede neural convolucional, construída
+manualmente ou a partir de *transfer learning*) a fim de maximizar as
+possibilidades e potencializar a resposta no sentido de garantir uma
+maior abrangência e acurácia para o modelo final.
+
+Vale ressaltar que neste caso, a explicabilidade do modelo ficaria
+comprometida dado que os modelos baseados em redes neurais profundas tem
+características que não permitem um detalhamento tão grande quanto
+extração manual de características de imagens baseadas em descritores
+(como de forma, área, textura, por exemplo).
+
+# Referências
+Referências
+[1] E. F. e. a. Borba, “Consenso de lúpus eritematoso sistêmico,” Revista Brasileira de Reumatologia, vol. 48,
+no. 4, pp. 196–207, Nov 2008.
+
+[2] H. A. e. a. Magalhães e Silva, “Lúpus eritematoso sistêmico: uma revisão atualizada da fisiopatologia ao
+tratamento,” Brazilian Journal of Health Review, vol. 4, no. 6, pp. 24 074–24 084, Dez 2021.
+
+[3] L. Rittner, “Classificação de wml baseado em etiologia,” Jun 2022.
+
+[4] O. d. e. a. Castro e Silva Jr., “Aspectos básicos da lesão de isquemia e reperfusão e do pré-condicionamento
+isquêmico,” Acta Cirúrgica Brasileira, vol. 17, no. 3, pp. 96–100, Abr 2003.
+
+[5] D. J. A. Morsch. (2021) Isquemia cerebral: Sintomas, riscos, sequelas e diferenÇas do avc. [Online].
+Available: https://telemedicinamorsch.com.br/blog/isquemia-cerebral
+
+[6] D. M. Miranda. (2013) Doenças desmielinizantes. [Online]. Available: http://www.ineuro.com.br/
+para-os-pacientes/doencas-desmielinizantes/comment-page-1/#comments
+
+[7] B. Copeland. artificial intelligence. [Online]. Available: https://www.britannica.com/technology/
+artificial-intelligence/Reasoning
+
+[8] V. Cortes, Corina Vapnik, “Support-vector networks,” Machine Learning - Kluwer Academic Publishers,
+vol. 20, no. 3, pp. 273–297, 1995.
+
+[9] R. L. e. a. Leite M, “Influence of mr image intensity normalization on texture-based classification of brain
+white matter lesions.” JECN, vol. 21, no. 2, pp. 46–77, 2015.
+
+[10] C. G. . S. M. . M. F, “Influence of mri acquisition protocols and image intensity normalization methods on
+texture classification.” Magn Reson Imaging, vol. 22, pp. 81–91, 2004.
+
+[11] M. T. Ribeiro, S. Singh, and C. Guestrin, “"why should i trust you?": Explaining the predictions of any
+classifier,” Ago 2016.
+
+[12] H. Pedrini, “Introduçao ao processamento digital de imagem mc920 / mo443.” [Online]. Available:
+https://www.ic.unicamp.br/~helio/disciplinas/MO443/aula_representacao.pdf
+
+[13] M. A. Wirth, “Shape analysis and measurement,” University of Guelph. CIS, vol. 6320, 2001.
