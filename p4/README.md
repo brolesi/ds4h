@@ -353,10 +353,8 @@ classificador (Tab. [1]):
 | c\_roi        | 0.94860  | 0.89535  | 0.97468  | 0.93333 | \[126, 9\], \[2, 77\]  |
 | c\_norm       | 0.84579  | 0.73958  | 0.89873  | 0.81143 | \[110, 25\], \[8, 71\] |
 | c\_x          | 0.98131  | 1.0      | 0.94937  | 0.97403 | \[135, 0\], \[4, 75\]  |
-|               |
 
 Tabela 1: Métricas dos classificadores.
-
 
 Conforme os resultados apresentados na Tab.
 [1], é
